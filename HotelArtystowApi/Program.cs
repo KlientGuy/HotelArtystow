@@ -21,6 +21,17 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
             };
         });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: "FrontEnd",
+        policy  =>
+        {
+            policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        });
+});
+
+
+
 String? connectionString = builder.Configuration.GetConnectionString("Default");
 
 if(connectionString is null)
@@ -38,6 +49,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("FrontEnd");
 
 app.UseAuthorization();
 

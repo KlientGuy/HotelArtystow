@@ -1,0 +1,78 @@
+:root, html, body {
+    padding: 0;
+    margin: 0;
+}
+
+body{
+    background-image: url("/public/svg/background.svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+}
+
+.login-box-wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-box {
+    background-color: #3B1B59;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 60vh;
+    width: 25vw;
+    border-radius: 35px;
+    -webkit-box-shadow: 7px 7px 9px 1px rgba(66, 68, 90, 1);
+    -moz-box-shadow: 7px 7px 9px 1px rgba(66, 68, 90, 1);
+    box-shadow: 7px 7px 9px 1px rgba(66, 68, 90, 1);
+}
+
+.login-logo {
+    width: 13vw;
+    margin-top: 5vh;
+}
+
+.container {
+    overflow: hidden;
+}
+.container > div {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.container > div > div {
+    width: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 0.866;
+    flex-shrink: 0;
+    clip-path: polygon(0 25%,50% 0,100% 25%,100% 75%,50% 100%,0 75%);
+    background: rgb(109,54,159);
+    background: radial-gradient(circle, rgba(109,54,159,1) 0%, rgba(59,27,89,1) 100%);
+    cursor: pointer;
+}
+
+.container > div > div:hover {
+    scale: 1.05;
+    transition: 0.2s;
+}
+
+.container > div:last-child {
+    transform: translateY(calc(20px - 25%));
+}
+
+.container > div:last-child > div:nth-child(10) {
+    background: black;
+}
+
+.app-icon {
+    fill: #978249;
+    stroke: black;
+    width: 150px;
+    height: 150px;
+    stroke-width: 1%;
+}
