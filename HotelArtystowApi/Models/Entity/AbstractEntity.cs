@@ -20,4 +20,21 @@ public abstract class AbstractEntity
 
         return toReturn;
     }
+
+    public override string ToString()
+    {
+        Dictionary<String, dynamic> props = this.ToDictionary()!;
+
+        String propsStr = "";
+        foreach(KeyValuePair<String, dynamic> entry in props)
+        {
+            propsStr += $"  {entry.Key}: {entry.Value}\n";
+        }
+
+        return $@"
+{GetType()}: {{
+{propsStr}
+}}
+        ";
+    }
 }
