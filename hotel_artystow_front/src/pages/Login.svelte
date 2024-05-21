@@ -1,21 +1,28 @@
 <script>
+    import {HotelArtystowApi} from '../lib/HotelArtystowApi';
+    import {navigateTo} from '../lib/navigation';
 
-    async function submitForm(event) {
+    export let params;
+    const api = new HotelArtystowApi();
+    let loginError = '';
+
+
+    async function submitForm() {
         const data = {username: document.querySelector('#username').value, password: document.querySelector('#password').value};
-        const response = await fetch('http://localhost:5222/users/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        });
+
+        const res = await api.login(data.username, data.password);
+
+        if(!res.status) {
+            loginError = res.message;
+            return;
+        }
+
+        navigateTo('/profile');
+        sessionStorage.setItem('loggedIn', '1');
     }
 
     async function testLogin(){
-        const response = await fetch('http://localhost:5222/users/getUsers', {
-            method: 'GET',
-            credentials: "include"
-        });
+        console.log(await api.getUsers());
     }
 
 </script>
@@ -25,6 +32,7 @@
         <img src="/public/svg/logo_test.svg" alt="logo" class="login-logo">
         <input type="text" placeholder="Username" id="username">
         <input type="password" placeholder="Password" id="password">
+        <span>{loginError}</span>
         <button type="button" id="submit-button" on:click={submitForm}>Zaloguj</button>
         <button type="button" id="submit" on:click={testLogin}>Zaloguj</button>
     </div>

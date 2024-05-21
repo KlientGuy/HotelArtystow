@@ -24,9 +24,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: "FrontEnd",
-        policy  =>
+        policy =>
         {
-            policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+            policy.WithOrigins("http://localhost:5001").AllowAnyHeader().AllowAnyMethod().AllowCredentials();
         });
 });
 

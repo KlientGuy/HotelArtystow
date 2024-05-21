@@ -53,9 +53,9 @@ public class UsersController : ControllerBase
         {
             case PasswordVerificationResult.Success:
                 AuthorizeUser(username);
-                return Ok();
+                return Ok(new Dictionary<String, dynamic> {{"status", true}, {"redirect", "adam"}});
             case PasswordVerificationResult.Failed:
-                return Unauthorized();
+                return Unauthorized("Invalid password");
         }
 
         return Ok();
