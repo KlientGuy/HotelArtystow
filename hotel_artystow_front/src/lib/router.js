@@ -24,6 +24,7 @@ export default class Router {
         if(location.pathname === '/index.html')
             location.pathname = '/login'
 
+        /** @param {string} route */
         window['navigateTo'] = (route) => this.navigateTo(route);
 
         this.switchComponent(location.pathname, this._getQueryParams());

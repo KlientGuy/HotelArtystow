@@ -55,6 +55,10 @@ body{
     justify-content: space-around;
 }
 
+.justify-center {
+    justify-content: center;
+}
+
 .login-logo {
     width: 13vw;
     margin-top: 5vh;

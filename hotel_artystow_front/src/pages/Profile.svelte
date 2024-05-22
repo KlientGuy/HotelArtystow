@@ -6,43 +6,74 @@
        display: flex;
        flex-direction: column;
        border-radius: 35px;
-       padding: 2em;
+       padding: 1rem;
    } 
 
    .profile-name {
-       flex-basis: 20%;
+       flex-basis: 10%;
    }
 
    .profile-info {
-       flex-basis: 80%;
+       flex-basis: 90%;
+   }
+
+   .profile-stats {
+       font-size: 2rem;
+       font-weight: bold;
+   }
+   .profile-stats .count {
+       font-size: 2.5em;
+   }
+
+   .profile-desc {
+       font-size: 1.3rem;
+       /* max-width: 50%; */
+   }
+
+   .profile-pic-wrap {
+       flex-basis: 50%;
+   }
+
+   .profile-name {
+       font-size: 2rem;
+       font-weight: bold;
    }
 </style>
 
 <div class="bg-primary profile-container">
     <div class="w-100 text-center profile-name">
-        <h2>Profile</h2>
+        <span class="profile-name">adam.adam2</span>
     </div>
     <div class="col space-around profile-info">
         <div class="row space-around">
-            <div class="profile-pic">
-                <div style="width: 100px; height: 100px; background-color: black;"></div>
+            <div class="col space-around profile-pic-wrap">
+                <div class="profile-pic">
+                    <img src="img/ja.jpg" width="256" height="256" alt="ja">
+                </div>
+                <div class="profile-desc row justify-center">
+                    <div class="text-center" style="max-width: 20em;">
+                        Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm
+                    </div>
+                </div>
             </div>
             <div class="profile-rank">
-                <div style="width: 100px; height: 100px; background-color: black;"></div>
+                <!-- <canvas width="256" height="256"></canvas> -->
+                <div style="width: 256px; height: 256px; background-color: black;"></div>
             </div>
         </div>
-        <div class="row space-around">
-            <div class="profile-desc">
-                Lorem ipsum
-            </div>
+        <div class="row space-around profile-stats">
             <div class="login-streak">
-                Fire emoji
+                <div class="count">10 🔥</div>
+                <div class="stat-text">Login streak</div>
             </div>
-        </div>
-        <div class="row space-around">
-            <div class="profile-chujwieco">cośtam emoji 3</div>
-            <div class="profile-ranking">Trophy emoji 10</div>
-            <div class="profile-bees">Bee emoji 999</div>
+            <div class="profile-ranking">
+                <div class="count">10 🏆</div>
+                <div class="stat-text">Ranking</div>
+            </div>
+            <div class="profile-bees">
+                <div class="count">999 🐝</div>
+                <div class="stat-text">Pszczoły</div>
+            </div>
         </div>
     </div>
 </div>
