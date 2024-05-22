@@ -41,6 +41,11 @@ body{
     text-align: center;
 }
 
+.align-items-center {
+    align-items: center;
+}
+
+
 .row {
     display: flex;
     flex-direction: row;
@@ -61,7 +66,7 @@ body{
 
 .login-logo {
     width: 13vw;
-    margin-top: 5vh;
+    margin-top: 2vh;
 }
 
 .container {
@@ -105,4 +110,93 @@ body{
     width: 150px;
     height: 150px;
     stroke-width: 1%;
+}
+
+.btn {
+    backface-visibility: hidden;
+    background-color: #594A67;
+    border-radius: 6px;
+    border-width: 0;
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset,rgba(50, 50, 93, .1) 0 2px 5px 0,rgba(0, 0, 0, .07) 0 1px 1px 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    font-family: -apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Ubuntu,sans-serif;
+    font-size: 100%;
+    height: 44px;
+    line-height: 1.15;
+    margin: 12px 0 0;
+    outline: none;
+    overflow: hidden;
+    padding: 0 25px;
+    position: relative;
+    text-align: center;
+    text-transform: none;
+    transform: translateZ(0);
+    transition: all .2s,box-shadow .08s ease-in;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    width: 8vw;
+}
+
+.btn:disabled {
+    cursor: default;
+}
+
+.btn:hover {
+    -webkit-box-shadow: inset 8px 8px 24px 0px rgba(37, 37, 41, 1);
+    -moz-box-shadow: inset 8px 8px 24px 0px rgba(37, 37, 41, 1);
+    box-shadow: inset 8px 8px 24px 0px rgba(37, 37, 41, 1);
+}
+
+.btn:focus {
+    box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+}
+
+.form-group {
+    position: relative;
+    padding: 15px 0 10px;
+    margin-top: 10px;
+    width: 50%;
+}
+
+.form-field {
+    font-family: inherit;
+    width: 100%;
+    border: 0;
+    border-bottom: 2px solid #9b9b9b;
+    outline: 0;
+    font-size: 1.3rem;
+    color: #fff;
+    padding: 7px 0;
+    background: transparent;
+    transition: border-color 0.2s;
+
+    &::placeholder {
+        color: transparent;
+    }
+
+    &:placeholder-shown ~ .form-label {
+        font-size: 1.3rem;
+        cursor: text;
+        top: 20px;
+    }
+}
+
+.form-label {
+    position: absolute;
+    top: 0;
+    display: block;
+    transition: 0.2s;
+    font-size: 1rem;
+    color: #9b9b9b;
+}
+
+.form-field{
+    &:required,&:invalid { box-shadow:none; }
+}
+
+.nav-logo {
+    width: 5vw;
 }

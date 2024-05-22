@@ -30,10 +30,19 @@
 <div class="login-box-wrapper">
     <div class="login-box bg-primary">
         <img src="/public/svg/logo_test.svg" alt="logo" class="login-logo">
-        <input type="text" placeholder="Username" id="username">
-        <input type="password" placeholder="Password" id="password">
-        <span>{loginError}</span>
-        <button type="button" id="submit-button" on:click={submitForm}>Zaloguj</button>
-        <button type="button" id="submit" on:click={testLogin}>Zaloguj</button>
+        <form on:submit|preventDefault={submitForm} class="col align-items-center w-100">
+            <div class="form-group field">
+                <input type="text" class="form-field" placeholder="Login" name="login" id="username" autocomplete="off" required />
+                <label for="login" class="form-label">Login</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" class="form-field" placeholder="Hasło" name="password" id="password" required />
+                <label for="password" class="form-label">Hasło</label>
+            </div>
+            <span>{loginError}</span>
+            <button type="submit" id="submit-button" class="btn" style="margin-top: 50px">Zaloguj</button>
+        </form>
     </div>
 </div>
+

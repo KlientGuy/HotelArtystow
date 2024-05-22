@@ -1,6 +1,7 @@
 <script>
     import Login from './pages/Login.svelte'
     import Router from './lib/router';
+    import Navbar from "./lib/Navbar.svelte";
 
     const router = new Router();
     let currentComponent = Router.currentComponent;
@@ -12,6 +13,8 @@
     })
 
 </script>
+
+<Navbar/>
 
 <main>
     <svelte:component this={currentComponent} bind:params/>
