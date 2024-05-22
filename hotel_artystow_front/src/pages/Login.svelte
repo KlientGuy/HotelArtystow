@@ -28,7 +28,7 @@
 </script>
 
 <div class="login-box-wrapper">
-    <div class="login-box">
+    <div class="login-box bg-primary">
         <img src="/public/svg/logo_test.svg" alt="logo" class="login-logo">
         <input type="text" placeholder="Username" id="username">
         <input type="password" placeholder="Password" id="password">
