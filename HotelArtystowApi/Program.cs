@@ -30,6 +30,13 @@ builder.Services.AddCors(options =>
         });
 });
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => 
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 
 String? connectionString = builder.Configuration.GetConnectionString("Default");
@@ -49,6 +56,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSession();
 
 app.UseCors("FrontEnd");
 

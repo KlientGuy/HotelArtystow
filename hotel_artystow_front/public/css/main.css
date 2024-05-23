@@ -10,13 +10,6 @@ body{
     height: 100vh;
 }
 
-.login-box-wrapper{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
 .login-box {
     display: flex;
     flex-direction: column;

@@ -5,17 +5,39 @@
     /** @type {Types.UserData} */
     let userData;
 
+    let isEditing = false;
+    let profileDesc = "Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm";
+
     const api = new HotelArtystowApi();
 
     async function getUserData() {
-        const res = await api.getProfileData(parseInt(sessionStorage.getItem('userId')));
+        const res = await api.getProfileData();
 
         if(!res.status) {
 
         }
 
         userData = res.data;
+        profileDesc = userData.Description ?? '';
     }
+
+    function editProfile() {
+        isEditing = true;
+    }
+
+    /**
+    * @param {HTMLElement} e 
+    */
+    const focusDescField = (e) => e.focus();
+
+    /**
+    * @param {Event & {target: HTMLTextAreaElement}} e 
+    */
+    async function saveDescription(e) {
+        profileDesc = e.target.value;
+        isEditing = false
+    }
+        
 </script>
 
 <style>
@@ -52,50 +74,67 @@
        flex-basis: 50%;
    }
 
+   .profile-pic img, .profile-rank div {
+       border-radius: 15px;
+   }
+
    .profile-name {
        font-size: 2rem;
        font-weight: bold;
+   }
+
+   #edit-desc-field {
+       width: 100%;
+       resize: none;
+       height: 10em;
    }
 </style>
 
 {#await getUserData()}
     adam
 {:then}
-<div class="bg-primary profile-container">
-    <div class="w-100 text-center profile-name">
-        <span class="profile-name">{userData.Firstname}</span>
-    </div>
-    <div class="col space-around profile-info">
-        <div class="row space-around">
-            <div class="col space-around profile-pic-wrap">
-                <div class="profile-pic">
-                    <img src="img/ja.jpg" width="256" height="256" alt="ja">
-                </div>
-                <div class="profile-desc row justify-center">
-                    <div class="text-center" style="max-width: 20em;">
-                        Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm
+    <div class="bg-primary profile-container">
+        <div class="w-100 text-center profile-name">
+            <span class="profile-name">{userData.Firstname}</span>
+        </div>
+        <div class="col space-around profile-info">
+            <div class="row space-around">
+                <div class="col space-around profile-pic-wrap">
+                    <div class="profile-pic">
+                        <img src="img/ja.jpg" width="256" height="256" alt="ja">
+                    </div>
+                    <div class="profile-desc row justify-center">
+                        {#if isEditing}
+                            <textarea name="editDescField" id="edit-desc-field" spellcheck="false" use:focusDescField on:focusout={saveDescription}>{profileDesc}</textarea>
+                        {:else}
+                            <div class="text-center" id="edit-description" style="max-width: 20em;">
+                                {profileDesc}
+                                <button type="button" style="font-size: 1rem;" on:click={editProfile}>
+                                    Edit description
+                                </button>
+                            </div>
+                        {/if}
                     </div>
                 </div>
+                <div class="profile-rank">
+                    <!-- <canvas width="256" height="256"></canvas> -->
+                    <div style="width: 256px; height: 256px; background-color: black;"></div>
+                </div>
             </div>
-            <div class="profile-rank">
-                <!-- <canvas width="256" height="256"></canvas> -->
-                <div style="width: 256px; height: 256px; background-color: black;"></div>
-            </div>
-        </div>
-        <div class="row space-around profile-stats">
-            <div class="login-streak">
-                <div class="count">10 🔥</div>
-                <div class="stat-text">Login streak</div>
-            </div>
-            <div class="profile-ranking">
-                <div class="count">10 🏆</div>
-                <div class="stat-text">Ranking</div>
-            </div>
-            <div class="profile-bees">
-                <div class="count">999 🐝</div>
-                <div class="stat-text">Pszczoły</div>
+            <div class="row space-around profile-stats">
+                <div class="login-streak">
+                    <div class="count">10 🔥</div>
+                    <div class="stat-text">Login streak</div>
+                </div>
+                <div class="profile-ranking">
+                    <div class="count">10 🏆</div>
+                    <div class="stat-text">Ranking</div>
+                </div>
+                <div class="profile-bees">
+                    <div class="count">999 🐝</div>
+                    <div class="stat-text">Pszczoły</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {/await}

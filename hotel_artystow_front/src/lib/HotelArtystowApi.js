@@ -33,24 +33,43 @@ export class HotelArtystowApi
 
     /**
      * @public
-     * @param {number} userId 
+     * @param {number} [userId=null] 
      * @returns Promise<object>
      */
-    async getProfileData(userId) {
-        const res = await this._sendGetRequest(`/users/profile/${userId}`);
+    async getProfileData(userId = null) {
+        let res;
+        if(userId === null)
+            res = await this._sendGetRequest('/users/profile');
+        else
+            res = await this._sendGetRequest(`/users/profile/${userId}`);
+
+        return await this._parseResponse(res);
+    }
+
+    /**
+     * @public
+     * @param {string} value 
+     * @returns Promise<object>
+     */
+    async saveProfileDescription(value) {
+        const res = await this._sendPostRequest('/users/profile/saveDescription', {value});
         return await this._parseResponse(res);
     }
 
     /**
     * @private
     * @param {string} endpoint 
-    * @param {object} queryParams 
+    * @param {object} [queryParams=null] 
     */
-    async _sendGetRequest(endpoint, queryParams) {
+    async _sendGetRequest(endpoint, queryParams = null) {
 
-        const params = new URLSearchParams(queryParams);
+        let queryPart = '';
+        if(queryParams !== null) {
+            const params = new URLSearchParams(queryParams);
+            queryPart = `?${params.toString()}`;
+        }
 
-        const res = await fetch(this._apiUrl + endpoint + `?${params.toString()}`, {
+        const res = await fetch(this._apiUrl + endpoint + queryPart, {
             credentials: 'include',
             method: 'GET',
         })

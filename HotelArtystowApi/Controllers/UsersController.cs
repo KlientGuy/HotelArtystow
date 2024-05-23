@@ -53,6 +53,7 @@ public class UsersController : ControllerBase
         {
             case PasswordVerificationResult.Success:
                 AuthorizeUser(username);
+                HttpContext.Session.SetInt32("userId", (int)user.Id);
                 return Ok(new Dictionary<String, dynamic> {{"status", true}, {"userId", user.Id}});
             case PasswordVerificationResult.Failed:
                 return Unauthorized("Invalid password");
@@ -147,5 +148,32 @@ public class UsersController : ControllerBase
 
         user.Password = null;
         return Ok(user.ToDictionary());
+    }
+
+    [HttpGet("profile")]
+    [Authorize]
+    public async Task<ActionResult> MyProfile()
+    {
+        UserRepository userRepository = new UserRepository(_mysql);
+        User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
+
+        if(user is null)
+            return NotFound("Could not find profile with this session id");
+
+        user.Password = null;
+        return Ok(user.ToDictionary());
+    }
+
+    public async Task<ActionResult> SaveDescription([FromBody] String value)
+    {
+        UserRepository userRepository = new UserRepository(_mysql);
+        User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
+
+        if(user is null)
+            return NotFound("Could not find profile with this session id");
+
+        user.Description = value;
+
+        return Ok();
     }
 }

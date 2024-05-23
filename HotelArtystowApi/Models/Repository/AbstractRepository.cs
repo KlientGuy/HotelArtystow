@@ -6,7 +6,7 @@ using MySqlConnector;
 
 namespace HotelArtystowApi.Models.Repository;
 
-public abstract class AbstractRepository<T>
+public abstract class AbstractRepository<T> where T : AbstractEntity
 {
     public MySqlDataSource dataSource;
     protected AbstractRepository(MySqlDataSource dataSource)
@@ -26,7 +26,7 @@ public abstract class AbstractRepository<T>
         return await ReadAllAsync(await command.ExecuteReaderAsync());
     }
 
-    async protected Task<bool> RunInsert(String tableName, AbstractEntity entity)
+    async protected Task<bool> RunInsert(String tableName, T entity)
     {
         Dictionary<String, dynamic?> columns = entity.ToDictionary();
         columns.Remove("Id");
@@ -47,26 +47,10 @@ public abstract class AbstractRepository<T>
         return res > 0;
     }
 
-    async protected Task<bool> RunInsert(String tableName, User entity)
-    {
-        Dictionary<String, dynamic?> columns = entity.ToDictionary();
-        columns.Remove("Id");
-
-        String columnString = String.Join(", ", columns.Keys);
-        String prep = "@" + String.Join(", @", columns.Keys);
-
-        String query = $"INSERT INTO {tableName} ({columnString}) VALUES ({prep})";
-
-        MySqlCommand command = await GetCommand(query);
-
-        BindQueryParams(command, columns);
-
-        int res = await command.ExecuteNonQueryAsync();
-
-        entity.Id = (long)command.LastInsertedId;
-
-        return res > 0;
-    }
+    // async protected Task<bool> RunUpdate(String tableName, T entity)
+    // {
+        // String query = $"UPDATE {tableName} SET WHERE id = {entity.Id}";
+    // }
 
     async protected Task<MySqlCommand> GetCommand(String query)
     {

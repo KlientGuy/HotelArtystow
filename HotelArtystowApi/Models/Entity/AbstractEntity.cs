@@ -1,10 +1,18 @@
 using System.Reflection;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace HotelArtystowApi.Models.Entity;
 
 public abstract class AbstractEntity
 {
     public long Id { get; set; }
+    private AbstractEntity? _snapshot;
+    protected AbstractEntity? Snapshot { 
+        get => Snapshot;
+        set {
+            _snapshot = value;
+        }
+    }
 
     public Dictionary<String, dynamic?> ToDictionary()
     {

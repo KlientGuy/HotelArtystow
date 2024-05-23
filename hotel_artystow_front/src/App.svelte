@@ -14,6 +14,14 @@
 
 </script>
 
+<style>
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
 <Navbar/>
 
 <main>
