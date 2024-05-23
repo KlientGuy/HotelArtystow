@@ -1,6 +1,8 @@
 using System.Data.Common;
-using HotelArtystowApi.Models.Entity;
 using MySqlConnector;
+
+using HotelArtystowApi.Models.Entity;
+using HotelArtystowApi.Util.DBUtil;
 
 namespace HotelArtystowApi.Models.Repository;
 
@@ -32,9 +34,12 @@ public sealed class UserRepository : AbstractRepository<User>
         while(await reader.ReadAsync())
         {
             User user = new User();
-            user.Id = reader.GetInt32(0);
-            user.Username = reader.GetString(1);
-            user.Password = reader.GetString(2);
+            user.Id = DBCast<int>("id", reader);
+            user.Username = DBCast<String>("username", reader);
+            user.Password = DBCast<String>("password", reader);
+            user.Firstname = DBCast<String>("firstname", reader);
+            user.Lastname = DBCast<String>("lastname", reader);
+            user.Description = DBCast<String>("description", reader);
 
             toReturn.Add(user);
         }

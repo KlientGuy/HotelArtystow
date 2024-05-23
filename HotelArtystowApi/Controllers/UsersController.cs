@@ -53,7 +53,7 @@ public class UsersController : ControllerBase
         {
             case PasswordVerificationResult.Success:
                 AuthorizeUser(username);
-                return Ok(new Dictionary<String, dynamic> {{"status", true}, {"redirect", "adam"}});
+                return Ok(new Dictionary<String, dynamic> {{"status", true}, {"userId", user.Id}});
             case PasswordVerificationResult.Failed:
                 return Unauthorized("Invalid password");
         }
@@ -87,18 +87,30 @@ public class UsersController : ControllerBase
     [HttpPost("register")]
     public async Task<ActionResult> Register([FromBody] Dictionary<String, dynamic> registerBody)
     {
+        String[] errorMsg = [];
         String username = ((JsonElement)registerBody["username"]).GetString() ?? "";
 
         if(username == "")
-            return BadRequest("Username is a required field");
+            errorMsg.Append("username");
 
         String password = ((JsonElement)registerBody["password"]).GetString() ?? "";
 
         if(password == "")
-            return BadRequest("Password is a required field");
+            errorMsg.Append("password");
+
+        String firstname = ((JsonElement)registerBody["firstname"]).GetString() ?? "";
+        String lastname = ((JsonElement)registerBody["lastname"]).GetString() ?? "";
+
+        if(firstname == "" || lastname == "")
+        {
+            errorMsg.Append("firstname").Append("lastname");
+            return BadRequest($"Following fields are required: {String.Join(", ", errorMsg)}");
+        }
 
         User user = new User();
         user.Username = username;
+        user.Firstname = firstname;
+        user.Lastname = lastname;
 
         PasswordHasher<User> hasher = new PasswordHasher<User>();
 
@@ -124,17 +136,16 @@ public class UsersController : ControllerBase
         return usersList.ToArray();
     }
 
-    [HttpPost("new")]
-    public async Task<ActionResult> New()
+    [HttpGet("profile/{id}")]
+    public async Task<ActionResult> Profile(int id)
     {
         UserRepository userRepository = new UserRepository(_mysql);
-        User user = new User();
-        user.Username = "adam.adam";
-        bool res = await userRepository.CreateUser(user);
+        User? user = await userRepository.GetBy("id", id);
 
-        if(res)
-            return CreatedAtAction(nameof(GetUsers), null, user);
+        if(user is null)
+            return NotFound();
 
-        return StatusCode(500);
+        user.Password = null;
+        return Ok(user.ToDictionary());
     }
 }

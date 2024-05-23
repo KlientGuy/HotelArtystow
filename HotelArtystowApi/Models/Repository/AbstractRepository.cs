@@ -1,5 +1,6 @@
 using System.Data.Common;
 using HotelArtystowApi.Models.Entity;
+using HotelArtystowApi.Util.DBUtil;
 using Microsoft.AspNetCore.Identity;
 using MySqlConnector;
 
@@ -82,6 +83,11 @@ public abstract class AbstractRepository<T>
         {
             command.Parameters.AddWithValue($"@{entry.Key}", entry.Value);
         }
+    }
+
+    protected DBT DBCast<DBT>(String colname, DbDataReader dataReader)
+    {
+        return DBUtil.DBCast<DBT>(colname, dataReader);
     }
 
     protected abstract Task<IReadOnlyList<T>> ReadAllAsync(DbDataReader reader);

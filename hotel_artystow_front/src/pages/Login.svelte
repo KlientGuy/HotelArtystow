@@ -19,6 +19,7 @@
 
         navigateTo('/profile');
         sessionStorage.setItem('loggedIn', '1');
+        sessionStorage.setItem('userId', res.data.userId);
     }
 
     async function testLogin(){

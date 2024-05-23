@@ -32,6 +32,16 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @param {number} userId 
+     * @returns Promise<object>
+     */
+    async getProfileData(userId) {
+        const res = await this._sendGetRequest(`/users/profile/${userId}`);
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} queryParams 
