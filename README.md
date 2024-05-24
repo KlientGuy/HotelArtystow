@@ -22,6 +22,16 @@ Bo to fajna zabawa i nowe technologie
 
 ### Jak przygotować :bomb:
 
+Potrzebujemy najpierw parę rzeczy mieć zainstalowanych
+* .NET runtime
+* .NET SDK
+ 
+Powyższe przynajmniej wersja 8
+
+* NodeJS :rofl:
+
+Chyba tyle, potem robimy sobie
+
 ```bash
 $ git pull git@github.com:KlientGuy/HotelArtystow.git
 $ cd hotel_artystow_front/
@@ -39,6 +49,6 @@ $ cd ../hotel_artystow_front/
 $ npm run dev
 ```
 
-Potem odpalamy w przeglądarce\
+Potem odpalamy w przeglądarce
 * http://localhost:5001 -- na front
 * http://localhost:5000/swagger/index.html -- na szwagra do testowania api
