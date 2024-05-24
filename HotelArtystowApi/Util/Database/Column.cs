@@ -1,11 +1,11 @@
 using System.Data.Common;
 
-namespace HotelArtystowApi.Util.DBUtil;
+namespace HotelArtystowApi.Util.Database;
 
 
-public static class DBUtil
+public static class Column
 {
-    public static T DBCast<T>(String colname, DbDataReader reader)
+    public static T Cast<T>(String colname, DbDataReader reader)
     {
         object value = reader.GetValue(reader.GetOrdinal(colname));
 

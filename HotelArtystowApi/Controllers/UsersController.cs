@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Text.Json.Nodes;
 
 namespace HotelArtystowApi.Controllers;
 
@@ -24,35 +25,22 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult> Login([FromBody] Dictionary<String, dynamic> loginBody)
+    public async Task<ActionResult> Login([FromBody] UserLoginDTO userLogin)
     {
-        String username = ((JsonElement)loginBody["username"]).GetString() ?? "";
-
-        if(username == "")
-            return BadRequest("Username is a required field");
-
-        String password = ((JsonElement)loginBody["password"]).GetString() ?? "";
-
-        if(password == "")
-            return BadRequest("Password is a required field");
-
         PasswordHasher<User> hasher = new PasswordHasher<User>();
-
         UserRepository userRepository = new UserRepository(_mysql);
 
-        User? user = await userRepository.GetBy("username", username);
+        User? user = await userRepository.GetBy("username", userLogin.Username);
 
         if(user is null)
-        {
             return NotFound("Login not found");
-        }
 
-        PasswordVerificationResult res = hasher.VerifyHashedPassword(user, user.Password!, password);
+        PasswordVerificationResult res = hasher.VerifyHashedPassword(user, user.Password!, userLogin.Password);
 
         switch(res)
         {
             case PasswordVerificationResult.Success:
-                AuthorizeUser(username);
+                AuthorizeUser(userLogin.Username);
                 HttpContext.Session.SetInt32("userId", (int)user.Id);
                 return Ok(new Dictionary<String, dynamic> {{"status", true}, {"userId", user.Id}});
             case PasswordVerificationResult.Failed:
@@ -86,39 +74,11 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult> Register([FromBody] Dictionary<String, dynamic> registerBody)
+    public async Task<ActionResult> Register([FromBody] UserRegisterDTO userRegister)
     {
-        String[] errorMsg = [];
-        String username = ((JsonElement)registerBody["username"]).GetString() ?? "";
-
-        if(username == "")
-            errorMsg.Append("username");
-
-        String password = ((JsonElement)registerBody["password"]).GetString() ?? "";
-
-        if(password == "")
-            errorMsg.Append("password");
-
-        String firstname = ((JsonElement)registerBody["firstname"]).GetString() ?? "";
-        String lastname = ((JsonElement)registerBody["lastname"]).GetString() ?? "";
-
-        if(firstname == "" || lastname == "")
-        {
-            errorMsg.Append("firstname").Append("lastname");
-            return BadRequest($"Following fields are required: {String.Join(", ", errorMsg)}");
-        }
-
-        User user = new User();
-        user.Username = username;
-        user.Firstname = firstname;
-        user.Lastname = lastname;
-
-        PasswordHasher<User> hasher = new PasswordHasher<User>();
-
-        String hashedPassword = hasher.HashPassword(user, password);
-
-        user.Password = hashedPassword;
+        User user = userRegister.MakeUser();
         Console.WriteLine(user.ToString());
+
         UserRepository userRepository = new UserRepository(_mysql);
         bool res = await userRepository.CreateUser(user);
         if(res)
@@ -164,6 +124,8 @@ public class UsersController : ControllerBase
         return Ok(user.ToDictionary());
     }
 
+    [HttpPost("profile/saveDescription")]
+    [Authorize]
     public async Task<ActionResult> SaveDescription([FromBody] String value)
     {
         UserRepository userRepository = new UserRepository(_mysql);
@@ -173,7 +135,9 @@ public class UsersController : ControllerBase
             return NotFound("Could not find profile with this session id");
 
         user.Description = value;
+        if(await userRepository.Update(user))
+            return Ok();
 
-        return Ok();
+        return StatusCode(500);
     }
 }

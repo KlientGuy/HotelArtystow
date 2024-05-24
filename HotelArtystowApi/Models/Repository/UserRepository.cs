@@ -2,12 +2,13 @@ using System.Data.Common;
 using MySqlConnector;
 
 using HotelArtystowApi.Models.Entity;
-using HotelArtystowApi.Util.DBUtil;
 
 namespace HotelArtystowApi.Models.Repository;
 
 public sealed class UserRepository : AbstractRepository<User>
 {
+    protected override string TableName { get; set; } = "users";
+
     public UserRepository(MySqlDataSource dataSource) : base(dataSource){}
 
     public async Task<IReadOnlyList<User>> GetAllUsers()
@@ -24,7 +25,12 @@ public sealed class UserRepository : AbstractRepository<User>
 
     public async Task<bool> CreateUser(User user) 
     {
-        return await this.RunInsert("users", user);
+        return await this.RunInsert(user);
+    }
+
+    public async Task<bool> Update(User user)
+    {
+        return await this.RunUpdate(user);
     }
 
     protected override async Task<IReadOnlyList<User>> ReadAllAsync(DbDataReader reader)
@@ -34,15 +40,17 @@ public sealed class UserRepository : AbstractRepository<User>
         while(await reader.ReadAsync())
         {
             User user = new User();
-            user.Id = DBCast<int>("id", reader);
-            user.Username = DBCast<String>("username", reader);
-            user.Password = DBCast<String>("password", reader);
-            user.Firstname = DBCast<String>("firstname", reader);
-            user.Lastname = DBCast<String>("lastname", reader);
-            user.Description = DBCast<String>("description", reader);
+            user.Id = Cast<int>("id", reader);
+            user.Username = Cast<String>("username", reader);
+            user.Password = Cast<String>("password", reader);
+            user.Firstname = Cast<String>("firstname", reader);
+            user.Lastname = Cast<String>("lastname", reader);
+            user.Description = Cast<String?>("description", reader);
 
+            updateTracker.Set(user);
             toReturn.Add(user);
         }
+
 
         return toReturn;
     }

@@ -1,5 +1,4 @@
 using System.Reflection;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace HotelArtystowApi.Models.Entity;
 

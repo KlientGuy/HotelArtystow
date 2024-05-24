@@ -1,14 +1,17 @@
 using System.Data.Common;
 using HotelArtystowApi.Models.Entity;
-using HotelArtystowApi.Util.DBUtil;
-using Microsoft.AspNetCore.Identity;
+using HotelArtystowApi.Util.Database;
 using MySqlConnector;
 
 namespace HotelArtystowApi.Models.Repository;
 
 public abstract class AbstractRepository<T> where T : AbstractEntity
 {
-    public MySqlDataSource dataSource;
+    protected UpdateTracker<T> updateTracker = new UpdateTracker<T>();
+    protected MySqlDataSource dataSource;
+
+    protected abstract String TableName { get; set; }
+
     protected AbstractRepository(MySqlDataSource dataSource)
     {
         this.dataSource = dataSource;
@@ -26,7 +29,7 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         return await ReadAllAsync(await command.ExecuteReaderAsync());
     }
 
-    async protected Task<bool> RunInsert(String tableName, T entity)
+    async protected Task<bool> RunInsert(T entity)
     {
         Dictionary<String, dynamic?> columns = entity.ToDictionary();
         columns.Remove("Id");
@@ -34,7 +37,7 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         String columnString = String.Join(", ", columns.Keys);
         String prep = "@" + String.Join(", @", columns.Keys);
 
-        String query = $"INSERT INTO {tableName} ({columnString}) VALUES ({prep})";
+        String query = $"INSERT INTO {TableName} ({columnString}) VALUES ({prep})";
 
         MySqlCommand command = await GetCommand(query);
 
@@ -47,10 +50,36 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         return res > 0;
     }
 
-    // async protected Task<bool> RunUpdate(String tableName, T entity)
-    // {
-        // String query = $"UPDATE {tableName} SET WHERE id = {entity.Id}";
-    // }
+    async protected Task<bool> RunUpdate(T entity)
+    {
+        if(entity.Id == 0L)
+            throw new Exception("Cannot update entity when Id is null");
+
+        Dictionary<String, dynamic?> diff = updateTracker.GetDiff(entity);
+
+        List<String> toUpdate = [];
+
+        foreach(KeyValuePair<String, dynamic?> entry in diff)
+        {
+            toUpdate.Add($"{entry.Key} = @{entry.Key}");
+        }
+
+        if(toUpdate.Count == 0)
+            return true;
+
+        String toUpdateStr = String.Join(", ", toUpdate);
+        String query = $"UPDATE {TableName} SET {toUpdateStr} WHERE id = @Id";
+        Console.WriteLine(query);
+
+        diff["Id"] = entity.Id;
+
+        MySqlCommand command = await GetCommand(query);
+        BindQueryParams(command, diff);
+
+        int res = await command.ExecuteNonQueryAsync();
+
+        return res > 0;
+    }
 
     async protected Task<MySqlCommand> GetCommand(String query)
     {
@@ -69,9 +98,9 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         }
     }
 
-    protected DBT DBCast<DBT>(String colname, DbDataReader dataReader)
+    protected DBT Cast<DBT>(String colname, DbDataReader dataReader)
     {
-        return DBUtil.DBCast<DBT>(colname, dataReader);
+        return Column.Cast<DBT>(colname, dataReader);
     }
 
     protected abstract Task<IReadOnlyList<T>> ReadAllAsync(DbDataReader reader);
