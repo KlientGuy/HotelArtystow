@@ -7,6 +7,7 @@
 
     let isEditing = false;
     let profileDesc = "Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm";
+    let profileError = null;
 
     const api = new HotelArtystowApi();
 
@@ -34,8 +35,18 @@
     * @param {Event & {target: HTMLTextAreaElement}} e 
     */
     async function saveDescription(e) {
-        profileDesc = e.target.value;
+        profileError = null;
+        const newDesc = e.target.value;
         isEditing = false
+
+        const res = await api.saveProfileDescription(newDesc);
+
+        if(!res.status) {
+            profileError = "Nie udało się zapisać opisu";
+            return;
+        }
+
+        profileDesc = newDesc;
     }
         
 </script>
@@ -115,6 +126,9 @@
                             </div>
                         {/if}
                     </div>
+                    {#if profileError !== null}
+                        <span style="color: red">{profileError}</span>
+                    {/if}
                 </div>
                 <div class="profile-rank">
                     <!-- <canvas width="256" height="256"></canvas> -->

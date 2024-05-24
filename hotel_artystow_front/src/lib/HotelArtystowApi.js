@@ -52,7 +52,7 @@ export class HotelArtystowApi
      * @returns Promise<object>
      */
     async saveProfileDescription(value) {
-        const res = await this._sendPostRequest('/users/profile/saveDescription', {value});
+        const res = await this._sendPostRequest('/users/profile/saveDescription', value);
         return await this._parseResponse(res);
     }
 
@@ -80,9 +80,10 @@ export class HotelArtystowApi
     /**
     * @private
     * @param {string} endpoint 
-    * @param {object} body 
+    * @param {object|string|number} body 
     */
     async _sendPostRequest(endpoint, body) {
+
         const res = await fetch(this._apiUrl + endpoint, {
             credentials: 'include',
             method: 'POST',
@@ -100,6 +101,10 @@ export class HotelArtystowApi
     */
     async _parseResponse(response) {
         if(response.ok) {
+
+            if(response.headers.get('Content-Length') === '0')
+                return {status: true, data: {}};
+
             return {
                 status: true,
                 data: await response.json()
