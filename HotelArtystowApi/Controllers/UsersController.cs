@@ -98,7 +98,7 @@ public class UsersController : ControllerBase
     }
 
     [HttpGet("profile/{id}")]
-    public async Task<ActionResult> Profile(int id)
+    public async Task<ActionResult<UserProfileDTO>> Profile(int id)
     {
         UserRepository userRepository = new UserRepository(_mysql);
         User? user = await userRepository.GetBy("id", id);
@@ -106,13 +106,14 @@ public class UsersController : ControllerBase
         if(user is null)
             return NotFound();
 
-        user.Password = null;
-        return Ok(user.ToDictionary());
+        UserProfileDTO profileDTO = user.ToDTO<UserProfileDTO>();
+
+        return Ok(profileDTO);
     }
 
     [HttpGet("profile")]
     [Authorize]
-    public async Task<ActionResult> MyProfile()
+    public async Task<ActionResult<UserProfileDTO>> MyProfile()
     {
         UserRepository userRepository = new UserRepository(_mysql);
         User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
@@ -120,8 +121,9 @@ public class UsersController : ControllerBase
         if(user is null)
             return NotFound("Could not find profile with this session id");
 
-        user.Password = null;
-        return Ok(user.ToDictionary());
+        UserProfileDTO profile = user.ToDTO<UserProfileDTO>();
+
+        return Ok(profile);
     }
 
     [HttpPost("profile/saveDescription")]

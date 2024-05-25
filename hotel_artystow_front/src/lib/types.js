@@ -1,8 +1,9 @@
 /**
 * @typedef {object} UserData
-* @property {string} Username
-* @property {string} Firstname
-* @property {string} Description
+* @property {string} username
+* @property {string} firstname
+* @property {string} description
+* @property {string} profilePic
 */
 
 export const Types = {};

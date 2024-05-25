@@ -46,6 +46,7 @@ public sealed class UserRepository : AbstractRepository<User>
             user.Firstname = Cast<String>("firstname", reader);
             user.Lastname = Cast<String>("lastname", reader);
             user.Description = Cast<String?>("description", reader);
+            user.ProfilePic = Cast<String?>("profilePic", reader);
 
             updateTracker.Set(user);
             toReturn.Add(user);

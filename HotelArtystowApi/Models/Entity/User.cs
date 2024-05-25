@@ -9,6 +9,7 @@ public class User : AbstractEntity
     public String? Firstname { get; set; }
     public String? Lastname { get; set; }
     public String? Description { get; set; }
+    public String? ProfilePic { get; set; }
 }
 
 public class UserRegisterDTO
@@ -38,4 +39,12 @@ public class UserLoginDTO
 {
     public required String Username { get; set; }
     public required String Password { get; set; }
+}
+
+public class UserProfileDTO : AbstractDTO
+{
+    public String? Firstname { get; set; }
+    public String? Lastname { get; set; }
+    public String? Description { get; set; }
+    public String? ProfilePic { get; set; }
 }

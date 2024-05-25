@@ -28,6 +28,21 @@ public abstract class AbstractEntity
         return toReturn;
     }
 
+    public T ToDTO<T>() where T : AbstractDTO, new()
+    {
+        Dictionary<String, dynamic?> dict = this.ToDictionary();
+        T dto = new T();
+
+        PropertyInfo[] props = dto.GetType().GetProperties();
+
+        foreach(PropertyInfo property in props)
+        {
+            property.SetValue(dto, dict[property.Name]);
+        }
+
+        return dto;
+    }
+
     public override string ToString()
     {
         Dictionary<String, dynamic> props = this.ToDictionary()!;

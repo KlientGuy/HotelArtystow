@@ -19,7 +19,8 @@
         }
 
         userData = res.data;
-        profileDesc = userData.Description ?? '';
+        console.log(userData);
+        profileDesc = userData.description ?? '';
     }
 
     function editProfile() {
@@ -106,13 +107,13 @@
 {:then}
     <div class="bg-primary profile-container">
         <div class="w-100 text-center profile-name">
-            <span class="profile-name">{userData.Firstname}</span>
+            <span class="profile-name">{userData.firstname}</span>
         </div>
         <div class="col space-around profile-info">
             <div class="row space-around">
                 <div class="col space-around profile-pic-wrap">
                     <div class="profile-pic">
-                        <img src="img/ja.jpg" width="256" height="256" alt="ja">
+                        <img src="img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
                     </div>
                     <div class="profile-desc row justify-center">
                         {#if isEditing}
