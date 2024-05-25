@@ -5,19 +5,22 @@ export default class Router {
 
     routes = new Map([
         ['/login', Login],
-        ['/profile', Profile]
+        ['/profile', Profile],
+        ['/profile/{id}', Profile]
     ]);
 
     pageChangeEvent = new CustomEvent('onPageChange', {
         detail: {
             component: () => Router.currentComponent,
             params: () => Router.currentParams,
+            routeParams: () => Router.routeParams
         }
     })
 
     static currentRoute = '/login';
     static currentComponent = Login;
     static currentParams = {};
+    static routeParams = {};
 
     constructor() {
 
@@ -69,10 +72,69 @@ export default class Router {
      */
     switchComponent(route, params = {})
     {
+        let routeParams = {};
+        if(!this.routes.has(route)) {
+            const matchedRoute = this._matchRoute(route);
+            route = matchedRoute.route;
+            routeParams = matchedRoute.params;
+        }
+
+
         Router.currentComponent = this.routes.get(route) ?? Login;
         Router.currentParams = params;
+        Router.routeParams = routeParams;
         document.dispatchEvent(this.pageChangeEvent);
     }
+
+    /**
+     * @private
+     * @param {string} route 
+     */
+    _matchRoute(route) {
+        const keys = this.routes.keys();
+
+        let bestMatch = null;
+        const routeParams = {};
+        for(const key of keys) {
+
+            const matches = [...key.matchAll(/{.*?}/g)];
+
+            if(matches.length === 0)
+                continue;
+
+            const splitTemplate = key.split('/');
+            const splitRoute = route.split('/');
+
+            splitTemplate.splice(0, 1);
+            splitRoute.splice(0, 1);
+
+            let goodRoute = false;
+
+            for(let i = 0; i < splitTemplate.length; i++) {
+
+                if(splitTemplate[i] === splitRoute[i]) {
+                    goodRoute = !/{.*?}/.test(splitTemplate[i]);
+                    continue;
+                }
+                
+                if(splitRoute[i] == null)
+                    goodRoute = false;
+
+                routeParams[splitTemplate[i].replaceAll(/{|}/g, '')] = splitRoute[i];
+            }
+
+            if(goodRoute) {
+                bestMatch = key;
+                break;
+            }
+        }
+
+        return {
+            route: bestMatch,
+            params: routeParams
+        }
+    }
+    
 
     /**
     * @private

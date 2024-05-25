@@ -1,16 +1,28 @@
 <script>
-    import Login from './pages/Login.svelte'
     import Router from './lib/router';
     import Navbar from "./lib/Navbar.svelte";
+    import * as Types from './lib/types';
 
     const router = new Router();
     let currentComponent = Router.currentComponent;
-    let params = Router.currentParams;
+    let params = {
+        query: Router.currentParams,
+        route: Router.routeParams
+    };
 
-    document.addEventListener('onPageChange', (e) => {
+    document.addEventListener('onPageChange', handleOnPageChange)
+
+    /**
+    * @param {Types.PageChangeEvent} e 
+    */
+    function handleOnPageChange(e) {
+
         currentComponent = e.detail.component();
-        params = e.detail.params();
-    })
+        params = {
+            query: e.detail.params(),
+            route: e.detail.routeParams()
+        };
+    }
 
 </script>
 

@@ -2,6 +2,9 @@
     import { HotelArtystowApi } from "../lib/HotelArtystowApi";
     import * as Types from '../lib/types';
 
+    /** @type {Types.RouterParams} */
+    export let params;
+
     /** @type {Types.UserData} */
     let userData;
 
@@ -12,14 +15,13 @@
     const api = new HotelArtystowApi();
 
     async function getUserData() {
-        const res = await api.getProfileData();
+        const res = await api.getProfileData(params.route.id);
 
         if(!res.status) {
 
         }
 
         userData = res.data;
-        console.log(userData);
         profileDesc = userData.description ?? '';
     }
 
@@ -113,7 +115,7 @@
             <div class="row space-around">
                 <div class="col space-around profile-pic-wrap">
                     <div class="profile-pic">
-                        <img src="img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
+                        <img src="/public/img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
                     </div>
                     <div class="profile-desc row justify-center">
                         {#if isEditing}
