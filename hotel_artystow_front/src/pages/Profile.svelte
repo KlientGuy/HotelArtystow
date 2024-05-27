@@ -97,6 +97,19 @@
        font-weight: bold;
    }
 
+   .profile-emoji{
+       height: 5rem;
+       width: 5rem;
+   }
+
+   .text-area{
+        background-color: #716085;
+        border: none;
+        border-radius: 15px;
+        padding: 0.5rem;
+        /*font-size: 1.5rem;*/
+   }
+
    #edit-desc-field {
        width: 100%;
        resize: none;
@@ -119,12 +132,12 @@
                     </div>
                     <div class="profile-desc row justify-center">
                         {#if isEditing}
-                            <textarea name="editDescField" id="edit-desc-field" spellcheck="false" use:focusDescField on:focusout={saveDescription}>{profileDesc}</textarea>
+                            <textarea class="text-area" name="editDescField" id="edit-desc-field" spellcheck="false" use:focusDescField on:focusout={saveDescription}>{profileDesc}</textarea>
                         {:else}
-                            <div class="text-center" id="edit-description" style="max-width: 20em;">
+                            <div class="text-center col align-items-center" id="edit-description" style="max-width: 20em;">
                                 {profileDesc}
-                                <button type="button" style="font-size: 1rem;" on:click={editProfile}>
-                                    Edit description
+                                <button type="button" class="btn" style="font-size: 1rem;" on:click={editProfile}>
+                                    Edytuj opis
                                 </button>
                             </div>
                         {/if}
@@ -140,15 +153,15 @@
             </div>
             <div class="row space-around profile-stats">
                 <div class="login-streak">
-                    <div class="count">10 🔥</div>
+                    <div class="count">10 <img class="profile-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
                     <div class="stat-text">Login streak</div>
                 </div>
                 <div class="profile-ranking">
-                    <div class="count">10 🏆</div>
+                    <div class="count">10 <img class="profile-emoji" src="/public/img/emojis/trophy_emoji.png" alt="trophy emoji"></div>
                     <div class="stat-text">Ranking</div>
                 </div>
                 <div class="profile-bees">
-                    <div class="count">999 🐝</div>
+                    <div class="count">999 <img class="profile-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
                     <div class="stat-text">Pszczoły</div>
                 </div>
             </div>

@@ -57,7 +57,7 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
 
         Dictionary<String, dynamic?> diff = updateTracker.GetDiff(entity);
 
-        List<String> toUpdate = [];
+        List<String> toUpdate = new List<string> {};
 
         foreach(KeyValuePair<String, dynamic?> entry in diff)
         {
