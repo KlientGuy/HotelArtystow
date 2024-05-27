@@ -1,3 +1,5 @@
+
+
 :root, html, body {
     padding: 0;
     margin: 0;
@@ -69,40 +71,6 @@ body{
     border-radius: 35px;
 }
 
-.container {
-    overflow: hidden;
-}
-.container > div {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-}
-
-.container > div > div {
-    width: 250px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    aspect-ratio: 0.866;
-    flex-shrink: 0;
-    clip-path: polygon(0 25%,50% 0,100% 25%,100% 75%,50% 100%,0 75%);
-    background: rgb(109,54,159);
-    background: radial-gradient(circle, rgba(109,54,159,1) 0%, rgba(59,27,89,1) 100%);
-    cursor: pointer;
-}
-
-.container > div > div:hover {
-    scale: 1.05;
-    transition: 0.2s;
-}
-
-.container > div:last-child {
-    transform: translateY(calc(20px - 25%));
-}
-
-.container > div:last-child > div:nth-child(10) {
-    background: black;
-}
 
 .app-icon {
     fill: #978249;
@@ -199,4 +167,9 @@ body{
 
 .nav-logo {
     width: 5vw;
+}
+
+.profile-navbar-image {
+    width: 3vw;
+    border-radius: 50%;
 }

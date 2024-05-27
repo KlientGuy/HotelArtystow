@@ -1,6 +1,7 @@
 import Login from '../pages/Login.svelte'
 import Profile from '../pages/Profile.svelte'
 import Zjeble from '../pages/Zjeble.svelte'
+import Homepage from "../pages/Homepage.svelte";
 
 export default class Router {
 
@@ -8,7 +9,8 @@ export default class Router {
         ['/login', Login],
         ['/profile', Profile],
         ['/profile/{id}', Profile],
-        ['/zjeble', Zjeble]
+        ['/zjeble', Zjeble],
+        ['/', Homepage]
     ]);
 
     pageChangeEvent = new CustomEvent('onPageChange', {
@@ -163,6 +165,8 @@ export default class Router {
                 found = false;
                 break;
             }
+
+            element = element.parentElement;
 
             found = true;
         }

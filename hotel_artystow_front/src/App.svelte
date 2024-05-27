@@ -3,6 +3,8 @@
     import Navbar from "./lib/Navbar.svelte";
     import * as Types from './lib/types';
 
+    import '/node_modules/@fortawesome/fontawesome-free/css/all.css';
+
     const router = new Router();
     let currentComponent = Router.currentComponent;
     let params = {
