@@ -1,6 +1,16 @@
 <script>
     const lives = ['❤️', '❤️', '❤️'];
     const lostLife = '🖤';
+    let leftLives = 2;
+
+    function handleAnswerSubmit() {
+        lives[leftLives] = lostLife;
+        leftLives--;
+
+        /** @type {HTMLInputElement} */
+        const input = document.querySelector('#game-answer');
+        input.value = null;
+    }
 </script>
 <style>
     .main-game {
@@ -30,12 +40,14 @@
             <div class="game-photo">
                 <img class="card-rounded" src="/public/img/profile_pics/patryk.jpg" width="512" height="512" alt="">
             </div>
-            <div class="game-input row justify-center">
-                <div class="form-group">
-                    <input class="form-field" id="game-answer" type="text" placeholder="Odpowiedź">
-                    <label for="game-answer" class="form-label">Odpowiedź</label>
+            <form action="#" on:submit|preventDefault={handleAnswerSubmit}>
+                <div class="game-input row justify-center">
+                    <div class="form-group">
+                        <input class="form-field" id="game-answer" type="text" placeholder="Zgadnij kto to">
+                        <label for="game-answer" class="form-label">Zgadnij kto to</label>
+                    </div>
                 </div>
-            </div>
+            </form>
             <div class="row justify-center">
                 <div class="game-lives row">
                     <div class="single-life" data-index="1">

@@ -1,4 +1,5 @@
 using System.Reflection;
+using HotelArtystowApi.Util.Database;
 
 namespace HotelArtystowApi.Models.Entity;
 
