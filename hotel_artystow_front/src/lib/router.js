@@ -1,12 +1,14 @@
 import Login from '../pages/Login.svelte'
 import Profile from '../pages/Profile.svelte'
+import Zjeble from '../pages/Zjeble.svelte'
 
 export default class Router {
 
     routes = new Map([
         ['/login', Login],
         ['/profile', Profile],
-        ['/profile/{id}', Profile]
+        ['/profile/{id}', Profile],
+        ['/zjeble', Zjeble]
     ]);
 
     pageChangeEvent = new CustomEvent('onPageChange', {
@@ -143,6 +145,10 @@ export default class Router {
     */
     _seekAnchorParent(element)
     {
+
+        if(element instanceof HTMLAnchorElement)
+            return element;
+
         let found = false;
 
         /** @type {HTMLAnchorElement} */

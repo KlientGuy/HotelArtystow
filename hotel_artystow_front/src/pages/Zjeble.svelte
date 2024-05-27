@@ -1,0 +1,54 @@
+<script>
+    const lives = ['❤️', '❤️', '❤️'];
+    const lostLife = '🖤';
+</script>
+<style>
+    .main-game {
+        width: 60vw;
+        height: 80vh;
+        margin-top: 10vh;
+        padding: 1.2rem;
+    }
+
+    .game-title {
+        font-size: 2rem;
+        margin-bottom: 10px
+    }
+
+    .game-lives {
+        font-size: 3rem;
+        justify-content: space-evenly;
+        width: 70%;
+    }
+</style>
+<div class="main-game bg-primary card-rounded">
+    <div class="row justify-center">
+        <div class="col justify-center" style="">
+            <span class="game-title">
+                Zjeble
+            </span>
+            <div class="game-photo">
+                <img class="card-rounded" src="/public/img/profile_pics/patryk.jpg" width="512" height="512" alt="">
+            </div>
+            <div class="game-input row justify-center">
+                <div class="form-group">
+                    <input class="form-field" id="game-answer" type="text" placeholder="Odpowiedź">
+                    <label for="game-answer" class="form-label">Odpowiedź</label>
+                </div>
+            </div>
+            <div class="row justify-center">
+                <div class="game-lives row">
+                    <div class="single-life" data-index="1">
+                        {lives[0]}
+                    </div>
+                    <div class="single-life" data-index="2">
+                        {lives[1]}
+                    </div>
+                    <div class="single-life" data-index="3">
+                        {lives[2]}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

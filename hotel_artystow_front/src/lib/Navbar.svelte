@@ -8,6 +8,7 @@
     <li><a href="#">News</a></li>
     <li><a href="#">Contact</a></li>
     <li style="float:right"><a href="#">About</a></li>
+    <li><a href="/zjeble">Zjeble</a></li>
 </ul>
 
 <style>
