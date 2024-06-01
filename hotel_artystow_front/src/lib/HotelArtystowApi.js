@@ -66,6 +66,16 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @param {string} answer 
+     * @returns Promise<object>
+     */
+    async submitZjebleAnswer(answer) {
+        const res = await this._sendPostRequest('/zjeble/submitAnswer', answer);
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

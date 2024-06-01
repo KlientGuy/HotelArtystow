@@ -48,4 +48,42 @@ public class ZjebleController : ControllerBase
         return Ok(session);
     }
 
+    [HttpPost("submitAnswer")]
+    public async Task<ActionResult> SubmitAnswer([FromBody] String answer) 
+    {
+        ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
+        ZjebleRound round = await roundRepository.GetLatest();
+        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+        ZjebleUserSessionRepository sessionRepository = new ZjebleUserSessionRepository(_mysql);
+        ZjebleUserSession session = (await sessionRepository.GetBy("userId", userId))!;
+        Dictionary<String, dynamic> response;
+
+        if(answer != round.Answer)
+        {
+            session.LivesLeft--;
+
+            if(session.LivesLeft == 0)
+                session.EndedAt = DateTime.Now;
+
+            response = new Dictionary<String, dynamic>() {
+                {"status", false},
+                {"message", "Próbuj dalej"}
+            };
+
+
+        }
+        else
+        {
+            session.EndedAt = DateTime.Now;
+            response = new Dictionary<String, dynamic>() {
+                {"status", true},
+                {"message", "Gratulacje użytkowniku"},
+            };
+        }
+
+        await sessionRepository.Update(session);
+
+        return Ok(response);
+    }
+
 }

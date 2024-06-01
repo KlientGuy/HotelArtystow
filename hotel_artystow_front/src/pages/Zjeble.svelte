@@ -3,9 +3,10 @@
     import Loading from '../lib/Loading.svelte';
     import * as Types from '../lib/types';
     
-    const lives = ['❤️', '❤️', '❤️'];
+    let lives = ['', '', ''];
     const goodLife = '❤️';
     const lostLife = '🖤';
+    const winLife = '💛';
     let leftLives = 2;
 
     const api = new HotelArtystowApi();
@@ -18,13 +19,41 @@
 
         userSession = res.data;
 
-        lives.fill(goodLife, 0, userSession.livesLeft - 1);
-        lives.fill(lostLife, userSession.livesLeft - 1, 2);
+        lives.fill(goodLife, 0, userSession.livesLeft);
+        lives.fill(lostLife, userSession.livesLeft, 3);
     }
 
-    function handleAnswerSubmit() {
-        lives[leftLives] = lostLife;
-        leftLives--;
+    /**
+    * @param {number} lifeIndex 
+    */
+    async function removeHeartCool(lifeIndex) {
+        lives[lifeIndex] = lostLife;
+        for(let i = 0; i < 3; i++) {
+            await new Promise((resolve) => {
+                setTimeout(() => {
+                    lives[lifeIndex] = i % 2 == 1 ? lostLife : goodLife;
+                    resolve();
+                }, 180);
+            })
+        }
+        lives[lifeIndex] = lostLife;
+    }
+
+    /**
+    * @param {SubmitEvent & {currentTarget: EventTarget & HTMLFormElement}} e 
+    */
+    async function handleAnswerSubmit(e) {
+        const answer = (new FormData(e.currentTarget)).get("gameAnswer").toString();
+
+        const res = await api.submitZjebleAnswer(answer);
+
+        if(res.data.status) {
+            removeHeartCool(leftLives);
+            leftLives--;
+        }
+        else {
+            lives = [winLife, winLife, winLife];
+        }
 
         /** @type {HTMLInputElement} */
         const input = document.querySelector('#game-answer');
@@ -52,7 +81,11 @@
 </style>
 {#await getSession()}
     <div class="main-game bg-primary card-rounded">
-        <Loading/>
+        <div class="row justify-center">
+            <div class="col justify-center">
+                <Loading/>
+            </div>
+        </div>
     </div>
 {:then}
     <div class="main-game bg-primary card-rounded">
@@ -64,10 +97,10 @@
                 <div class="game-photo">
                     <img class="card-rounded" src="/public/img/profile_pics/patryk.jpg" width="512" height="512" alt="">
                 </div>
-                <form action="#" on:submit|preventDefault={handleAnswerSubmit}>
+                <form action="#" on:submit|preventDefault={(e) => handleAnswerSubmit(e)}>
                     <div class="game-input row justify-center">
                         <div class="form-group">
-                            <input class="form-field" id="game-answer" type="text" placeholder="Zgadnij kto to">
+                            <input name="gameAnswer" class="form-field" id="game-answer" type="text" placeholder="Zgadnij kto to">
                             <label for="game-answer" class="form-label">Zgadnij kto to</label>
                         </div>
                     </div>
