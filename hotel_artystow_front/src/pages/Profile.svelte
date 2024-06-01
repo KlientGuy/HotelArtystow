@@ -1,5 +1,6 @@
 <script>
     import { HotelArtystowApi } from "../lib/HotelArtystowApi";
+    import Loading from "../lib/Loading.svelte";
     import * as Types from '../lib/types';
 
     /** @type {Types.RouterParams} */
@@ -118,7 +119,13 @@
 </style>
 
 {#await getUserData()}
-    adam
+    <div class="bg-primary profile-container">
+        <div class="row justify-center">
+            <div class="col justify-center">
+                <Loading/>
+            </div>
+        </div>
+    </div>
 {:then}
     <div class="bg-primary profile-container">
         <div class="w-100 text-center profile-name">
