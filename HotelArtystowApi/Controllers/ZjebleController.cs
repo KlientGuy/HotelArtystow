@@ -43,6 +43,7 @@ public class ZjebleController : ControllerBase
 
             await repository.Create(session);
         }
+        return Ok();
 
     }
 
