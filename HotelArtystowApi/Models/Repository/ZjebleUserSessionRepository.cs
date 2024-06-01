@@ -37,10 +37,10 @@ public sealed class ZjebleUserSessionRepository : AbstractRepository<ZjebleUserS
         while(await reader.ReadAsync())
         {
             ZjebleUserSession session = new ZjebleUserSession();
-            session.Id = Cast<long>("id", reader);
+            session.Id = Cast<int>("id", reader);
             session.UserId = Cast<int>("userId", reader);
             session.LivesLeft = Cast<int>("livesLeft", reader);
-            session.Round = new Relation<long, ZjebleRound>(Cast<long>("round", reader), new ZjebleRound());
+            session.Round = new Relation<ZjebleRound>(Cast<int>("round", reader), new ZjebleRound());
             session.StartedAt = Cast<DateTime>("startedAt", reader);
             session.EndedAt = Cast<DateTime>("endedAt", reader);
 

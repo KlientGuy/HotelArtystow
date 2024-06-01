@@ -57,6 +57,15 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @returns Promise<object>
+     */
+    async getZjebleUserSession() {
+        const res = await this._sendGetRequest('/zjeble/getUserSession');
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

@@ -1,13 +1,14 @@
-using HotelArtystowApi.Models.Entity;
-using HotelArtystowApi.Models.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 
+using HotelArtystowApi.Models.Entity;
+using HotelArtystowApi.Models.Repository;
+
 namespace HotelArtystowApi.Controllers;
 
 [ApiController]
-[Route("/zjeble")]
+[Route("zjeble")]
 public class ZjebleController : ControllerBase
 {
     private readonly MySqlDataSource _mysql;
@@ -17,7 +18,7 @@ public class ZjebleController : ControllerBase
         _mysql = mysql; 
     }
 
-    [HttpGet("/getUserSession")]
+    [HttpGet("getUserSession")]
     [Authorize]
     public async Task<ActionResult> GetUserSession()
     {
@@ -36,15 +37,15 @@ public class ZjebleController : ControllerBase
         else
         {
             session = new ZjebleUserSession();
-            session.StartedAt = new DateTime();
+            session.StartedAt = DateTime.Now;
             session.LivesLeft = 3;
             session.UserId = userId;
-            session.Round = new Util.Database.Relation<long, ZjebleRound>(round.Id, round);
+            session.Round = new Util.Database.Relation<ZjebleRound>(round.Id, round);
 
             await repository.Create(session);
         }
-        return Ok();
 
+        return Ok(session);
     }
 
 }

@@ -23,4 +23,17 @@
  * @property {object} route
  */
 
+/**
+ * @typedef {object} ZjebleRound
+ * @property {number} id
+ * @property {string} answer
+ */
+
+/**
+ * @typedef {object} ZjebleUserSession
+ * @property {number} id
+ * @property {number} livesLeft
+ * @property {ZjebleRound} round
+ */
+
 export const Types = {};

@@ -23,7 +23,18 @@ public abstract class AbstractEntity
 
         foreach(PropertyInfo property in properties)
         {
-            toReturn[property.Name] = property.GetValue(this);
+            var val = property.GetValue(this);
+
+            if(val is not null)
+            {
+                Type valType = val.GetType();
+                if(valType.IsGenericType && valType.GetGenericTypeDefinition() == typeof(Relation<>))
+                {
+                    val = (long?)val.GetType().GetProperty("Key")?.GetValue(val);
+                }
+            }
+
+            toReturn[property.Name] = val;
         }
 
         return toReturn;

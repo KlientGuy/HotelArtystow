@@ -1,15 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
-using System.Text.Json;
-using MySqlConnector;
-
-using HotelArtystowApi.Models.Entity;
-using HotelArtystowApi.Models.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Text.Json.Nodes;
+using MySqlConnector;
+
+using HotelArtystowApi.Models.Entity;
+using HotelArtystowApi.Models.Repository;
 
 namespace HotelArtystowApi.Controllers;
 
