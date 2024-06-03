@@ -2,29 +2,33 @@
 
 import Navbar from "../lib/Navbar.svelte";
 import Loading from "../lib/Loading.svelte";
+import {navigateTo} from '../lib/navigation';
+
+
 </script>
 
-<Loading/>
-<!--<div class="container">-->
-<!--    <div class="app-block">-->
-<!--        <div class="hex">-->
-<!--            <i class="fa-solid fa-7x fa-cloud-arrow-up"></i>-->
-<!--        </div>-->
-<!--        <div class="hex">-->
-<!--            <i class="fa-solid fa-7x fa-camera-retro"></i>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--    <div class="app-block">-->
-<!--        <div class="hex">-->
-<!--            <i class="fa-solid fa-7x fa-ranking-star"></i>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<!--<Loading/>-->
+<div class="container">
+    <div class="app-block">
+        <button class="hex">
+            <i class="fa-solid fa-7x fa-cloud-arrow-up"></i>
+        </button>
+        <button on:click={() => navigateTo('/zjeble')} class="hex zjeble">
+            <i class="fa-solid fa-7x fa-camera-retro"></i>
+        </button>
+    </div>
+    <div class="app-block">
+        <button on:click={() => navigateTo('/ranking')} class="hex">
+            <i class="fa-solid fa-7x fa-ranking-star"></i>
+        </button>
+    </div>
+</div>
 
 <style>
 
     .container {
-        overflow: hidden;
+        overflow: visible;
+        padding: 20px;
     }
     .container > .app-block {
         display: flex;
@@ -34,6 +38,10 @@ import Loading from "../lib/Loading.svelte";
 
     .container > .app-block > .hex > i {
         color: #978249;
+    }
+
+    .hex:hover{
+        transform: scale(1.1);
     }
 
     .container > .app-block > .hex {
@@ -47,6 +55,7 @@ import Loading from "../lib/Loading.svelte";
         background: rgb(109,54,159);
         background: radial-gradient(circle, rgba(109,54,159,1) 0%, rgba(59,27,89,1) 100%);
         cursor: pointer;
+        transition: transform 0.3s ease;
     }
 
     .container > .app-block:last-child {
@@ -55,6 +64,13 @@ import Loading from "../lib/Loading.svelte";
 
     .container > .app-block:last-child > .hex:nth-child(10) {
         background: black;
+    }
+
+    button:hover {
+        border: none;
+    }
+    button:focus{
+        outline: none;
     }
 
 </style>

@@ -173,3 +173,20 @@ body{
     width: 3vw;
     border-radius: 50%;
 }
+
+.badge {
+    color: white;
+    font-size: 30px;
+    padding: 4px 8px;
+    text-align: center;
+    border-radius: 5px;
+}
+.first-place {
+    background-color: #978249;
+}
+.second-place {
+    background-color: #7a7a7a;
+}
+.third-place {
+    background-color: #624526;
+}
