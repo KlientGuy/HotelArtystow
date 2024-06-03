@@ -81,6 +81,18 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         return res > 0;
     }
 
+    async public Task<IReadOnlyList<T>> GetBy(Dictionary<String, dynamic?> search)
+    {
+        List<String> columns = [];
+
+        foreach(KeyValuePair<String, dynamic?> entry in search)
+        {
+            columns.Add($"{entry.Key} = @{entry.Key}");
+        }
+
+        return await RunSelect($"SELECT * FROM {TableName} WHERE {String.Join(" AND ", columns)}", search);
+    }
+
     async protected Task<MySqlCommand> GetCommand(String query)
     {
         MySqlConnection connection = await dataSource.OpenConnectionAsync();

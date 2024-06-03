@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats;
 
 using HotelArtystowApi.Models.Entity;
 using HotelArtystowApi.Models.Repository;
+using HotelArtystowApi.Util.Games;
+using SixLabors.ImageSharp.Formats.Png;
 
 namespace HotelArtystowApi.Controllers;
 
@@ -69,8 +73,6 @@ public class ZjebleController : ControllerBase
                 {"status", false},
                 {"message", "Próbuj dalej"}
             };
-
-
         }
         else
         {
@@ -86,4 +88,26 @@ public class ZjebleController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("getImageForUser")]
+    [Authorize]
+    public async Task<ActionResult> getImageForUser()
+    {
+        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+
+        ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
+        ZjebleRound round = await roundRepository.GetLatest();
+        ZjebleUserSessionRepository sessionRepository = new ZjebleUserSessionRepository(_mysql);
+
+        Dictionary<String, dynamic?> searchQuery = new Dictionary<String, dynamic?>() {
+            {"userId", userId},
+            {"round", round.Id}
+        };
+
+        ZjebleUserSession session = (await sessionRepository.GetBy(searchQuery))!.First();
+
+        Zjeble zjeble = new Zjeble();
+
+        Image image = await zjeble.BlurImageAsync("Resources/Images/Zjeble/patryk.jpg", session.LivesLeft * 5);
+        return File(zjeble.ImageToWebpStream(image), "image/webp");
+    }
 }
