@@ -114,12 +114,17 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserProfileDTO>> MyProfile()
     {
         UserRepository userRepository = new UserRepository(_mysql);
+        UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
         User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
 
         if(user is null)
             return NotFound("Could not find profile with this session id");
 
+        UserStatistics statistics = (await statisticsRepository.GetBy(new Dictionary<String, dynamic?>() {{"userId", user.Id}})).First();
+
+
         UserProfileDTO profile = user.ToDTO<UserProfileDTO>();
+        profile.UserStatistics = statistics;
 
         return Ok(profile);
     }

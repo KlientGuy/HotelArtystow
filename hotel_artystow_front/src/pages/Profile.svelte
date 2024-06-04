@@ -1,4 +1,5 @@
 <script>
+    import { elasticIn } from "svelte/easing";
     import { HotelArtystowApi } from "../lib/HotelArtystowApi";
     import Loading from "../lib/Loading.svelte";
     import * as Types from '../lib/types';
@@ -15,6 +16,11 @@
 
     const api = new HotelArtystowApi();
 
+    let counters = {
+        loginStreak: 0,
+        bees: 0
+    }
+
     async function getUserData() {
         const res = await api.getProfileData(params.route.id);
 
@@ -24,6 +30,45 @@
 
         userData = res.data;
         profileDesc = userData.description ?? '';
+
+        requestAnimationFrame((timestamp) => startCounter(timestamp, 'loginStreak'));
+        requestAnimationFrame((timestamp) => startCounter(timestamp, 'bees'));
+    }
+
+    let start;
+    let end;
+    let counterDuration = 1000 * 5;
+    let countersVisible = false;
+
+    /**
+    * @param {number} startTimestamp
+    * @param {string} prop 
+    */
+    function startCounter(startTimestamp, prop) {
+        const valueToGo = userData.userStatistics[prop];
+        // userData.userStatistics[prop] = '';
+        start = startTimestamp;
+        end = startTimestamp + 5000;
+        incrementCounter(startTimestamp, prop, valueToGo);
+    }
+
+    /**
+    * @param {number} now 
+    * @param {string} prop 
+    */
+    function incrementCounter(now, prop, val) {
+        if(now > end) {
+            countersVisible = true;
+            counters[prop] = '';
+            return;
+        }
+
+        let progress = (now - start) / counterDuration;
+        let progressVal = val * (1 - Math.pow(1 - progress, 3)) //EaseOut cubic;
+
+        counters[prop] = progressVal.toFixed(0);
+
+        requestAnimationFrame((timestamp) => incrementCounter(timestamp, prop, val));
     }
 
     function editProfile() {
@@ -56,6 +101,10 @@
 </script>
 
 <style>
+    .invisible {
+        visibility: hidden;
+    }
+
    .profile-container {
        width: 70vw;
        height: 70vh;
@@ -79,6 +128,18 @@
    }
    .profile-stats .count {
        font-size: 2.5em;
+       /* overflow: hidden; */
+       transition: --beeCount 5s;
+       counter-reset: beeCount var(--beeCount);
+   }
+
+   .profile-stats .count::before {
+       content: attr(data-count);
+       position: absolute;
+   }
+
+   .profile-stats .count:hover {
+       --beeCount: 10;
    }
 
    .profile-desc {
@@ -160,7 +221,7 @@
             </div>
             <div class="row space-around profile-stats">
                 <div class="login-streak">
-                    <div class="count">10 <img class="profile-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
+                    <div class="count" data-count="{counters.loginStreak}"><span class:invisible={!countersVisible}>{userData.userStatistics.loginStreak}</span> <img class="profile-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
                     <div class="stat-text">Login streak</div>
                 </div>
                 <div class="profile-ranking">
@@ -168,7 +229,7 @@
                     <div class="stat-text">Ranking</div>
                 </div>
                 <div class="profile-bees">
-                    <div class="count">999 <img class="profile-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+                    <div class="count" data-count="{counters.bees}"><span class:invisible={!countersVisible}>{userData.userStatistics.bees}</span> <img class="profile-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
                     <div class="stat-text">Pszczoły</div>
                 </div>
             </div>

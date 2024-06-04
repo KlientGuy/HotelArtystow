@@ -28,9 +28,12 @@ public abstract class AbstractEntity
             if(val is not null)
             {
                 Type valType = val.GetType();
-                if(valType.IsGenericType && valType.GetGenericTypeDefinition() == typeof(Relation<>))
+                if(valType.IsGenericType)
                 {
-                    val = (long?)val.GetType().GetProperty("Key")?.GetValue(val);
+                    if(valType.GetGenericTypeDefinition() == typeof(Relation<>))
+                        val = (long?)val.GetType().GetProperty("Key")?.GetValue(val);
+                    else if(valType.GetGenericTypeDefinition() == typeof(ReverseRelation<>))
+                        continue;
                 }
             }
 

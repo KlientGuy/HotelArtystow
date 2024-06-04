@@ -1,4 +1,7 @@
 <script>
+    import { HotelArtystowApi } from "./HotelArtystowApi";
+
+    const api = new HotelArtystowApi();
 
 </script>
 

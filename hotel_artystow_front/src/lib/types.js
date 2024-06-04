@@ -4,7 +4,16 @@
 * @property {string} firstname
 * @property {string} description
 * @property {string} profilePic
+* @property {UserStatistics} userStatistics
 */
+
+/**
+ * @typedef {object} UserStatistics
+ * @property {number} id
+ * @property {number|string} loginStreak
+ * @property {number|string} bees
+ * @property {number|string} division
+ */
 
 /**
  * @typedef {CustomEvent & {detail: PageChangeEventDetails}} PageChangeEvent

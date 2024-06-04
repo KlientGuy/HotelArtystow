@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
 
+using HotelArtystowApi.Util.Database;
+
 namespace HotelArtystowApi.Models.Entity;
 
-public class User : AbstractEntity
+public sealed class User : AbstractEntity
 {
     public String? Username { get; set; }
     public String? Password { get; set; }
@@ -10,6 +12,7 @@ public class User : AbstractEntity
     public String? Lastname { get; set; }
     public String? Description { get; set; }
     public String? ProfilePic { get; set; }
+    public ReverseRelation<UserStatistics>? UserStatistics { get; set; }
 }
 
 public class UserRegisterDTO
@@ -47,4 +50,5 @@ public class UserProfileDTO : AbstractDTO
     public String? Lastname { get; set; }
     public String? Description { get; set; }
     public String? ProfilePic { get; set; }
+    public UserStatistics? UserStatistics { get; set; }
 }
