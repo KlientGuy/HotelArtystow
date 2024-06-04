@@ -145,4 +145,19 @@ public class UsersController : ControllerBase
 
         return StatusCode(500);
     }
+
+    [HttpGet("profile/getNavbarStats")]
+    [Authorize]
+    public async Task<ActionResult<UserNavbarDTO>> GetNavbarStats()
+    {
+        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+
+        UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
+
+        UserStatistics stats = (await statisticsRepository.GetBy("userId", userId))!;
+
+        UserNavbarDTO dto = stats.ToDTO<UserNavbarDTO>();
+
+        return Ok(dto);
+    }
 }

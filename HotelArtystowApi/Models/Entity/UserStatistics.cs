@@ -14,3 +14,9 @@ public sealed class UserStatistics : AbstractEntity
         User = user;
     }
 }
+
+public sealed class UserNavbarDTO : AbstractDTO
+{
+    public int LoginStreak { get; set; } = 0;
+    public int Bees { get; set; } = 0;
+}

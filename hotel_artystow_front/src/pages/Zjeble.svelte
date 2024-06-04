@@ -11,6 +11,8 @@
 
     const api = new HotelArtystowApi();
 
+    let responseMessage = 'Zjeble';
+
     /** @type {Types.ZjebleUserSession} */
     let userSession;
 
@@ -21,6 +23,10 @@
         const res = await api.getZjebleUserSession();
 
         userSession = res.data;
+        if(!res.status) {
+            responseMessage = 'Coś się wyjebało';
+            return;
+        }
 
         lives.fill(goodLife, 0, userSession.livesLeft);
         lives.fill(lostLife, userSession.livesLeft, 3);
@@ -54,10 +60,21 @@
     */
     async function handleAnswerSubmit(e) {
         const answer = (new FormData(e.currentTarget)).get("gameAnswer").toString();
+        if(answer == '')
+            return;
+
+        /** @type {HTMLInputElement} */
+        const input = document.querySelector('#game-answer');
+        input.value = null;
 
         const res = await api.submitZjebleAnswer(answer);
 
         if(!res.data.status) {
+            responseMessage = res.data.message;
+
+            if(res.data.noAction)
+                return;
+
             removeHeartCool(leftLives);
             leftLives--;
             await fetchImage();
@@ -66,9 +83,6 @@
             lives = [winLife, winLife, winLife];
         }
 
-        /** @type {HTMLInputElement} */
-        const input = document.querySelector('#game-answer');
-        input.value = null;
     }
 </script>
 <style>
@@ -103,7 +117,7 @@
         <div class="row justify-center">
             <div class="col justify-center" style="">
                 <span class="game-title">
-                    Zjeble
+                    {responseMessage} 
                 </span>
                 <div class="game-photo">
                     <img class="card-rounded" src="{imageUrl}" width="512" height="512" alt="">

@@ -2,6 +2,14 @@
     import { HotelArtystowApi } from "./HotelArtystowApi";
 
     const api = new HotelArtystowApi();
+    let navbarData = {
+        bees: 0,
+        loginStreak: 0
+    };
+
+    /* api.getNavbarData().then((res) => {
+        navbarData = res.data;
+    }) */
 
 </script>
 
@@ -12,8 +20,8 @@
 <!--    <li class="stats">999<img class="nav-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></li>-->
     <li class="profile">
         <div class="row align-items-center">
-            <div class="nav-emoji">999<img class="nav-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
-            <div class="nav-emoji">999<img class="nav-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
+            <div class="nav-emoji">{navbarData.bees}<img class="nav-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+            <div class="nav-emoji">{navbarData.loginStreak}<img class="nav-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
             <a href="/profile"><img class="profile-navbar-image" src="/public/img/profile_pics/Hotpot.png" alt="ja"></a>
         </div>
     </li>

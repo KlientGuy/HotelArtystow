@@ -46,6 +46,11 @@ export class HotelArtystowApi
         return await this._parseResponse(res);
     }
 
+    async getNavbarData() {
+        const res = await this._sendGetRequest('/users/profile/getNavbarStats');
+        return await this._parseResponse(res);
+    }
+
     /**
      * @public
      * @param {string} value 

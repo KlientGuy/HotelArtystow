@@ -13,13 +13,6 @@ public sealed class ZjebleUserSessionRepository : AbstractRepository<ZjebleUserS
 
     public ZjebleUserSessionRepository(MySqlDataSource dataSource) : base(dataSource){}
 
-    public async Task<ZjebleUserSession?> GetBy(String column, dynamic value)
-    {
-        IReadOnlyList<ZjebleUserSession> res = await RunSelect($"SELECT * FROM {TableName} WHERE {column} = @search", new Dictionary<String, dynamic?>{{"search", value}});
-
-        return res.FirstOrDefault();
-    }
-
     public async Task<bool> Create(ZjebleUserSession session) 
     {
         return await this.RunInsert(session);
@@ -42,7 +35,7 @@ public sealed class ZjebleUserSessionRepository : AbstractRepository<ZjebleUserS
             session.LivesLeft = Cast<int>("livesLeft", reader);
             session.Round = new Relation<ZjebleRound>(Cast<int>("round", reader), new ZjebleRound());
             session.StartedAt = Cast<DateTime>("startedAt", reader);
-            session.EndedAt = Cast<DateTime>("endedAt", reader);
+            session.EndedAt = Cast<DateTime?>("endedAt", reader);
 
             updateTracker.Set(session);
             toReturn.Add(session);

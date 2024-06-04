@@ -2,12 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MySqlConnector;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Formats;
 
 using HotelArtystowApi.Models.Entity;
 using HotelArtystowApi.Models.Repository;
 using HotelArtystowApi.Util.Games;
-using SixLabors.ImageSharp.Formats.Png;
 
 namespace HotelArtystowApi.Controllers;
 
@@ -57,10 +55,42 @@ public class ZjebleController : ControllerBase
     {
         ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
         ZjebleRound round = await roundRepository.GetLatest();
+
         int userId = (int)HttpContext.Session.GetInt32("userId")!;
+
         ZjebleUserSessionRepository sessionRepository = new ZjebleUserSessionRepository(_mysql);
-        ZjebleUserSession session = (await sessionRepository.GetBy("userId", userId))!;
+        ZjebleUserSession? session = (await sessionRepository.GetBy(new Dictionary<String, dynamic?>() {{"userId", userId}, {"round", round.Id}}))!.FirstOrDefault();
+
         Dictionary<String, dynamic> response;
+
+        if(session is null)
+        {
+            response = new Dictionary<String, dynamic>() {
+                {"status", false},
+                {"message", "Nie znaleziono wygenerowanej sesji"},
+                {"noAction", 1}
+            };
+            return NotFound(response);
+        }
+
+        if(session.EndedAt is not null && session.LivesLeft <= 0)
+        {
+            response = new Dictionary<String, dynamic>() {
+                {"status", false},
+                {"message", "Nie możesz już zgadywać, wyczerpałeś wszystkie życia ;("},
+                {"noAction", 1}
+            };
+            return Ok(response);
+        }
+        else if(session.EndedAt is not null)
+        {
+            response = new Dictionary<String, dynamic>() {
+                {"status", false},
+                {"message", "Już zgadłeś, czego tu jeszcze szukasz?"},
+                {"noAction", 1}
+            };
+            return Ok(response);
+        }
 
         if(answer != round.Answer)
         {
@@ -81,6 +111,11 @@ public class ZjebleController : ControllerBase
                 {"status", true},
                 {"message", "Gratulacje użytkowniku"},
             };
+
+            UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
+            UserStatistics stats = (await statisticsRepository.GetBy("userId", userId))!;
+            stats.Bees += session.LivesLeft * 10;
+            await statisticsRepository.Update(stats);
         }
 
         await sessionRepository.Update(session);

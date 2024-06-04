@@ -93,6 +93,13 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         return await RunSelect($"SELECT * FROM {TableName} WHERE {String.Join(" AND ", columns)}", search);
     }
 
+    public async Task<T?> GetBy(String column, dynamic value)
+    {
+        IReadOnlyList<T> res = await RunSelect($"SELECT * FROM {TableName} WHERE {column} = @search", new Dictionary<String, dynamic?>{{"search", value}});
+
+        return res.FirstOrDefault();
+    }
+
     async protected Task<MySqlCommand> GetCommand(String query)
     {
         MySqlConnection connection = await dataSource.OpenConnectionAsync();
@@ -110,7 +117,7 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
         }
     }
 
-    protected DBT Cast<DBT>(String colname, DbDataReader dataReader)
+    protected DBT? Cast<DBT>(String colname, DbDataReader dataReader)
     {
         return Column.Cast<DBT>(colname, dataReader);
     }

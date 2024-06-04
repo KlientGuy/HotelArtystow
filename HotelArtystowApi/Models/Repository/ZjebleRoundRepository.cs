@@ -11,13 +11,6 @@ public sealed class ZjebleRoundRepository : AbstractRepository<ZjebleRound>
 
     public ZjebleRoundRepository(MySqlDataSource dataSource) : base(dataSource){}
 
-    public async Task<ZjebleRound?> GetBy(String column, dynamic value)
-    {
-        IReadOnlyList<ZjebleRound> res = await RunSelect($"SELECT * FROM {TableName} WHERE {column} = @search", new Dictionary<String, dynamic?>{{"search", value}});
-
-        return res.FirstOrDefault();
-    }
-
     public async Task<ZjebleRound> GetLatest()
     {
         IReadOnlyList<ZjebleRound> res = await RunSelect($"SELECT * FROM {TableName} ORDER BY id DESC LIMIT 1", new Dictionary<string, dynamic?>{});
