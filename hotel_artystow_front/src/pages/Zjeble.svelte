@@ -14,6 +14,9 @@
     /** @type {Types.ZjebleUserSession} */
     let userSession;
 
+    let imageUrl = '/public/img/profile_pics/patryk.jpg';
+    let inputDisabled = false;
+
     async function getSession() {
         const res = await api.getZjebleUserSession();
 
@@ -21,6 +24,13 @@
 
         lives.fill(goodLife, 0, userSession.livesLeft);
         lives.fill(lostLife, userSession.livesLeft, 3);
+        
+        await fetchImage();
+    }
+
+    async function fetchImage() {
+        const imgRes = await api.getZjebleImage();
+        imageUrl = window.URL.createObjectURL(imgRes.data);
     }
 
     /**
@@ -47,9 +57,10 @@
 
         const res = await api.submitZjebleAnswer(answer);
 
-        if(res.data.status) {
+        if(!res.data.status) {
             removeHeartCool(leftLives);
             leftLives--;
+            await fetchImage();
         }
         else {
             lives = [winLife, winLife, winLife];
@@ -95,12 +106,12 @@
                     Zjeble
                 </span>
                 <div class="game-photo">
-                    <img class="card-rounded" src="/public/img/profile_pics/patryk.jpg" width="512" height="512" alt="">
+                    <img class="card-rounded" src="{imageUrl}" width="512" height="512" alt="">
                 </div>
                 <form action="#" on:submit|preventDefault={(e) => handleAnswerSubmit(e)}>
                     <div class="game-input row justify-center">
                         <div class="form-group">
-                            <input name="gameAnswer" class="form-field" id="game-answer" type="text" placeholder="Zgadnij kto to">
+                            <input name="gameAnswer" disabled={inputDisabled} class="form-field" id="game-answer" type="text" placeholder="Zgadnij kto to">
                             <label for="game-answer" class="form-label">Zgadnij kto to</label>
                         </div>
                     </div>

@@ -76,6 +76,15 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @returns Promise<object>
+     */
+    async getZjebleImage() {
+        const res = await this._sendGetRequest('/zjeble/getImageForUser');
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 
@@ -124,9 +133,27 @@ export class HotelArtystowApi
             if(response.headers.get('Content-Length') === '0')
                 return {status: true, data: {}};
 
+            let resData = null;
+            console.log(response.headers.get('Content-Type'));
+            let contentType = response.headers.get('Content-Type');
+
+            if(contentType.includes(';')) {
+                contentType = contentType.substring(0, contentType.indexOf(';'));
+            }
+            switch(contentType) {
+                case 'image/webp':
+                    resData = await response.blob();
+                break;
+                case 'text/plain':
+                    resData = await response.text();
+                case 'application/json':
+                    resData = await response.json();
+                break;
+            }
+
             return {
                 status: true,
-                data: await response.json()
+                data: resData
             }
         }
 

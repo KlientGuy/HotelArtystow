@@ -50,6 +50,8 @@ public sealed class ZjebleRoundRepository : AbstractRepository<ZjebleRound>
             toReturn.Add(round);
         }
 
+        await reader.CloseAsync();
+
         return toReturn;
     }
 }

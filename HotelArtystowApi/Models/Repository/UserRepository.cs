@@ -52,6 +52,7 @@ public sealed class UserRepository : AbstractRepository<User>
             toReturn.Add(user);
         }
 
+        await reader.CloseAsync();
 
         return toReturn;
     }

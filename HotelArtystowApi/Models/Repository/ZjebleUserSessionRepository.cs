@@ -47,6 +47,7 @@ public sealed class ZjebleUserSessionRepository : AbstractRepository<ZjebleUserS
             updateTracker.Set(session);
             toReturn.Add(session);
         }
+        await reader.CloseAsync();
 
         return toReturn;
     }
