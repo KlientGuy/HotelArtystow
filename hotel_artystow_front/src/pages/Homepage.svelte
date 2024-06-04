@@ -16,10 +16,16 @@ import {navigateTo} from '../lib/navigation';
         <button on:click={() => navigateTo('/zjeble')} class="hex zjeble">
             <i class="fa-solid fa-7x fa-camera-retro"></i>
         </button>
+        <button on:click={() => navigateTo('/flappybee')} class="hex zjeble">
+            <img src="/public/svg/bee.svg" alt="">
+        </button>
     </div>
     <div class="app-block">
         <button on:click={() => navigateTo('/ranking')} class="hex">
             <i class="fa-solid fa-7x fa-ranking-star"></i>
+        </button>
+        <button on:click={() => navigateTo('/zjeble')} class="hex">
+            ZAPCHAJ DZIURA BO CHUJOWO WYGLADA JAK JEST NIESYMETRYCZNIE
         </button>
     </div>
 </div>

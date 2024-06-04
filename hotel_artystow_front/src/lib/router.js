@@ -3,6 +3,7 @@ import Profile from '../pages/Profile.svelte'
 import Zjeble from '../pages/Zjeble.svelte'
 import Homepage from "../pages/Homepage.svelte";
 import Ranking from "../pages/Ranking.svelte";
+import FlappyBee from "../pages/FlappyBee.svelte";
 
 export default class Router {
 
@@ -12,6 +13,7 @@ export default class Router {
         ['/profile/{id}', Profile],
         ['/zjeble', Zjeble],
         ['/ranking', Ranking],
+        ['/flappybee', FlappyBee],
         ['/', Homepage]
     ]);
 
