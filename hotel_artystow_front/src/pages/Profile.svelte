@@ -2,6 +2,7 @@
     import { elasticIn } from "svelte/easing";
     import { HotelArtystowApi } from "../lib/HotelArtystowApi";
     import Loading from "../lib/Loading.svelte";
+    import DivisionCanvas from "../lib/DivisionCanvas.svelte";
     import * as Types from '../lib/types';
 
     /** @type {Types.RouterParams} */
@@ -105,11 +106,6 @@
         visibility: hidden;
     }
 
-    #division-canvas {
-        border: 2px solid black;
-        background-color: black;
-        border-radius: 15px;
-    }   
 
    .profile-container {
        width: 70vw;
@@ -221,7 +217,7 @@
                     {/if}
                 </div>
                 <div class="profile-rank">
-                    <canvas id="division-canvas" width="256" height="256"></canvas>
+                    <DivisionCanvas width={256} height={256}/>
                     <!-- <div style="width: 256px; height: 256px; background-color: black;"></div> -->
                 </div>
             </div>
