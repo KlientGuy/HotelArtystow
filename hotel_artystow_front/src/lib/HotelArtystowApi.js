@@ -1,3 +1,5 @@
+import { navigateTo } from "./navigation";
+
 export class HotelArtystowApi
 {
     /**
@@ -133,6 +135,7 @@ export class HotelArtystowApi
     * @param {Response} response 
     */
     async _parseResponse(response) {
+
         if(response.ok) {
 
             if(response.headers.get('Content-Length') === '0')
@@ -160,6 +163,9 @@ export class HotelArtystowApi
                 status: true,
                 data: resData
             }
+        }
+        else if(response.status == 401) {
+            navigateTo('/login');
         }
 
         return {

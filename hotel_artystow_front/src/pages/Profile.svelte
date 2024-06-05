@@ -106,7 +106,6 @@
         visibility: hidden;
     }
 
-
    .profile-container {
        width: 70vw;
        height: 70vh;
