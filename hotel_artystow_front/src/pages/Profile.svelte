@@ -105,6 +105,12 @@
         visibility: hidden;
     }
 
+    #division-canvas {
+        border: 2px solid black;
+        background-color: black;
+        border-radius: 15px;
+    }   
+
    .profile-container {
        width: 70vw;
        height: 70vh;
@@ -215,8 +221,8 @@
                     {/if}
                 </div>
                 <div class="profile-rank">
-                    <!-- <canvas width="256" height="256"></canvas> -->
-                    <div style="width: 256px; height: 256px; background-color: black;"></div>
+                    <canvas id="division-canvas" width="256" height="256"></canvas>
+                    <!-- <div style="width: 256px; height: 256px; background-color: black;"></div> -->
                 </div>
             </div>
             <div class="row space-around profile-stats">

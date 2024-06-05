@@ -21,6 +21,23 @@ public sealed class UserStatisticsRepository : AbstractRepository<UserStatistics
         return await this.RunUpdate(user);
     }
 
+    public async Task<bool> UpdateLoginStreak(UserStatistics userStatistics)
+    {
+        int lastLoginDiff = DateTime.Now.DayOfYear - (userStatistics.User.Value!.LastLogin ?? DateTime.MinValue).DayOfYear;
+        if(lastLoginDiff == 1)
+        {
+            userStatistics.LoginStreak++;
+            return await Update(userStatistics);
+        }
+        else if(lastLoginDiff != 0)
+        {
+            userStatistics.LoginStreak = 1;
+            return await Update(userStatistics);
+        }
+
+        return true;
+    }
+
     protected override async Task<IReadOnlyList<UserStatistics>> ReadAllAsync(DbDataReader reader)
     {
         List<UserStatistics> toReturn = new List<UserStatistics>{};

@@ -12,6 +12,7 @@ public sealed class User : AbstractEntity
     public String? Lastname { get; set; }
     public String? Description { get; set; }
     public String? ProfilePic { get; set; }
+    public DateTime? LastLogin { get; set; }
     public ReverseRelation<UserStatistics>? UserStatistics { get; set; }
 }
 

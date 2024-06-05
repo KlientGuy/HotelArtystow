@@ -40,6 +40,7 @@ public sealed class UserRepository : AbstractRepository<User>
             user.Lastname = Cast<String>("lastname", reader);
             user.Description = Cast<String?>("description", reader);
             user.ProfilePic = Cast<String?>("profilePic", reader);
+            user.LastLogin = Cast<DateTime?>("lastLogin", reader);
 
             updateTracker.Set(user);
             toReturn.Add(user);

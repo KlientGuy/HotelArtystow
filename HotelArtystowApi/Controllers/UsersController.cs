@@ -38,6 +38,17 @@ public class UsersController : ControllerBase
         switch(res)
         {
             case PasswordVerificationResult.Success:
+
+                UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
+                UserStatistics stats = (await statisticsRepository.GetBy("userId", user.Id))!;
+
+                stats.User.Value = user;
+
+                await statisticsRepository.UpdateLoginStreak(stats);
+
+                user.LastLogin = DateTime.Now;
+                await userRepository.Update(user);
+
                 AuthorizeUser(userLogin.Username);
                 HttpContext.Session.SetInt32("userId", (int)user.Id);
                 return Ok(new Dictionary<String, dynamic> {{"status", true}, {"userId", user.Id}});
