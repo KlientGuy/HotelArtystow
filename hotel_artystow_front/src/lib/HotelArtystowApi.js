@@ -78,7 +78,7 @@ export class HotelArtystowApi
      * @returns Promise<object>
      */
     async submitZjebleAnswer(answer) {
-        const res = await this._sendPostRequest('/zjeble/submitAnswer', answer);
+        const res = await this._sendPostRequest('/zjeble/submitAnswer', answer.toLowerCase());
         return await this._parseResponse(res);
     }
 

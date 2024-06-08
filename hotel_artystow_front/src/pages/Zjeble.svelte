@@ -22,14 +22,19 @@
     async function getSession() {
         const res = await api.getZjebleUserSession();
 
-        userSession = res.data;
         if(!res.status) {
             responseMessage = 'Coś się wyjebało';
             return;
         }
+        userSession = res.data;
 
-        lives.fill(goodLife, 0, userSession.livesLeft);
-        lives.fill(lostLife, userSession.livesLeft, 3);
+        if(userSession.endedAt) {
+            lives = [winLife, winLife, winLife];
+        }
+        else {
+            lives.fill(goodLife, 0, userSession.livesLeft);
+            lives.fill(lostLife, userSession.livesLeft, 3);
+        }
         
         await fetchImage();
     }
@@ -69,8 +74,8 @@
 
         const res = await api.submitZjebleAnswer(answer);
 
+        responseMessage = res.data.message;
         if(!res.data.status) {
-            responseMessage = res.data.message;
 
             if(res.data.noAction)
                 return;

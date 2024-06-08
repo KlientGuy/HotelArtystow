@@ -30,7 +30,7 @@ public class ZjebleController : ControllerBase
         ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
 
         ZjebleRound round = await roundRepository.GetLatest();
-        ZjebleUserSession? session = await repository.GetBy("userId", userId);
+        ZjebleUserSession? session = (await repository.GetBy(new Dictionary<String, dynamic?>() {{"userId", userId}, {"round", round.Id}})).FirstOrDefault();
 
         if(session is not null)
         {
@@ -142,7 +142,32 @@ public class ZjebleController : ControllerBase
 
         Zjeble zjeble = new Zjeble();
 
-        Image image = await zjeble.BlurImageAsync("Resources/Images/Zjeble/patryk.jpg", session.LivesLeft * 5);
+        Image image = (session.EndedAt is null) ? await zjeble.BlurImageAsync(round.PicturePath!, session.LivesLeft * 5) : await zjeble.GetClearImage(round.PicturePath!);
         return File(zjeble.ImageToWebpStream(image), "image/webp");
+    }
+
+    [HttpPost("createTodaysRound")]
+    public async Task<ActionResult<ZjebleRound>> CreateTodaysRound()
+    {
+        ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
+
+        ZjebleRound round = await roundRepository.GetLatest();
+
+        if(round.createdAt.DayOfYear == DateTime.Now.DayOfYear)
+        {
+            return StatusCode(418, "Todays round already exists");
+        }
+
+        Zjeble zjeble = new Zjeble();
+        String path = zjeble.GetNextImagePath(round);
+
+        round = new ZjebleRound();
+        round.Answer = path.Substring(0, path.LastIndexOf('_')).ToLower();
+        round.PicturePath = path;
+        round.createdAt = DateTime.Now;
+
+        await roundRepository.Create(round);
+
+        return Ok(round);
     }
 }

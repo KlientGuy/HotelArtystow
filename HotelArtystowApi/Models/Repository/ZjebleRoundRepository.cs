@@ -38,6 +38,7 @@ public sealed class ZjebleRoundRepository : AbstractRepository<ZjebleRound>
             round.Id = Cast<int>("id", reader);
             round.PicturePath = Cast<String>("picturePath", reader);
             round.Answer = Cast<String>("answer", reader);
+            round.createdAt = Cast<DateTime>("createdAt", reader);
 
             updateTracker.Set(round);
             toReturn.Add(round);

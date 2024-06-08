@@ -43,6 +43,8 @@
  * @property {number} id
  * @property {number} livesLeft
  * @property {ZjebleRound} round
+ * @property {string} startedAt
+ * @property {string} endedAt
  */
 
 export const Types = {};
