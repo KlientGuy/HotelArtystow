@@ -7,7 +7,7 @@
     const goodLife = '❤️';
     const lostLife = '🖤';
     const winLife = '💛';
-    let leftLives = 2;
+    let leftLives;
 
     const api = new HotelArtystowApi();
 

@@ -142,7 +142,6 @@ export class HotelArtystowApi
                 return {status: true, data: {}};
 
             let resData = null;
-            console.log(response.headers.get('Content-Type'));
             let contentType = response.headers.get('Content-Type');
 
             if(contentType.includes(';')) {

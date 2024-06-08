@@ -22,7 +22,7 @@ public class ZjebleController : ControllerBase
 
     [HttpGet("getUserSession")]
     [Authorize]
-    public async Task<ActionResult> GetUserSession()
+    public async Task<ActionResult<ZjebleUserSessionClearDTO>> GetUserSession()
     {
         int userId = (int)HttpContext.Session.GetInt32("userId")!;
 
@@ -47,7 +47,7 @@ public class ZjebleController : ControllerBase
             await repository.Create(session);
         }
 
-        return Ok(session);
+        return Ok(session.ToDTO<ZjebleUserSessionClearDTO>());
     }
 
     [HttpPost("submitAnswer")]

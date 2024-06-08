@@ -10,3 +10,11 @@ public sealed class ZjebleUserSession : AbstractEntity
     public DateTime StartedAt { get; set; }
     public DateTime? EndedAt { get; set; }
 }
+
+public sealed class ZjebleUserSessionClearDTO : AbstractDTO
+{
+    public long UserId { get; set; }
+    public int LivesLeft { get; set; }
+    public DateTime StartedAt { get; set; }
+    public DateTime? EndedAt { get; set; }
+}
