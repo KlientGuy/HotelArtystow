@@ -4,6 +4,7 @@
     import { Shader } from './glEngine/utils/shader';
     import { Cube } from './glEngine/cube';
     import { Vector3 } from './glEngine/utils/vector';
+    import { Texture2D } from './glEngine/texture_2d';
 
     export let width;
     export let height;
@@ -19,11 +20,16 @@
         engineBase = new EngineBase(document.querySelector('#division-canvas'));
         engineBase.setBaseColor(59, 27, 89);
 
-        const shader = await Shader.fromUri('generic_mvp.vert', 'generic_flat_color.frag', true);
+        // const shader = await Shader.fromUri('generic_mvp.vert', 'generic_flat_color.frag', true);
+        const shader = await Shader.fromUri('generic_texture_mvp.vert', 'generic_texture.frag', true);
+        // const texture = await Texture2D.fromUri('divisions/shrex.png', 207, 207);
+        const texture = await Texture2D.fromUri('divisions/diamond_block.png', 16, 16);
+
         cube = new Cube();
         cube.setShader(shader);
+        cube.setTexture(texture);
         cube.translate(new Vector3(0, 0, 2));
-        cube.rotateGlobal(new Vector3(-25, 45, 0));
+        // cube.rotateGlobal(new Vector3(-25, 45, 0));
 
         engineBase.run();
 
@@ -37,6 +43,7 @@
     */
     function cubePreDraw(deltaTime, elapsedTime) {
         this.rotateGlobal(new Vector3(-25, elapsedTime * cubeRotationSpeed, 0))
+        // this.rotate(new Vector3(-25, elapsedTime * 0.0001, 0));
         this.translateLocal(new Vector3(0, Math.sin(elapsedTime) / 6, 0))
         // this.move(new Vector3(Math.sin(elapsedTime) * deltaTime, 0, 0));
     }

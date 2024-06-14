@@ -130,7 +130,13 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<UserProfileDTO>> MyProfile()
     {
         UserRepository userRepository = new UserRepository(_mysql);
-        User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
+
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
+
+        User? user = await userRepository.GetBy("id", userId);
 
         if(user is null)
             return NotFound("Could not find profile with this session id");
@@ -150,7 +156,13 @@ public class UsersController : ControllerBase
     public async Task<ActionResult> SaveDescription([FromBody] String value)
     {
         UserRepository userRepository = new UserRepository(_mysql);
-        User? user = await userRepository.GetBy("id", HttpContext.Session.GetInt32("userId")!);
+
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
+
+        User? user = await userRepository.GetBy("id", userId);
 
         if(user is null)
             return NotFound("Could not find profile with this session id");
@@ -166,7 +178,10 @@ public class UsersController : ControllerBase
     [Authorize]
     public async Task<ActionResult<UserNavbarDTO>> GetNavbarStats()
     {
-        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
 
         UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
 

@@ -24,7 +24,10 @@ public class ZjebleController : ControllerBase
     [Authorize]
     public async Task<ActionResult<ZjebleUserSessionClearDTO>> GetUserSession()
     {
-        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
 
         ZjebleUserSessionRepository repository = new ZjebleUserSessionRepository(_mysql);
         ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
@@ -41,7 +44,7 @@ public class ZjebleController : ControllerBase
             session = new ZjebleUserSession();
             session.StartedAt = DateTime.Now;
             session.LivesLeft = 3;
-            session.UserId = userId;
+            session.UserId = (int)userId;
             session.Round = new Util.Database.Relation<ZjebleRound>(round.Id, round);
 
             await repository.Create(session);
@@ -56,7 +59,10 @@ public class ZjebleController : ControllerBase
         ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
         ZjebleRound round = await roundRepository.GetLatest();
 
-        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
 
         ZjebleUserSessionRepository sessionRepository = new ZjebleUserSessionRepository(_mysql);
         ZjebleUserSession? session = (await sessionRepository.GetBy(new Dictionary<String, dynamic?>() {{"userId", userId}, {"round", round.Id}}))!.FirstOrDefault();
@@ -127,7 +133,10 @@ public class ZjebleController : ControllerBase
     [Authorize]
     public async Task<ActionResult> getImageForUser()
     {
-        int userId = (int)HttpContext.Session.GetInt32("userId")!;
+        int? userId = HttpContext.Session.GetInt32("userId");
+
+        if(userId is null)
+            return Unauthorized();
 
         ZjebleRoundRepository roundRepository = new ZjebleRoundRepository(_mysql);
         ZjebleRound round = await roundRepository.GetLatest();
