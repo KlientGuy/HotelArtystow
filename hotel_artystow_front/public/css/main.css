@@ -188,11 +188,23 @@ body{
     text-align: center;
     border-radius: 5px;
 }
-.first-place {
-    background-color: #978249;
+
+.first-place, .second-place, .third-place {
+    user-select: none;
+    min-width: 25px;
+    display: inline-block;
 }
+
+.first-place {
+    /* background-color: #978249; */
+    background-color: #ddb23e;
+    color: #9d5e0e;
+    font-weight: bold;
+}
+
 .second-place {
     background-color: #7a7a7a;
+    color: lightgray;
 }
 .third-place {
     background-color: #624526;

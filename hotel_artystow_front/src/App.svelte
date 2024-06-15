@@ -11,6 +11,7 @@
         query: Router.currentParams,
         route: Router.routeParams
     };
+    let currentRoute = location.pathname;
 
     document.addEventListener('onPageChange', handleOnPageChange)
 
@@ -24,6 +25,7 @@
             query: e.detail.params(),
             route: e.detail.routeParams()
         };
+        currentRoute = location.pathname;
     }
 
 </script>
@@ -36,7 +38,9 @@
     }
 </style>
 
-<Navbar/>
+{#if currentRoute !== '/login'}
+    <Navbar/>
+{/if}
 
 <main>
     <svelte:component this={currentComponent} bind:params/>

@@ -1,42 +1,17 @@
 <script>
-
-    import Navbar from "../lib/Navbar.svelte";
     import Loading from "../lib/Loading.svelte";
-</script>
+    import { HotelArtystowApi } from "../lib/HotelArtystowApi";
 
-<div class="bg-primary ranking-container">
-    <table>
-        <thead>
-            <tr>
-                <th>Miejsce</th>
-                <th>Użytkownik</th>
-                <th>Pszczoły</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><span class="badge first-place">1</span></td>
-                <td>Salah</td>
-                <td>456</td>
-            </tr>
-            <tr>
-                <td><span class="badge second-place">2</span></td>
-                <td>Kutes</td>
-                <td>345</td>
-            </tr>
-            <tr>
-                <td><span class="badge third-place">3</span></td>
-                <td>Kitos</td>
-                <td>123</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Adam</td>
-                <td>4</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
+    const api = new HotelArtystowApi();
+
+    const badges = ['badge first-place', 'badge second-place', 'badge third-place'];
+
+    async function getRanking() {
+        const res = await api.getRanking();
+
+        return res.data;
+    }
+</script>
 
 <style>
     .ranking-container {
@@ -46,11 +21,13 @@
         flex-direction: column;
         border-radius: 35px;
         padding: 1rem;
+        overflow-y: scroll;
     }
+
     table, tr {
-        border-bottom: 1px solid white;
+        border-bottom: 1px solid grey;
         border-collapse: collapse;
-        heigth: 5vh;
+        height: 5vh;
     }
     th, td {
         padding: 1rem;
@@ -63,3 +40,30 @@
         font-size: 20px;
     }
 </style>
+
+{#await getRanking()}
+    <Loading/>
+{:then ranking}
+    <div class="bg-primary ranking-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Miejsce</th>
+                    <th>Użytkownik</th>
+                    <th>Pszczoły</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each ranking as one}
+                    <tr>
+                        <td><span class="{badges[one.scalars.place - 1] ?? ''}">{one.scalars.place}</span></td>
+                        <td>{one.scalars.firstname}</td>
+                        <td>{one.bees}</td>
+                        <td><a href="/profile/{one.user.key}"><i class="fa fa-search"></i></a></td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+{/await}

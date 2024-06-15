@@ -13,6 +13,7 @@
  * @property {number|string} loginStreak
  * @property {number|string} bees
  * @property {number|string} division
+ * @property {number|string} place
  */
 
 /**

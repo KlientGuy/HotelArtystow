@@ -11,6 +11,7 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
     protected MySqlDataSource dataSource;
 
     protected abstract String TableName { get; set; }
+    protected List<String> Scalars { get; set; } = [];
 
     protected AbstractRepository(MySqlDataSource dataSource)
     {
@@ -120,6 +121,19 @@ public abstract class AbstractRepository<T> where T : AbstractEntity
     protected DBT? Cast<DBT>(String colname, DbDataReader dataReader)
     {
         return Column.Cast<DBT>(colname, dataReader);
+    }
+
+    protected void AddScalar(String colname)
+    {
+        Scalars.Add(colname);
+    }
+
+    protected void ReadScalars(T entity, DbDataReader reader)
+    {
+        foreach(String column in Scalars)
+        {
+            entity.Scalars.Add(column, Cast<dynamic?>(column, reader));
+        }
     }
 
     protected abstract Task<IReadOnlyList<T>> ReadAllAsync(DbDataReader reader);

@@ -42,6 +42,8 @@ public sealed class UserRepository : AbstractRepository<User>
             user.ProfilePic = Cast<String?>("profilePic", reader);
             user.LastLogin = Cast<DateTime?>("lastLogin", reader);
 
+            ReadScalars(user, reader);
+
             updateTracker.Set(user);
             toReturn.Add(user);
         }

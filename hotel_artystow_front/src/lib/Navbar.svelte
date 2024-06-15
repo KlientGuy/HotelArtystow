@@ -7,9 +7,9 @@
         loginStreak: 0
     };
 
-    /* api.getNavbarData().then((res) => {
+    api.getNavbarData().then((res) => {
         navbarData = res.data;
-    }) */
+    })
 
 </script>
 

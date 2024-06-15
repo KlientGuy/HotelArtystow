@@ -38,6 +38,38 @@ public sealed class UserStatisticsRepository : AbstractRepository<UserStatistics
         return true;
     }
 
+    public async Task<IReadOnlyList<UserStatistics>> GetByRank()
+    {
+        AddScalar("place");
+        AddScalar("firstname");
+        return await RunSelect($@"
+                SELECT 
+                    us.*,
+                    u.firstname,
+                    RANK() OVER (ORDER BY bees DESC) as place
+                FROM {TableName} us
+                INNER JOIN users u on u.id = us.userId
+                ORDER BY bees DESC
+        ", null);
+    }
+
+    public async Task<UserStatistics> GetWithUserRank(User user) 
+    {
+        AddScalar("place");
+        Dictionary<String, dynamic?> queryParams = new Dictionary<String, dynamic?>() {{"userId", user.Id}};
+        return (await RunSelect($@"
+            WITH ranks as (
+                SELECT
+                    us.*,
+                    RANK() OVER (ORDER BY bees DESC) as place
+                FROM userStatistics us
+                INNER JOIN users u on u.id = us.userId
+            )
+
+            SELECT * FROM ranks WHERE userId = @userId
+        ", queryParams)).First();
+    }
+
     protected override async Task<IReadOnlyList<UserStatistics>> ReadAllAsync(DbDataReader reader)
     {
         List<UserStatistics> toReturn = new List<UserStatistics>{};
@@ -49,6 +81,8 @@ public sealed class UserStatisticsRepository : AbstractRepository<UserStatistics
             userStatistics.Bees = Cast<int>("bees", reader);
             userStatistics.LoginStreak = Cast<int>("loginStreak", reader);
             userStatistics.Division = Cast<int>("divisionId", reader);
+
+            ReadScalars(userStatistics, reader);
 
             updateTracker.Set(userStatistics);
             toReturn.Add(userStatistics);

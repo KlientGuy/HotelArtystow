@@ -13,7 +13,7 @@ public sealed class User : AbstractEntity
     public String? Description { get; set; }
     public String? ProfilePic { get; set; }
     public DateTime? LastLogin { get; set; }
-    public ReverseRelation<UserStatistics>? UserStatistics { get; set; }
+    public ReverseRelation<UserStatistics> UserStatistics { get; set; } = new ReverseRelation<UserStatistics>(0, null);
 }
 
 public class UserRegisterDTO

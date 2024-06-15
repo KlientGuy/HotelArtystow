@@ -92,6 +92,15 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @returns Promise<object>
+     */
+    async getRanking() {
+        const res = await this._sendGetRequest('/users/ranking');
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

@@ -116,7 +116,7 @@ public class UsersController : ControllerBase
             return NotFound();
 
         UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
-        UserStatistics statistics = (await statisticsRepository.GetBy(new Dictionary<String, dynamic?>() {{"userId", user.Id}})).First();
+        UserStatistics statistics = (await statisticsRepository.GetWithUserRank(user));
 
         UserProfileDTO profileDTO = user.ToDTO<UserProfileDTO>();
 
@@ -142,7 +142,7 @@ public class UsersController : ControllerBase
             return NotFound("Could not find profile with this session id");
 
         UserStatisticsRepository statisticsRepository = new UserStatisticsRepository(_mysql);
-        UserStatistics statistics = (await statisticsRepository.GetBy(new Dictionary<String, dynamic?>() {{"userId", user.Id}})).First();
+        UserStatistics statistics = (await statisticsRepository.GetWithUserRank(user));
 
 
         UserProfileDTO profile = user.ToDTO<UserProfileDTO>();
@@ -191,4 +191,15 @@ public class UsersController : ControllerBase
 
         return Ok(dto);
     }
+
+    [HttpGet("ranking")]
+    public async Task<ActionResult> GetRanking()
+    {
+        UserStatisticsRepository repository = new UserStatisticsRepository(_mysql);
+        IReadOnlyList<UserStatistics> users = await repository.GetByRank();
+
+        return Ok(users);
+    }
+
+    // public async Task<ActionResult> GetMyRank()
 }

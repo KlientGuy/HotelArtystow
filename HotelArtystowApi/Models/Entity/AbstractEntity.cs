@@ -6,13 +6,7 @@ namespace HotelArtystowApi.Models.Entity;
 public abstract class AbstractEntity
 {
     public long Id { get; set; }
-    private AbstractEntity? _snapshot;
-    protected AbstractEntity? Snapshot { 
-        get => Snapshot;
-        set {
-            _snapshot = value;
-        }
-    }
+    public Dictionary<String, dynamic?> Scalars {get; set; }= new Dictionary<String, dynamic?>();
 
     public Dictionary<String, dynamic?> ToDictionary()
     {
@@ -52,7 +46,8 @@ public abstract class AbstractEntity
 
         foreach(PropertyInfo property in props)
         {
-            property.SetValue(dto, dict[property.Name]);
+            dict.TryGetValue(property.Name, out dynamic? val);
+            property.SetValue(dto, val);
         }
 
         return dto;

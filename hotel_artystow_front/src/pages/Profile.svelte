@@ -8,6 +8,9 @@
     /** @type {Types.RouterParams} */
     export let params;
 
+    console.log(params.route);
+    console.log(sessionStorage.getItem('userId'))
+
     /** @type {Types.UserData} */
     let userData;
 
@@ -15,25 +18,27 @@
     let profileDesc = "Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm Lorem ipusm";
     let profileError = null;
 
+    /** @type {number|string} */
+    let place = 12;
+
     const api = new HotelArtystowApi();
 
     let counters = {
         loginStreak: 0,
-        bees: 0
+        bees: 0,
+        place: 12
     }
 
     async function getUserData() {
         const res = await api.getProfileData(params.route.id);
 
-        if(!res.status) {
-
-        }
-
         userData = res.data;
+        userData.userStatistics.place = res.data.userStatistics.scalars.place;
         profileDesc = userData.description ?? '';
 
-        requestAnimationFrame((timestamp) => startCounter(timestamp, 'loginStreak'));
-        requestAnimationFrame((timestamp) => startCounter(timestamp, 'bees'));
+        requestAnimationFrame((timestamp) => startIncrement(timestamp, 'loginStreak'));
+        requestAnimationFrame((timestamp) => startIncrement(timestamp, 'bees'));
+        requestAnimationFrame((timestamp) => startDecrement(timestamp, 'place', 12, () => place = userData.userStatistics.place));
     }
 
     let start;
@@ -45,17 +50,34 @@
     * @param {number} startTimestamp
     * @param {string} prop 
     */
-    function startCounter(startTimestamp, prop) {
+    function startIncrement(startTimestamp, prop) {
         const valueToGo = userData.userStatistics[prop];
-        // userData.userStatistics[prop] = '';
+
         start = startTimestamp;
         end = startTimestamp + 5000;
+
         incrementCounter(startTimestamp, prop, valueToGo);
+    }
+
+    /**
+    * @param {number} startTimestamp
+    * @param {string} prop 
+    * @param {number} from 
+    * @param {Function} endCallback 
+    */
+    function startDecrement(startTimestamp, prop, from, endCallback) {
+        const valueToGo = userData.userStatistics[prop];
+        
+        start = startTimestamp;
+        end = startTimestamp + 5000;
+
+        decrementCounter(startTimestamp, prop, from, valueToGo, endCallback);
     }
 
     /**
     * @param {number} now 
     * @param {string} prop 
+    * @param {number} val 
     */
     function incrementCounter(now, prop, val) {
         if(now > end) {
@@ -70,6 +92,29 @@
         counters[prop] = progressVal.toFixed(0);
 
         requestAnimationFrame((timestamp) => incrementCounter(timestamp, prop, val));
+    }
+
+    /**
+    * @param {number} now 
+    * @param {string} prop 
+    * @param {number} from 
+    * @param {number} to 
+    * @param {Function} endCallback
+    */
+    function decrementCounter(now, prop, from, to, endCallback) {
+        if(now > end) {
+            countersVisible = true;
+            counters[prop] = '';
+            endCallback?.();
+            return;
+        }
+
+        let progress = (start - now) / counterDuration;
+        let progressVal = from * (Math.pow(1 + progress, 3)) + to //EaseOut cubic;
+
+        counters[prop] = progressVal.toFixed(0);
+
+        requestAnimationFrame((timestamp) => decrementCounter(timestamp, prop, from, to, endCallback));
     }
 
     function editProfile() {
@@ -205,9 +250,11 @@
                         {:else}
                             <div class="text-center col align-items-center" id="edit-description" style="max-width: 20em;">
                                 {profileDesc}
-                                <button type="button" class="btn" style="font-size: 1rem;" on:click={editProfile}>
-                                    Edytuj opis
-                                </button>
+                                {#if params.route.id == sessionStorage.getItem('userId') || params.route.id == undefined}
+                                    <button type="button" class="btn" style="font-size: 1rem;" on:click={editProfile}>
+                                        Edytuj opis
+                                    </button>
+                                {/if}
                             </div>
                         {/if}
                     </div>
@@ -226,7 +273,7 @@
                     <div class="stat-text">Login streak</div>
                 </div>
                 <div class="profile-ranking">
-                    <div class="count">10 <img class="profile-emoji" src="/public/img/emojis/trophy_emoji.png" alt="trophy emoji"></div>
+                    <div class="count" data-count="{counters.place}"><span class:invisible={!countersVisible}>{place}</span> <img class="profile-emoji" src="/public/img/emojis/trophy_emoji.png" alt="trophy emoji"></div>
                     <div class="stat-text">Ranking</div>
                 </div>
                 <div class="profile-bees">
