@@ -9,7 +9,7 @@ body{
     font-optical-sizing: auto;
     font-weight: <weight>;
     font-style: normal;
-    background-image: url("/public/svg/background.svg");
+    background-image: url("/svg/background.svg");
     background-repeat: no-repeat;
     background-size: cover;
     height: 100vh;

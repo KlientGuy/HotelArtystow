@@ -242,7 +242,7 @@
             <div class="row space-around">
                 <div class="col space-around profile-pic-wrap">
                     <div class="profile-pic">
-                        <img src="/public/img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
+                        <img src="/img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
                     </div>
                     <div class="profile-desc row justify-center">
                         {#if isEditing}
@@ -269,15 +269,15 @@
             </div>
             <div class="row space-around profile-stats">
                 <div class="login-streak">
-                    <div class="count" data-count="{counters.loginStreak}"><span class:invisible={!countersVisible}>{userData.userStatistics.loginStreak}</span> <img class="profile-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
+                    <div class="count" data-count="{counters.loginStreak}"><span class:invisible={!countersVisible}>{userData.userStatistics.loginStreak}</span> <img class="profile-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
                     <div class="stat-text">Login streak</div>
                 </div>
                 <div class="profile-ranking">
-                    <div class="count" data-count="{counters.place}"><span class:invisible={!countersVisible}>{place}</span> <img class="profile-emoji" src="/public/img/emojis/trophy_emoji.png" alt="trophy emoji"></div>
+                    <div class="count" data-count="{counters.place}"><span class:invisible={!countersVisible}>{place}</span> <img class="profile-emoji" src="/img/emojis/trophy_emoji.png" alt="trophy emoji"></div>
                     <div class="stat-text">Ranking</div>
                 </div>
                 <div class="profile-bees">
-                    <div class="count" data-count="{counters.bees}"><span class:invisible={!countersVisible}>{userData.userStatistics.bees}</span> <img class="profile-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+                    <div class="count" data-count="{counters.bees}"><span class:invisible={!countersVisible}>{userData.userStatistics.bees}</span> <img class="profile-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
                     <div class="stat-text">Pszczoły</div>
                 </div>
             </div>

@@ -3,7 +3,7 @@
 </script>
 
 <div class="loading-conatiner justify-center align-items-center col">
-    <img src="/public/svg/logo_test.svg" alt="logo" class="nav-logo">
+    <img src="/svg/logo_test.svg" alt="logo" class="nav-logo">
     <div class="spinner">
         <div></div>
         <div></div>

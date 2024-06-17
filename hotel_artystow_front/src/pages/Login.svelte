@@ -29,7 +29,7 @@
 </script>
 
 <div class="login-box bg-primary">
-    <img src="/public/svg/logo_test.svg" alt="logo" class="login-logo">
+    <img src="/svg/logo_test.svg" alt="logo" class="login-logo">
     <form on:submit|preventDefault={submitForm} class="col align-items-center w-100">
         <div class="form-group field">
             <input type="text" class="form-field" placeholder="Login" name="login" id="username" autocomplete="off" required />

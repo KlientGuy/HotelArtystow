@@ -16,7 +16,7 @@
     /** @type {Types.ZjebleUserSession} */
     let userSession;
 
-    let imageUrl = '/public/img/profile_pics/patryk.jpg';
+    let imageUrl = '/img/profile_pics/patryk.jpg';
     let inputDisabled = false;
 
     async function getSession() {

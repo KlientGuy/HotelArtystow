@@ -17,7 +17,7 @@ import {navigateTo} from '../lib/navigation';
             <i class="fa-solid fa-7x fa-camera-retro"></i>
         </button>
         <button on:click={() => navigateTo('/flappybee')} class="hex zjeble">
-            <img src="/public/svg/bee.svg" alt="">
+            <img src="/svg/bee.svg" alt="">
         </button>
     </div>
     <div class="app-block">

@@ -15,13 +15,13 @@
     };
 
     let birdImage = new Image();
-    birdImage.src = "/public/img/emojis/bee_right_emoji.png";
+    birdImage.src = "/img/emojis/bee_right_emoji.png";
 
     let pipeImage = new Image();
-    pipeImage.src = "/public/img/flappy_bee/wood_pipe.png";
+    pipeImage.src = "/img/flappy_bee/wood_pipe.png";
 
     let backgroundImage = new Image();
-    backgroundImage.src = "/public/img/flappy_bee/flappy_background.png";
+    backgroundImage.src = "/img/flappy_bee/flappy_background.png";
 
     let pipes = [];
     let frame = 0;
@@ -78,6 +78,7 @@
         if (bird.y + bird.height > canvas.height || bird.y < 0) {
             isGameOver = true;
             isGameRunning = false;
+            sendScore();
         }
     }
 
@@ -106,6 +107,7 @@
             ) {
                 isGameOver = true;
                 isGameRunning = false;
+                sendScore();
             }
         }
     }
@@ -119,9 +121,13 @@
             ctx.fillText(`Score: ${score}`, 10, 20);
 
             if (isGameOver) {
-            ctx.fillStyle = "red";
-            ctx.font = "30px Arial";
-            ctx.fillText("Game Over", canvas.width / 2 - 70, canvas.height / 2);
+            ctx.fillStyle = 'red';
+            ctx.fillRect(canvas.width / 2 - 230, canvas.height /2, canvas.width / 2, canvas.height / 2);
+            ctx.fillStyle = "white";
+            ctx.font = '40px "Baloo 2", sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText("Kliknij spacje", canvas.width / 2, canvas.height / 2);
             }
     }
 
@@ -147,6 +153,18 @@
                 bird.velocity = bird.lift;
             }
         }
+    }
+
+    function sendScore() {
+            if (score > 3){
+                fetch('/submit-score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({score})
+                })
+            }
     }
 
     onMount(() => {

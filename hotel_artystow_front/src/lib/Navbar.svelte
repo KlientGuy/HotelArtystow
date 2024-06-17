@@ -14,15 +14,15 @@
 </script>
 
 <ul>
-    <li><a class="nav-logo-element" href="/"><img src="/public/svg/logo_test.svg" alt="logo" class="nav-logo"></a></li>
+    <li><a class="nav-logo-element" href="/"><img src="/svg/logo_test.svg" alt="logo" class="nav-logo"></a></li>
     <li><a href="/zjeble">Zjeble</a></li>
-<!--    <li class="stats">999<img class="nav-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></li>-->
-<!--    <li class="stats">999<img class="nav-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></li>-->
+<!--    <li class="stats">999<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></li>-->
+<!--    <li class="stats">999<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></li>-->
     <li class="profile">
         <div class="row align-items-center">
-            <div class="nav-emoji">{navbarData.bees}<img class="nav-emoji" src="/public/img/emojis/bee_emoji.png" alt="bee emoji"></div>
-            <div class="nav-emoji">{navbarData.loginStreak}<img class="nav-emoji" src="/public/img/emojis/fire_emoji.png" alt="fire emoji"></div>
-            <a href="/profile"><img class="profile-navbar-image" src="/public/img/profile_pics/Hotpot.png" alt="ja"></a>
+            <div class="nav-emoji">{navbarData.bees}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+            <div class="nav-emoji">{navbarData.loginStreak}<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
+            <a href="/profile"><img class="profile-navbar-image" src="/img/profile_pics/Hotpot.png" alt="ja"></a>
         </div>
     </li>
 </ul>
