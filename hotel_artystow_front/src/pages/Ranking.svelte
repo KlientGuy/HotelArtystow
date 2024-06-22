@@ -57,10 +57,10 @@
             <tbody>
                 {#each ranking as one}
                     <tr>
-                        <td><span class="{badges[one.scalars.place - 1] ?? ''}">{one.scalars.place}</span></td>
-                        <td>{one.scalars.firstname}</td>
-                        <td>{one.bees}</td>
-                        <td><a href="/profile/{one.user.key}"><i class="fa fa-search"></i></a></td>
+                        <td><span class="{badges[one.place - 1] ?? ''}">{one.place}</span></td>
+                        <td>{one[0].firstname}</td>
+                        <td>{one[0].userStatistics.bees}</td>
+                        <td><a href="/profile/{one[0].id}"><i class="fa fa-search"></i></a></td>
                     </tr>
                 {/each}
             </tbody>

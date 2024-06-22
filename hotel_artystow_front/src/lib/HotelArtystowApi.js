@@ -9,7 +9,7 @@ export class HotelArtystowApi
     _apiUrl;
 
     constructor() {
-        this._apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:5000' : '';
+        this._apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
     }
 
     /**
@@ -48,8 +48,19 @@ export class HotelArtystowApi
         return await this._parseResponse(res);
     }
 
+    async getRankingPlace(userId = null) {
+        let res;
+        if(userId === null)
+            res = await this._sendGetRequest('/users/getMyRank');
+        else
+            res = await this._sendGetRequest(`/users/getUserRank/${userId}`);
+
+        return await this._parseResponse(res);
+    }
+
+
     async getNavbarData() {
-        const res = await this._sendGetRequest('/users/profile/getNavbarStats');
+        const res = await this._sendGetRequest('/users/getNavbarStats');
         return await this._parseResponse(res);
     }
 
@@ -59,7 +70,7 @@ export class HotelArtystowApi
      * @returns Promise<object>
      */
     async saveProfileDescription(value) {
-        const res = await this._sendPostRequest('/users/profile/saveDescription', value);
+        const res = await this._sendPostRequest('/users/profile/saveDescription', {description: value});
         return await this._parseResponse(res);
     }
 
@@ -78,7 +89,7 @@ export class HotelArtystowApi
      * @returns Promise<object>
      */
     async submitZjebleAnswer(answer) {
-        const res = await this._sendPostRequest('/zjeble/submitAnswer', answer.toLowerCase());
+        const res = await this._sendPostRequest('/zjeble/submitAnswer', {answer: answer.toLowerCase()});
         return await this._parseResponse(res);
     }
 

@@ -31,9 +31,10 @@
 
     async function getUserData() {
         const res = await api.getProfileData(params.route.id);
+        const placeRes = await api.getRankingPlace(params.route.id);
 
         userData = res.data;
-        userData.userStatistics.place = res.data.userStatistics.scalars.place;
+        userData.userStatistics.place = placeRes.data.place;
         profileDesc = userData.description ?? '';
 
         requestAnimationFrame((timestamp) => startIncrement(timestamp, 'loginStreak'));
