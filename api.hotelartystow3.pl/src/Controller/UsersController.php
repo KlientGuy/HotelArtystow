@@ -56,6 +56,16 @@ class UsersController extends AbstractController
         return new JsonResponse();
     }
 
+    #[Route('/ping', name: 'api_users_ping', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Used for checking if user is authorized'
+    )]
+    public function ping()
+    {
+        return new JsonResponse('pong');
+    }
+
     #[Route('/getUsers', name: 'api_users_get_users', methods: ['GET'])]
     #[OA\Response(
         response: 200,

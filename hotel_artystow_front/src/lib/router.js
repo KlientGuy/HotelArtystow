@@ -4,6 +4,8 @@ import Zjeble from '../pages/Zjeble.svelte'
 import Homepage from "../pages/Homepage.svelte";
 import Ranking from "../pages/Ranking.svelte";
 import FlappyBee from "../pages/FlappyBee.svelte";
+import Empty from "../pages/Empty.svelte";
+import { HotelArtystowApi } from './HotelArtystowApi';
 
 export default class Router {
 
@@ -25,25 +27,40 @@ export default class Router {
         }
     })
 
-    static currentRoute = '/login';
-    static currentComponent = Login;
+    static currentRoute = '/';
+    static currentComponent = Empty;
     static currentParams = {};
     static routeParams = {};
 
     constructor() {
 
-        if(location.pathname === '/index.html')
-            location.pathname = '/login'
-
         /** @param {string} route */
         window['navigateTo'] = (route) => this.navigateTo(route);
-
-        this.switchComponent(location.pathname, this._getQueryParams());
 
         document.querySelector('body').addEventListener('click', (/** @type {MouseEvent & {target: HTMLElement}} */ e) => this._handleHtmlAnchorClick(e));
 
         /** @param {PopStateEvent & {target: Window}} e */
         window.onpopstate = (e) => this._handleOnPopState(e);
+
+        this._resolveEntry();
+    }
+
+    /**
+     * @private
+     */
+    async _resolveEntry() {
+
+        const api = new HotelArtystowApi();
+        const res = await api.ping();
+
+        if(!res.status)
+            return;
+
+        if(location.pathname === '/index.html')
+            location.pathname = '/';
+
+        this.switchComponent(location.pathname, this._getQueryParams());
+
     }
 
     /**

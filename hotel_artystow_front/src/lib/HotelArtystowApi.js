@@ -28,6 +28,15 @@ export class HotelArtystowApi
      * @public
      * @returns Promise<object>
      */
+    async ping() {
+        const res = await this._sendGetRequest('/users/ping');
+        return await this._parseResponse(res);
+    }
+
+    /**
+     * @public
+     * @returns Promise<object>
+     */
     async getUsers() {
         const res = await this._sendGetRequest('/users/getUsers');
         return await this._parseResponse(res);
@@ -184,6 +193,7 @@ export class HotelArtystowApi
             }
         }
         else if(response.status == 401) {
+            console.log('adam');
             navigateTo('/login');
         }
 
