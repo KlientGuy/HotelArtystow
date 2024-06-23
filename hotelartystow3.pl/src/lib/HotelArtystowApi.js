@@ -9,7 +9,7 @@ export class HotelArtystowApi
     _apiUrl;
 
     constructor() {
-        this._apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8000' : '';
+        this._apiUrl = window.location.hostname === 'localhost' ? 'http://localhost:8000' : 'api.hotelartystow3.pl';
     }
 
     /**
