@@ -79,7 +79,7 @@ export class HotelArtystowApi
      * @returns Promise<object>
      */
     async saveProfileDescription(value) {
-        const res = await this._sendPostRequest('/users/profile/saveDescription', {description: value});
+        const res = await this._sendPostRequest('/users/saveDescription', {description: value});
         return await this._parseResponse(res);
     }
 
