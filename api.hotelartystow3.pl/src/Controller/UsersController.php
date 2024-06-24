@@ -19,6 +19,7 @@ use OpenApi\Attributes\JsonContent;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Serializer\SerializerInterface;
 
@@ -54,6 +55,43 @@ class UsersController extends AbstractController
     {
         $security->logout(false);
         return new JsonResponse();
+    }
+
+    #[Route('/changePassword', name: 'api_change_password', methods: ['POST'])]
+    #[OA\RequestBody(
+        required: true,
+        content: new OA\JsonContent(
+            example: [
+                'password' => 'string'
+            ]
+        )
+    )]
+    public function changePassword(#[CurrentUser] User $user, Request $request, UserPasswordHasherInterface $hasher)
+    {
+        [
+            'password' => $password
+        ] = $request->toArray();
+
+        if(empty($password))
+            return new JsonResponse(['status' => false, 'message' => 'Hasło nie może być puste']);
+
+        $hashedPassword = $hasher->hashPassword($user, $password);
+
+        $user->setPassword($hashedPassword);
+
+        try
+        {
+            $this->em->beginTransaction();
+            $this->em->persist($user);
+            $this->em->flush();
+            $this->em->commit();
+            return new JsonResponse(['status' => true, 'message' => 'Zmieniono hasło']);
+        }
+        catch(\Exception $e)
+        {
+            $this->em->rollback();
+            return new JsonResponse(['status' => false, 'message' => 'Nie udało się zapisać hasła w bazie']);
+        }
     }
 
     #[Route('/ping', name: 'api_users_ping', methods: ['GET'])]

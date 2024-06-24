@@ -5,6 +5,7 @@ import Homepage from "../pages/Homepage.svelte";
 import Ranking from "../pages/Ranking.svelte";
 import FlappyBee from "../pages/FlappyBee.svelte";
 import Empty from "../pages/Empty.svelte";
+import Settings from "../pages/Settings.svelte";
 import { HotelArtystowApi } from './HotelArtystowApi';
 
 export default class Router {
@@ -16,6 +17,7 @@ export default class Router {
         ['/zjeble', Zjeble],
         ['/ranking', Ranking],
         ['/flappybee', FlappyBee],
+        ['/settings', Settings],
         ['/', Homepage]
     ]);
 

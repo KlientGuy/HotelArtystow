@@ -19,6 +19,15 @@ class Division
     #[ORM\Column]
     private ?int $beesRequired = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $texture = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $vertexShader = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $fragmentShader = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +53,42 @@ class Division
     public function setBeesRequired(int $beesRequired): static
     {
         $this->beesRequired = $beesRequired;
+
+        return $this;
+    }
+
+    public function getTexture(): ?string
+    {
+        return $this->texture;
+    }
+
+    public function setTexture(string $texture): static
+    {
+        $this->texture = $texture;
+
+        return $this;
+    }
+
+    public function getVertexShader(): ?string
+    {
+        return $this->vertexShader;
+    }
+
+    public function setVertexShader(string $vertexShader): static
+    {
+        $this->vertexShader = $vertexShader;
+
+        return $this;
+    }
+
+    public function getFragmentShader(): ?string
+    {
+        return $this->fragmentShader;
+    }
+
+    public function setFragmentShader(string $fragmentShader): static
+    {
+        $this->fragmentShader = $fragmentShader;
 
         return $this;
     }

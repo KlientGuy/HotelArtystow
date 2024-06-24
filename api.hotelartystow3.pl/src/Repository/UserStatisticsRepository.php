@@ -66,16 +66,18 @@ class UserStatisticsRepository extends ServiceEntityRepository
     public function updateLoginStreak(User $user)
     {
         $statistics = $user->getUserStatistics();
-        $lastLoginDiff = date_diff(new \DateTime(), $user->getLastLogin() ?? new \DateTime());
+        $nowMidnight = new \DateTime(date('Y-m-d'));
+        $loginMidnight = new \DateTime($user->getLastLogin()->format('Y-m-d'));
+
+        $lastLoginDiff = date_diff($nowMidnight, $loginMidnight);
+
         if($lastLoginDiff->days == 1)
         {
             $streak = $statistics->getLoginStreak();
             $statistics->setLoginStreak(++$streak);
         }
         else if($lastLoginDiff->days != 0)
-        {
             $statistics->setLoginStreak(1);
-        }
 
         $user->setLastLogin(new \DateTime());
 

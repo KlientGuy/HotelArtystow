@@ -21,11 +21,6 @@
         sessionStorage.setItem('loggedIn', '1');
         sessionStorage.setItem('userId', res.data.userId);
     }
-
-    async function testLogin(){
-        console.log(await api.getUsers());
-    }
-
 </script>
 
 <div class="login-box bg-primary">

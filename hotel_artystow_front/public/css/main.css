@@ -209,3 +209,25 @@ body{
 .third-place {
     background-color: #624526;
 }
+
+.big-container {
+    width: 70vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 35px;
+    padding: 1rem;
+}
+
+.small-container {
+    width: 30vw;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 35px;
+    padding: 1rem;
+}
+
+.img-link, .img-link > * {
+    display: block !important;
+}

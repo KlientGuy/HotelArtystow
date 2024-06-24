@@ -26,6 +26,17 @@ export class HotelArtystowApi
 
     /**
      * @public
+     * @param {string} password 
+     * @param {string} passwordConfirm 
+     */
+    async changePassword(password, passwordConfirm) {
+        const res = await this._sendPostRequest('/users/changePassword', {password, passwordConfirm});
+
+        return await this._parseResponse(res);
+    }
+
+    /**
+     * @public
      * @returns Promise<object>
      */
     async ping() {
