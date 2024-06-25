@@ -43,5 +43,7 @@
 {/if}
 
 <main>
-    <svelte:component this={currentComponent} bind:params/>
+    {#key currentRoute}
+        <svelte:component this={currentComponent} bind:params/>
+    {/key}
 </main>

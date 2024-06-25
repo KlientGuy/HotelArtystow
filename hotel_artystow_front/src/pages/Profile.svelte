@@ -4,6 +4,7 @@
     import Loading from "../lib/Loading.svelte";
     import DivisionCanvas from "../lib/DivisionCanvas.svelte";
     import * as Types from '../lib/types';
+    import { onMount } from "svelte";
 
     /** @type {Types.RouterParams} */
     export let params;

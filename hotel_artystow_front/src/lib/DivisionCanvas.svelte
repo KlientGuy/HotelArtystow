@@ -20,7 +20,7 @@
     let cubeRotationSpeed = 20;
 
     onDestroy(() => {
-        cube.destroy();
+        cube?.destroy();
     });
 
     onMount(async () => {

@@ -61,6 +61,8 @@ export default class Router {
         if(location.pathname === '/index.html')
             location.pathname = '/';
 
+        Router.currentRoute = location.pathname;
+
         this.switchComponent(location.pathname, this._getQueryParams());
 
     }
@@ -83,8 +85,6 @@ export default class Router {
         else queryString = '';
 
         const queryParams = new URLSearchParams(queryString);
-
-        console.log(Object.fromEntries(queryParams));
 
         route = route.replace(new RegExp(/\?.*/), '');
         Router.currentRoute = route;
