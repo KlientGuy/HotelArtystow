@@ -37,19 +37,19 @@ class AddUsers extends Command
                 'username' => 'patryk',
                 'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
                 'firstname' => 'Patryk',
-                'profilePic' => 'patryk.webp',
+                'profilePic' => 'patryk-256.webp',
             ],
             [
                 'username' => 'gabriel',
                 'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
                 'firstname' => 'Gabryś',
-                'profilePic' => 'gabrys.webp',
+                'profilePic' => 'gabrys-256.webp',
             ],
             [
                 'username' => 'damian',
                 'roles' => ['ROLE_USER'],
                 'firstname' => 'Damian',
-                'profilePic' => 'damian.webp',
+                'profilePic' => 'damian-256.webp',
             ],
 
         ];
