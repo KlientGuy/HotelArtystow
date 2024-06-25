@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import {EngineBase} from '../lib/glEngine/engine_base'
     import { Shader } from './glEngine/utils/shader';
     import { Cube } from './glEngine/cube';
@@ -8,6 +8,9 @@
 
     export let width;
     export let height;
+    export let texture;
+    export let vertex;
+    export let fragment;
 
     /** @type {EngineBase} */
     let engineBase;
@@ -16,14 +19,20 @@
 
     let cubeRotationSpeed = 20;
 
+    onDestroy(() => {
+        cube.destroy();
+    });
+
     onMount(async () => {
         engineBase = new EngineBase(document.querySelector('#division-canvas'));
         engineBase.setBaseColor(59, 27, 89);
 
         // const shader = await Shader.fromUri('generic_mvp.vert', 'generic_flat_color.frag', true);
-        const shader = await Shader.fromUri('generic_texture_mvp.vert', 'generic_texture.frag', true);
+        // const shader = await Shader.fromUri('generic_texture_mvp.vert', 'generic_texture.frag', true);
+        const shader = await Shader.fromUri(vertex, fragment, true);
         // const texture = await Texture2D.fromUri('divisions/shrex.png', 207, 207);
-        const texture = await Texture2D.fromUri('divisions/diamond_block.png', 16, 16);
+        // const texture = await Texture2D.fromUri('divisions/diamond_block.png', 16, 16);
+        const texture2d = await Texture2D.fromUri(texture, 16, 16);
 
         cube = new Cube();
         cube.setShader(shader);

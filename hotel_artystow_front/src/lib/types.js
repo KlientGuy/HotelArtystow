@@ -12,8 +12,16 @@
  * @property {number} id
  * @property {number|string} loginStreak
  * @property {number|string} bees
- * @property {number|string} division
  * @property {number|string} place
+ * @property {Division} division
+ */
+
+/**
+ * @typedef {object} Division
+ * @property {string} name
+ * @property {string} texture
+ * @property {string} vertexShader
+ * @property {string} fragmentShader
  */
 
 /**

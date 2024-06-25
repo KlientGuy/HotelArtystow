@@ -1,5 +1,6 @@
 import { EngineBase } from "./engine_base.js";
 import { GameObject } from "./game_object.js";
+import { Renderer } from "./renderer.js";
 import { Texture2D } from "./texture_2d.js";
 import { Mathf } from "./utils/mathf.js";
 import { Vector3 } from "./utils/vector.js";
@@ -181,5 +182,21 @@ export class Cube extends GameObject {
 
         gl.bindVertexArray(null);
         this.resetTransform();
+    }
+
+    /**
+    * @public
+    */
+    destroy() {
+        const gl = EngineBase.getGlContext();
+        this._texture.destroy();
+        this.shader.destroy();
+        Renderer.removeObjectFromQueue(this);
+
+        gl.deleteBuffer(this.buffer);
+        gl.deleteBuffer(this.elementBuffer);
+        gl.deleteBuffer(this.sideElementBuffer);
+        gl.deleteVertexArray(this.vao);
+
     }
 }

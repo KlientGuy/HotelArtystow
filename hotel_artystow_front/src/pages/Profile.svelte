@@ -264,7 +264,13 @@
                     {/if}
                 </div>
                 <div class="profile-rank">
-                    <DivisionCanvas width={256} height={256}/>
+                    <DivisionCanvas 
+                        width={256}
+                        height={256}
+                        texture={userData.userStatistics.division.texture}
+                        vertex={userData.userStatistics.division.vertexShader}
+                        fragment={userData.userStatistics.division.fragmentShader}
+                    />
                     <!-- <div style="width: 256px; height: 256px; background-color: black;"></div> -->
                 </div>
             </div>

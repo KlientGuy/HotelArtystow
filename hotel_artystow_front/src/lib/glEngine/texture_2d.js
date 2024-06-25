@@ -66,4 +66,12 @@ export class Texture2D {
 
         return new Texture2D(image);
     }
+
+    /**
+    * @public
+    */
+    destroy() {
+        const gl = EngineBase.getGlContext();
+        gl.deleteTexture(this._texture);
+    }
 }

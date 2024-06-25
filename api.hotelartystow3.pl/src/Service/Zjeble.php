@@ -20,6 +20,7 @@ class Zjeble
     public function blurImage(string $imgName, int $blurStrength)
     {
         $imagick = new \Imagick($this->kernel->getProjectDir().'/'. $this->imagePath . $imgName);
+        $imagick->resizeImage(512, 512, null, null);
         $imagick->gaussianBlurImage($blurStrength, $blurStrength);
         $imagick->setImageFormat('webp');
         return $imagick->getImageBlob();

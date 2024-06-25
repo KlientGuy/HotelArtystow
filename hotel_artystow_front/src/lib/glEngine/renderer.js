@@ -198,6 +198,14 @@ export class Renderer {
     }
 
     /**
+     * @public
+     * @param {GameObject} object 
+     */
+    static removeObjectFromQueue(object) {
+        this.drawQueue.splice(this.drawQueue.indexOf(object));
+    }
+
+    /**
     * @param {Camera} camera 
     * @static
     */

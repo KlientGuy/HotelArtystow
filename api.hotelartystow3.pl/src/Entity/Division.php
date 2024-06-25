@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\DivisionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: DivisionRepository::class)]
 class Division
@@ -14,18 +15,22 @@ class Division
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['userProfile'])]
     private ?string $name = null;
 
     #[ORM\Column]
     private ?int $beesRequired = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['userProfile'])]
     private ?string $texture = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['userProfile'])]
     private ?string $vertexShader = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['userProfile'])]
     private ?string $fragmentShader = null;
 
     public function getId(): ?int

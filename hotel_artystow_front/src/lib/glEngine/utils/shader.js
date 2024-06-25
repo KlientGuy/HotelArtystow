@@ -112,4 +112,14 @@ export class Shader {
 
         return new Shader(vertexSource, fragmentSource, compile);
     }
+
+    /**
+    * @public
+    */
+    destroy() {
+        const gl = EngineBase.getGlContext();
+        gl.deleteProgram(this.glProgram);
+        gl.deleteShader(this.vertexShader);
+        gl.deleteShader(this.fragmentShader);
+    }
 }
