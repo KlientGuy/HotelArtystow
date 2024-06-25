@@ -36,7 +36,7 @@
 
         cube = new Cube();
         cube.setShader(shader);
-        cube.setTexture(texture);
+        cube.setTexture(texture2d);
         cube.translate(new Vector3(0, 0, 2));
         // cube.rotateGlobal(new Vector3(-25, 45, 0));
 

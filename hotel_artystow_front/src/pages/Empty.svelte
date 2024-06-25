@@ -1,3 +1,6 @@
+<script>
+    export const params = {};
+</script>
 <style>
     .full {
         width: 100vw;

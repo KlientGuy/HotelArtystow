@@ -134,6 +134,9 @@ export class Cube extends GameObject {
     * @param {Texture2D} texture 
     */
     setTexture(texture) {
+
+        if(!(texture instanceof Texture2D)) throw new DOMException('setTexture: passed value is not Texture2D');
+
         this._texture = texture;
         const gl = EngineBase.getGlContext();
 

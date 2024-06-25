@@ -8,8 +8,8 @@
     /** @type {Types.RouterParams} */
     export let params;
 
-    console.log(params.route);
-    console.log(sessionStorage.getItem('userId'))
+    // console.log(params.route);
+    // console.log(sessionStorage.getItem('userId'))
 
     /** @type {Types.UserData} */
     let userData;
@@ -197,7 +197,7 @@
        flex-basis: 50%;
    }
 
-   .profile-pic img, .profile-rank div {
+   .profile-pic img {
        border-radius: 15px;
    }
 
@@ -271,7 +271,6 @@
                         vertex={userData.userStatistics.division.vertexShader}
                         fragment={userData.userStatistics.division.fragmentShader}
                     />
-                    <!-- <div style="width: 256px; height: 256px; background-color: black;"></div> -->
                 </div>
             </div>
             <div class="row space-around profile-stats">
