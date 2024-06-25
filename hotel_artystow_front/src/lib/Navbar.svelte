@@ -1,5 +1,6 @@
 <script>
     import { HotelArtystowApi } from "./HotelArtystowApi";
+    import { navigateTo } from "./navigation";
 
     const api = new HotelArtystowApi();
     let navbarData = {
@@ -10,6 +11,11 @@
     api.getNavbarData().then((res) => {
         navbarData = res.data;
     })
+
+    async function logoutClick() {
+        await api.logout();
+        navigateTo('/login');
+    }
 
 </script>
 
@@ -84,6 +90,26 @@
         color: #fbc41b;
     }
 
+    .logout-hover > i {
+        transition: color 250ms ease-out, scale 500ms;
+        cursor: pointer;
+    }
+
+    .logout-hover:hover > i {
+        color: red;
+        scale: -1 1;
+    }
+    .nav-button {
+        width: auto;
+        height: auto;
+        display: block;
+        padding: 0;
+        background-color: transparent;
+    }
+    .nav-button:hover {
+        border-color: transparent;
+    }
+
 </style>
 
 <ul>
@@ -95,6 +121,7 @@
             <div class="nav-emoji">{navbarData.loginStreak}<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
             <div class="row align-items-center">
                 <a href="/settings" class="img-link nav-emoji-fa"><i class="fa fa-cog rotate-hover"></i></a>
+                <button on:click={logoutClick} class="img-link nav-emoji-fa nav-button logout-hover"><i class="fa fa-right-from-bracket"></i></button>
                 <a href="/profile" class="img-link"><img class="profile-navbar-image" src="/img/profile_pics/Hotpot.png" alt="profile_pic"></a>
             </div>
         </div>

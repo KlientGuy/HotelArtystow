@@ -26,6 +26,14 @@ export class HotelArtystowApi
 
     /**
      * @public
+     * @returns Promise<void>
+     */
+    async logout() {
+        const res = await this._sendGetRequest('/users/logout');
+    }
+
+    /**
+     * @public
      * @param {string} password 
      * @param {string} passwordConfirm 
      */
