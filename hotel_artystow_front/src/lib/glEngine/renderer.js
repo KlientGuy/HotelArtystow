@@ -58,6 +58,12 @@ export class Renderer {
     frames = 0;
 
     /**
+     * @type {number}
+     * @private
+     */
+    _animationFrameHandler;
+
+    /**
      * @private
      * @type {object}
      */
@@ -86,6 +92,8 @@ export class Renderer {
 
         setInterval(this.countFps.bind(this), 1000);
 
+        // this.limitFps(5);
+
         /* for(let i = 0; i <= 120; i++) {
             const renderer = this;
             setTimeout(function() {
@@ -106,7 +114,7 @@ export class Renderer {
 
             if(this.targetFps) {
                 if(deltaTime < 1000 / this.targetFps) {
-                    requestAnimationFrame(drawFunction);
+                    this._animationFrameHandler = requestAnimationFrame(drawFunction);
                     return;
                 }
             }
@@ -123,7 +131,9 @@ export class Renderer {
 
             for(const one of Renderer.drawQueue) {
                 const shader = one.getShader();
+                const texture = one.getTexture();
                 shader.use();
+                texture.use();
                 gl.uniformMatrix4fv(shader.getUniformLocation('uProjection'), false, this.projectionMatrix.toFloat32Array(), 0, 0);
 
                 this.moveCamera(deltaTime);
@@ -132,9 +142,16 @@ export class Renderer {
                 one.draw();
             }
 
-            requestAnimationFrame(drawFunction);
+            this._animationFrameHandler = requestAnimationFrame(drawFunction);
         }
         drawFunction();
+    }
+
+    /**
+     * @public
+     */
+    stop() {
+        cancelAnimationFrame(this._animationFrameHandler);
     }
 
     /**

@@ -41,6 +41,15 @@ export class Texture2D {
         // gl.generateMipmap(gl.TEXTURE_2D);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+    }
+
+    /**
+     * @public
+     */
+    use() {
+        const gl = EngineBase.getGlContext();
+        gl.bindTexture(gl.TEXTURE_2D, this._texture);
     }
 
     /**

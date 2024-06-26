@@ -132,12 +132,12 @@ export class Cube extends GameObject {
     /**
     * @public
     * @param {Texture2D} texture 
+    * @param {boolean} freePrevious 
     */
-    setTexture(texture) {
+    setTexture(texture, freePrevious) {
 
         if(!(texture instanceof Texture2D)) throw new DOMException('setTexture: passed value is not Texture2D');
 
-        this._texture = texture;
         const gl = EngineBase.getGlContext();
 
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -146,6 +146,12 @@ export class Cube extends GameObject {
         gl.enableVertexAttribArray(1);
         gl.bindVertexArray(null);
         gl.bindBuffer(gl.ARRAY_BUFFER, null);
+
+        if(freePrevious) {
+            this.texture.destroy();
+        }
+
+        this.texture = texture;
     }
 
     /**
@@ -192,7 +198,7 @@ export class Cube extends GameObject {
     */
     destroy() {
         const gl = EngineBase.getGlContext();
-        this._texture.destroy();
+        this.texture.destroy();
         this.shader.destroy();
         Renderer.removeObjectFromQueue(this);
 

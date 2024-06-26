@@ -58,6 +58,13 @@ export class EngineBase {
 
     /**
      * @public
+     */
+    stop() {
+        this.renderer.stop();
+    }
+
+    /**
+     * @public
      * @param {number} r 
      * @param {number} g 
      * @param {number} b 

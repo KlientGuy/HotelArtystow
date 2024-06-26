@@ -35,6 +35,7 @@
         const placeRes = await api.getRankingPlace(params.route.id);
 
         userData = res.data;
+        userData.canAdvance = true;
         userData.userStatistics.place = placeRes.data.place;
         profileDesc = userData.description ?? '';
 
@@ -145,6 +146,7 @@
 
         profileDesc = newDesc;
     }
+    let isAdvancing = false;
         
 </script>
 
@@ -264,13 +266,14 @@
                         <span style="color: red">{profileError}</span>
                     {/if}
                 </div>
-                <div class="profile-rank">
+                <div class="profile-rank-wrap">
                     <DivisionCanvas 
                         width={256}
                         height={256}
                         texture={userData.userStatistics.division.texture}
                         vertex={userData.userStatistics.division.vertexShader}
                         fragment={userData.userStatistics.division.fragmentShader}
+                        canAdvance={userData.canAdvance}
                     />
                 </div>
             </div>

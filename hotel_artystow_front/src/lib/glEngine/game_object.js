@@ -1,5 +1,6 @@
 import { EngineBase } from "./engine_base.js";
 import { Renderer } from "./renderer.js";
+import { Texture2D } from "./texture_2d.js";
 import { Matrix4 } from "./utils/matrix4.js";
 import { Shader } from "./utils/shader.js";
 import { Vector3 } from "./utils/vector.js";
@@ -29,6 +30,12 @@ export class GameObject {
      *  @protected
      */
     shader;
+
+    /**
+     * @type {Texture2D}
+     * @protected
+     */
+    texture;
 
     /**
      *  @type {number}
@@ -114,6 +121,22 @@ export class GameObject {
 
     getShader() {
         return this.shader;
+    }
+
+    /**
+     * @public
+     * @param {Texture2D} texture 
+     * @param {boolean} freePrevious 
+     * @virtual
+     */
+    setTexture(texture, freePrevious) {};
+
+    /**
+     * @public
+     * @returns {Texture2D}
+     */
+    getTexture() {
+        return this.texture;
     }
 
     /**
