@@ -180,6 +180,16 @@ export class GameObject {
     }
 
     /**
+     * @public
+     * @param {Vector3} vec3 
+     */
+    scaleTimes(vec3) {
+        this.scaleMatrix.scaleTimes(vec3);
+
+        return this;
+    }
+
+    /**
      * @param {Vector3} vec3 
      */
     rotate(vec3) {
@@ -211,9 +221,13 @@ export class GameObject {
      * @protected
      */
     calculateTransform() {
-        this.transformMatrix = new Matrix4(this.rotationMatrix.toArray());
+        this.transformMatrix = new Matrix4(this.scaleMatrix.toArray());
+        this.transformMatrix.multiply(this.rotationMatrix);
         this.transformMatrix.multiply(this.calculateTranslation());
-        this.transformMatrix.multiply(this.scaleMatrix);
+
+        // this.transformMatrix = new Matrix4(this.rotationMatrix.toArray());
+        // this.transformMatrix.multiply(this.calculateTranslation());
+        // this.transformMatrix.multiply(this.scaleMatrix);
     }
 
     /**

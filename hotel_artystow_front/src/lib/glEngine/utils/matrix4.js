@@ -45,9 +45,9 @@ export class Matrix4 {
     * @param {Vector3} vec3 
     */
     scale(vec3) {
-        this.matrix[0] += vec3.x;
-        this.matrix[5] += vec3.y;
-        this.matrix[10] += vec3.z;
+        this.matrix[0] = vec3.x;
+        this.matrix[5] = vec3.y;
+        this.matrix[10] = vec3.z;
 
         return this;
     }
