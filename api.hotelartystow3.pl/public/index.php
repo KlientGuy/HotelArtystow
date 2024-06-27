@@ -5,7 +5,7 @@ use App\Kernel;
 $allowed = [
     'https://hotelartystow3.pl',
     'https://www.hotelartystow3.pl',
-    'localhost:5001'
+    'http://localhost:5001'
 ];
 
 if(isset($_SERVER['HTTP_ORIGIN']) && in_array($_SERVER['HTTP_ORIGIN'], $allowed))
