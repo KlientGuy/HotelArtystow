@@ -195,11 +195,15 @@ export class Cube extends GameObject {
 
     /**
     * @public
+    * @param {boolean} destroyShader 
+    * @param {boolean} [destroyTexture=true] 
     */
-    destroy() {
+    destroy(destroyShader = true, destroyTexture = true) {
         const gl = EngineBase.getGlContext();
-        this.texture.destroy();
-        this.shader.destroy();
+
+        if(destroyTexture) this.texture.destroy();
+        if(destroyShader) this.shader.destroy();
+
         Renderer.removeObjectFromQueue(this);
 
         gl.deleteBuffer(this.buffer);

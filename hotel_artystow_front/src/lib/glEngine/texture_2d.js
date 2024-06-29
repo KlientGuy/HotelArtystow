@@ -76,6 +76,10 @@ export class Texture2D {
         return new Texture2D(image);
     }
 
+    clone() {
+        return new Texture2D(this._image);
+    }
+
     /**
     * @public
     */

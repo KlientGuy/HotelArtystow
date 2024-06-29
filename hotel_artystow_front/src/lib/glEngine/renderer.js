@@ -8,11 +8,18 @@ import { Vector3 } from "./utils/vector.js";
 export class Renderer {
 
     /** 
-     * @type {Array<GameObject>}
+     * @type {Map<string, GameObject>}
      * @private
      * @static
      */
-    static drawQueue = [];
+    static drawQueue = new Map();
+
+    /**
+     * @type {Map<string, GameObject>}
+     * @private
+     * @static
+     */
+    static destroyQueue = new Map();
 
     /**
      * @type {Camera}
@@ -129,7 +136,14 @@ export class Renderer {
             gl.clearColor(Renderer.baseColor.r, Renderer.baseColor.g, Renderer.baseColor.b, 1.0);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-            for(const one of Renderer.drawQueue) {
+            for(const [key, one] of Renderer.destroyQueue.entries()) {
+                one.getShader().use();
+                one.getTexture().use();
+                one.destroy(false, false);
+                Renderer.destroyQueue.delete(one.id);
+            }
+
+            for(const [key, one] of Renderer.drawQueue.entries()) {
                 const shader = one.getShader();
                 const texture = one.getTexture();
                 shader.use();
@@ -177,7 +191,7 @@ export class Renderer {
     /**
      * @private
      */
-    countFps() {
+    countFps(frames) {
         this.fps = frames;
         this.frames = 0;
     }
@@ -211,7 +225,14 @@ export class Renderer {
     *   @param {GameObject} object 
     */
     static queueObjectDraw(object) {
-        this.drawQueue.push(object);
+        this.drawQueue.set(object.id, object);
+    }
+
+    /**
+     * @param {GameObject} object 
+     */
+    static queueObjectDestroy(object) {
+        this.destroyQueue.set(object.id, object);
     }
 
     /**
@@ -219,7 +240,8 @@ export class Renderer {
      * @param {GameObject} object 
      */
     static removeObjectFromQueue(object) {
-        this.drawQueue.splice(this.drawQueue.indexOf(object));
+        // this.drawQueue.splice(this.drawQueue.indexOf(object));
+        this.drawQueue.delete(object.id);
     }
 
     /**

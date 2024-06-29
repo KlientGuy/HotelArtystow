@@ -7,6 +7,8 @@ import { Vector3 } from "./utils/vector.js";
 
 export class GameObject {
 
+    id = crypto.randomUUID();
+
     /**
     * @type {Float32Array}
     * @protected
@@ -300,5 +302,9 @@ export class GameObject {
     queueDraw(preDrawCallback = null) {
         this.preDrawCallback = preDrawCallback;
         Renderer.queueObjectDraw(this);
+    }
+
+    queueDestroy(destroyShader = false, destroyTexture = false) {
+        Renderer.queueObjectDestroy(this);
     }
 }
