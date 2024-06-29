@@ -36,7 +36,7 @@ class Zjeble
     public function createNextRound()
     {
         $round = $this->roundRepository->getCurrent();
-        $nextIndex = $round->getId() + 1;
+        $nextIndex = $round->getPhotoIndex() + 1;
         $globPath = $this->kernel->getProjectDir().'/'.$this->imagePath. "*_$nextIndex.jpg";
 
         $globRes = glob($globPath);
@@ -52,7 +52,8 @@ class Zjeble
         $newRound
             ->setCreatedAt(new \DateTimeImmutable())
             ->setPicturePath($globRes[0])
-            ->setAnswer($answer);
+            ->setAnswer($answer)
+            ->setPhotoIndex($nextIndex);
 
         try
         {

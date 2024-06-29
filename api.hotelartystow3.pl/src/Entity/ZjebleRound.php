@@ -30,6 +30,9 @@ class ZjebleRound
     #[ORM\OneToMany(targetEntity: ZjebleUserSession::class, mappedBy: 'round')]
     private Collection $zjebleUserSessions;
 
+    #[ORM\Column]
+    private ?int $photoIndex = null;
+
     public function __construct()
     {
         $this->zjebleUserSessions = new ArrayCollection();
@@ -102,6 +105,18 @@ class ZjebleRound
                 $zjebleUserSession->setRound(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPhotoIndex(): ?int
+    {
+        return $this->photoIndex;
+    }
+
+    public function setPhotoIndex(int $photoIndex): static
+    {
+        $this->photoIndex = $photoIndex;
 
         return $this;
     }

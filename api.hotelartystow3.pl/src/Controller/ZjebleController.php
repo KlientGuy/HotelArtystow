@@ -166,7 +166,7 @@ class ZjebleController extends AbstractController
         $round = $this->roundRepository->getCurrent();
         $session = $this->sessionRepository->getForRound($user, $round);
 
-        $image = empty($session->getEndedAt()) ? $zjeble->blurImage('patryk.jpg', $session->getLivesLeft() * 3) : $zjeble->getClearImage('patryk.jpg');
+        $image = empty($session->getEndedAt()) ? $zjeble->blurImage($round->getPicturePath(), $session->getLivesLeft() * 3) : $zjeble->getClearImage($round->getPicturePath());
 
         return new Response($image, 200, [
             'Content-Type' => 'image/webp'
