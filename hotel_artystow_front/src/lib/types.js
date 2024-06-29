@@ -4,6 +4,7 @@
 * @property {string} firstname
 * @property {string} description
 * @property {string} profilePic
+* @property {boolean} canAdvance
 * @property {UserStatistics} userStatistics
 */
 

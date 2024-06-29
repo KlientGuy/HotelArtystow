@@ -140,6 +140,16 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @returns Promise<object>
+     */
+    async advanceDivision() {
+        const res = await this._sendPostRequest('/users/rankup');
+
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

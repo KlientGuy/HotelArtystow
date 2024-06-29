@@ -35,7 +35,6 @@
         const placeRes = await api.getRankingPlace(params.route.id);
 
         userData = res.data;
-        userData.canAdvance = true;
         userData.userStatistics.place = placeRes.data.place;
         profileDesc = userData.description ?? '';
 
@@ -274,6 +273,7 @@
                         vertex={userData.userStatistics.division.vertexShader}
                         fragment={userData.userStatistics.division.fragmentShader}
                         canAdvance={userData.canAdvance}
+                        divisionName={userData.userStatistics.division.name}
                     />
                 </div>
             </div>

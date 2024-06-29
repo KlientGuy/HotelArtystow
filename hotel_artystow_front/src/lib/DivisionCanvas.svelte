@@ -5,6 +5,7 @@
     import { Cube } from './glEngine/cube';
     import { Vector3 } from './glEngine/utils/vector';
     import { Texture2D } from './glEngine/texture_2d';
+    import { HotelArtystowApi } from './HotelArtystowApi';
 
     export let width;
     export let height;
@@ -12,11 +13,17 @@
     export let vertex;
     export let fragment;
     export let canAdvance;
+    export let divisionName;
 
     const CUBE_SPEED_MULTIPLIER = 1.005;
     const MAX_CUBE_SPEED = 1000;
     const MIN_CUBE_SPEED = 20;
     const MINIMUM_ADVANCE_ANIM_HEIGHT = calculateMinimumCubePosition();
+
+    let nextDivisionName;
+    let nextTexture;
+    let canAdvanceMore = false;
+    let waitTime = 1;
 
     /** @type {EngineBase} */
     let engineBase;
@@ -34,18 +41,13 @@
         engineBase = new EngineBase(document.querySelector('#division-canvas'));
         engineBase.setBaseColor(59, 27, 89);
 
-        // const shader = await Shader.fromUri('generic_mvp.vert', 'generic_flat_color.frag', true);
-        // const shader = await Shader.fromUri('generic_texture_mvp.vert', 'generic_texture.frag', true);
         const shader = await Shader.fromUri(vertex, fragment, true);
-        // const texture = await Texture2D.fromUri('divisions/shrex.png', 207, 207);
-        // const texture = await Texture2D.fromUri('divisions/diamond_block.png', 16, 16);
         const texture2d = await Texture2D.fromUri(texture, 16, 16);
 
         cube = new Cube();
         cube.setShader(shader);
         cube.setTexture(texture2d, false);
         cube.translate(new Vector3(0, 0, 2));
-        // cube.rotateGlobal(new Vector3(-25, 45, 0));
 
         engineBase.run();
 
@@ -96,20 +98,12 @@
         }
     }
 
-    const textures = [
-        'divisions/stone_block.png',
-        'divisions/iron_block.png',
-        'divisions/gold_block.png',
-        'divisions/diamond_block.png',
-        'divisions/emerald_block.png',
-        'divisions/bedrock_block.png',
-    ];
-
     async function animateAdvance() {
         const audio = new Audio('/audio/mc_levelup.mp3');
         const buildup = new Audio('/audio/stone_break.mp3');
-        const index = Math.floor(Math.random() * 6);
-        const texture2d = await Texture2D.fromUri(textures[index], 16, 16);
+
+        const texture2d = await Texture2D.fromUri(nextTexture, 16, 16);
+
         buildup.play();
         buildup.addEventListener('timeupdate', () => {
             if(buildup.currentTime >= 8) {
@@ -117,14 +111,19 @@
             }
         })
         await animateAdvanceRotation(true);
-        await new Promise(resolve => setTimeout(() => resolve(), 1000 * index));
+        await new Promise(resolve => setTimeout(() => resolve(), waitTime));
         await animateAdvanceScale(texture2d, true);
 
         buildup.pause();
         audio.play();
 
-        animateAdvanceRotation(false);
+        divisionName = nextDivisionName;
+
         animateAdvanceScale(null, false);
+        await animateAdvanceRotation(false);
+
+        canAdvance = canAdvanceMore;
+        canAdvanceMore = false;
     }
 
     /**
@@ -137,21 +136,24 @@
                 interval = setInterval(() => {
                     cubeRotationSpeed *= CUBE_SPEED_MULTIPLIER;
 
-                    if(cubeRotationSpeed >= MAX_CUBE_SPEED) {
+                    if(cubeRotationSpeed >= waitTime * 2) {
                         clearInterval(interval);
                         resolve();
                     }
                 }, 8);
             })
         } else {
-            interval = setInterval(() => {
-                cubeRotationSpeed /= CUBE_SPEED_MULTIPLIER;
+            return new Promise((resolve) => {
+                interval = setInterval(() => {
+                    cubeRotationSpeed /= CUBE_SPEED_MULTIPLIER;
 
-                if(cubeRotationSpeed <= MIN_CUBE_SPEED) {
-                    clearInterval(interval);
-                    freeze = false;
-                }
-            }, 10)
+                    if(cubeRotationSpeed <= MIN_CUBE_SPEED) {
+                        clearInterval(interval);
+                        freeze = false;
+                        resolve();
+                    }
+                }, 10)
+            })
         }
     }
 
@@ -200,11 +202,34 @@
         return min;
     }
 
+    async function rankup() {
+        const api = new HotelArtystowApi();
+
+        const res = await api.advanceDivision();
+
+        if(!res.status) return;
+
+        canAdvance = false;
+        startAnimation = true;
+        nextTexture = res.data.texture;
+        nextDivisionName = res.data.name;
+        canAdvanceMore = res.data.canAdvanceMore;
+        waitTime = res.data.waitTime;
+    }
+
 </script>
+
+<style>
+    .division-name {
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+</style>
 
 <div class="profile-rank">
     <canvas id="division-canvas" class="bg-primary" width="{width}" height="{height}"></canvas>
 </div>
+<div class="division-name">{divisionName}</div>
 {#if canAdvance}
-    <button type="button" class="btn" on:click={() => startAnimation = true}>Awansuj</button>
+    <button type="button" class="btn" on:click={() => rankup()}>Awansuj</button>
 {/if}

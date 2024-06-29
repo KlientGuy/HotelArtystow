@@ -16,8 +16,12 @@
     /** @type {Types.ZjebleUserSession} */
     let userSession;
 
-    let imageUrl = '/img/profile_pics/patryk.jpg';
+    let imageUrl = '';
     let inputDisabled = false;
+
+    const badAudio = new Audio('/audio/familiada_bad.mp3');
+    const winningAudio = new Audio('/audio/cheer.mp3');
+    winningAudio.volume = 0.25;
 
     async function getSession() {
         const res = await api.getZjebleUserSession();
@@ -28,12 +32,13 @@
         }
         userSession = res.data;
 
-        if(userSession.endedAt) {
+        if(userSession.endedAt && userSession.livesLeft > 0) {
             lives = [winLife, winLife, winLife];
         }
         else {
             lives.fill(goodLife, 0, userSession.livesLeft);
             lives.fill(lostLife, userSession.livesLeft, 3);
+            leftLives = userSession.livesLeft - 1;
         }
         
         await fetchImage();
@@ -81,11 +86,15 @@
                 return;
 
             removeHeartCool(leftLives);
+            badAudio.currentTime = 0;
+            badAudio.play();
             leftLives--;
             await fetchImage();
         }
         else {
+            winningAudio.play();
             lives = [winLife, winLife, winLife];
+            await fetchImage();
         }
 
     }

@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Division;
 use App\Entity\User;
 use App\Entity\UserStatistics;
+use App\Repository\DivisionRepository;
 use App\Repository\UserRepository;
 use App\Repository\UserStatisticsRepository;
 use App\Service\JsonSerializer;
@@ -122,9 +124,12 @@ class UsersController extends AbstractController
         description: 'Logged user profile data',
         content: new Model(type: User::class, groups: ['userProfile'])
     )]
-    public function myProfile(#[CurrentUser] User $user)
+    public function myProfile(#[CurrentUser] User $user, DivisionRepository $divisionRepository)
     {
-        return $this->serializer->res($user, ['userProfile']);
+        $json = json_decode($this->serializer->serialize($user, ['userProfile']), true);
+        $json['canAdvance'] = $divisionRepository->canUserAdvance($user);
+
+        return new JsonResponse($json);
     }
 
     #[Route('/profile/{id}', name: 'api_users_profile', methods: ['GET'])]
@@ -225,5 +230,57 @@ class UsersController extends AbstractController
     {
         $res = $statisticsRepository->getUserRank($user->getId());
         return new JsonResponse(['place' => $res]);
+    }
+
+    #[Route('/rankup', name: 'api_users_rankpup', methods: ['POST'])]
+    #[OA\Response(
+        response: 200,
+        description: 'Data for the next division',
+        content: new JsonContent(
+            example: [
+                'name' => 'string',
+                'texture' => 'string',
+                'vertex' => 'string',
+                'fragment' => 'string',
+                'canAdvanceMore' => 'bool',
+                'waitTime' => 'number'
+            ]
+        )
+    )]
+    public function advanceDivision(#[CurrentUser] User $user, DivisionRepository $divisionRepository) 
+    {
+        if(!$divisionRepository->canUserAdvance($user)) {
+            return new JsonResponse(['status' => false, 'message' => 'Niezła próba'], 400);
+        }
+
+        $statistics = $user->getUserStatistics();
+        $currentDivision = $statistics->getDivision();
+
+        /** @var Division */
+        $newDivision = $divisionRepository->find($currentDivision->getId() + 1);
+
+        $statistics->setDivision($newDivision);
+
+        try {
+            $this->em->beginTransaction();
+            $this->em->persist($user);
+            $this->em->flush();
+            $this->em->commit();
+
+            $canAdvanceMore = $divisionRepository->canUserAdvance($user);
+
+            return new JsonResponse([
+                'name' => $newDivision->getName(),
+                'texture' => $newDivision->getTexture(),
+                'vertex' => $newDivision->getVertexShader(),
+                'fragment' => $newDivision->getFragmentShader(),
+                'canAdvanceMore' => $canAdvanceMore,
+                'waitTime' => $newDivision->getBeesRequired() * 5
+            ]);
+        }
+        catch(\Exception $e) {
+            $this->em->rollback();
+            return new JsonResponse(['status' => false, 'message' => 'Problem z bazą'], 500);
+        }
     }
 }

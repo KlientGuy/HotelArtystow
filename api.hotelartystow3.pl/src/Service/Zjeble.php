@@ -37,21 +37,20 @@ class Zjeble
     {
         $round = $this->roundRepository->getCurrent();
         $nextIndex = $round->getPhotoIndex() + 1;
-        $globPath = $this->kernel->getProjectDir().'/'.$this->imagePath. "*_$nextIndex.jpg";
+        $globPath = $this->kernel->getProjectDir().'/'.$this->imagePath. "*_$nextIndex.jpeg";
 
         $globRes = glob($globPath);
 
         if(!$globRes)
             throw new \Exception('Next photo does not exist');
 
-        $path = $globRes[0];
-        $lastSlash = strrpos($path, '/') + 1;
-        $answer = substr($path, $lastSlash, strrpos($path, '_') - $lastSlash);
+        $path = substr($globRes[0], strrpos($globRes[0], '/') + 1);
+        $answer = substr($path, 0, strpos($path, '_'));
 
         $newRound = new ZjebleRound();
         $newRound
             ->setCreatedAt(new \DateTimeImmutable())
-            ->setPicturePath($globRes[0])
+            ->setPicturePath($path)
             ->setAnswer($answer)
             ->setPhotoIndex($nextIndex);
 
