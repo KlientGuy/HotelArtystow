@@ -30,13 +30,14 @@
         engineBase.stop();
     });
 
+    let shader;
     onMount(async () => {
         engineBase = new EngineBase(document.querySelector('#division-canvas'));
         engineBase.setBaseColor(59, 27, 89);
 
         // const shader = await Shader.fromUri('generic_mvp.vert', 'generic_flat_color.frag', true);
         // const shader = await Shader.fromUri('generic_texture_mvp.vert', 'generic_texture.frag', true);
-        const shader = await Shader.fromUri(vertex, fragment, true);
+        shader = await Shader.fromUri(vertex, fragment, true);
         // const texture = await Texture2D.fromUri('divisions/shrex.png', 207, 207);
         // const texture = await Texture2D.fromUri('divisions/diamond_block.png', 16, 16);
         const texture2d = await Texture2D.fromUri(texture, 16, 16);
@@ -105,11 +106,36 @@
         'divisions/bedrock_block.png',
     ];
 
+    function moveUpSmall(deltaTime, elapsedTime) {
+        translation = 1 * deltaTime;
+        // let translationx = (Math.random() - .5) * deltaTime;
+        let translationx = Math.sin(elapsedTime * 10) / 10;
+        this.translateLocal(new Vector3(translationx, 0, 0));
+        this.move(new Vector3(0, translation, 0));
+    }
+
     async function animateAdvance() {
+
+
         const audio = new Audio('/audio/mc_levelup.mp3');
         const buildup = new Audio('/audio/stone_break.mp3');
         const index = Math.floor(Math.random() * 6);
         const texture2d = await Texture2D.fromUri(textures[index], 16, 16);
+        const texture2d2 = await Texture2D.fromUri('divisions/dirt_block.png', 16, 16);
+        const cubesArr = [];
+        let interval = setInterval(() => {
+            let x = Math.random() - 0.5;
+            let y = Math.random() * 0.5;
+            let z = Math.random() + 1.5;
+            const smallCube = new Cube();
+            smallCube.setShader(shader);
+            smallCube.setTexture(texture2d2, false);
+            smallCube.scale(new Vector3(.25, .25, .25))
+            smallCube.translate(new Vector3(x, y, z));
+            smallCube.queueDraw(moveUpSmall);
+            
+            cubesArr.push(smallCube);
+        }, 250);
         buildup.play();
         buildup.addEventListener('timeupdate', () => {
             if(buildup.currentTime >= 8) {
@@ -117,14 +143,18 @@
             }
         })
         await animateAdvanceRotation(true);
-        await new Promise(resolve => setTimeout(() => resolve(), 1000 * index));
+        // await new Promise(resolve => setTimeout(() => resolve(), 1000 * index));
+        clearInterval(interval);
         await animateAdvanceScale(texture2d, true);
+
+        cubesArr.forEach((elem) => elem.queueDestroy(false, false));
 
         buildup.pause();
         audio.play();
 
-        animateAdvanceRotation(false);
         animateAdvanceScale(null, false);
+        animateAdvanceRotation(false);
+
     }
 
     /**
