@@ -6,6 +6,7 @@
     import { Vector3 } from './glEngine/utils/vector';
     import { Texture2D } from './glEngine/texture_2d';
     import { HotelArtystowApi } from './HotelArtystowApi';
+    import FancyButton from './FancyButton.svelte';
 
     export let width;
     export let height;
@@ -230,6 +231,8 @@
     <canvas id="division-canvas" class="bg-primary" width="{width}" height="{height}"></canvas>
 </div>
 <div class="division-name">{divisionName}</div>
-{#if canAdvance}
-    <button type="button" class="btn" on:click={() => rankup()}>Awansuj</button>
-{/if}
+<!-- {#if canAdvance} -->
+    {#key divisionName}
+        <FancyButton onclick={rankup} disabled={!canAdvance} divisionName={divisionName.toLowerCase()}/>
+    {/key}
+<!-- {/if} -->
