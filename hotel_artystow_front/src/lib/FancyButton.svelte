@@ -15,7 +15,8 @@
         'złoto': 'linear-gradient(var(--bg-angle), rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);',
         'diament': 'linear-gradient(var(--bg-angle), #1a1a1a 0%, #14ff00 50%, rgba(0,212,255,1) 100%);',
         'szmaragd': 'linear-gradient(var(--bg-angle), rgba(25,0,143,1) 0%, rgba(197,137,0,1) 48%, rgba(151,0,255,1) 100%);',
-        'bedrock': 'linear-gradient(var(--bg-angle), rgba(255,0,0,1) 0%, rgba(255,154,0,1) 23%, rgba(103,255,90,1) 51%, rgba(131,154,177,1) 80%, rgba(255,0,230,1) 100%);'
+        'bedrock': 'linear-gradient(var(--bg-angle), rgba(255,0,0,1) 0%, rgba(255,154,0,1) 23%, rgba(103,255,90,1) 51%, rgba(131,154,177,1) 80%, rgba(255,0,230,1) 100%);',
+        'legendary bedrock': 'linear-gradient(var(--bg-angle), #000000 0%, #fffd00 25%, #000000 50%, #fffd00 75%, #000000 100%);'
     }
     /* const GRADIENTS = {
         'dirt': 'linear-gradient(var(--bg-angle), #823700 0%, #823700 100%);',
