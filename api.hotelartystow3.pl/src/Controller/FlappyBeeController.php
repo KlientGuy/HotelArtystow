@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\FlappyBeeScore;
 use App\Entity\User;
 use App\Entity\ZjebleUserSession;
+use App\Repository\FlappyBeeScoreRepository;
 use App\Repository\ZjebleRoundRepository;
 use App\Repository\ZjebleUserSessionRepository;
 use App\Service\JsonSerializer;
@@ -40,12 +42,40 @@ class FlappyBeeController extends AbstractController
             example: ["points" => "integer"]
         )
     )]
-    public function submitPoints(Request $request, #[CurrentUser] ?User $user): Response
+    public function submitPoints(Request $request, #[CurrentUser] ?User $user, FlappyBeeScoreRepository $flappyBeeScoreRepository): Response
     {
         [
             'points' => $points
         ] = $request->toArray();
-        echo $points;
+
+        $flappyBeeScore = new FlappyBeeScore();
+        $statistics = $user->getUserStatistics();
+
+        $canGetPoints = $flappyBeeScoreRepository->canGetPoints($user);
+
+        if($points >= 10 && $canGetPoints) {
+            $flappyBeeScore
+                ->setUser($user)
+                ->setScore($points)
+                ->setCreatedAt(new DateTimeImmutable());
+
+            $newBees = $statistics->getBees() + $points;
+            $statistics->setBees($newBees);
+
+            try {
+                $this->em->beginTransaction();
+                $this->em->persist($flappyBeeScore);
+                $this->em->persist($statistics);
+                $this->em->flush();
+                $this->em->commit();
+
+                return new JsonResponse(['message' => 'Punkty zostały zapisane'], 200);
+            } catch (\Exception $e) {
+                $this->em->rollback();
+                return new JsonResponse(['message' => 'Coś się wyjebało'], 500);
+            }
+        }
+
         die;
     }
 }

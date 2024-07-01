@@ -150,6 +150,16 @@ export class HotelArtystowApi
     }
 
     /**
+     * @public
+     * @param {number} score
+     * @returns Promise<object>
+     */
+    async sendBeePoints(score) {
+        const res = await this._sendPostRequest('/flappyBee/submitPoints', {points:score});
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

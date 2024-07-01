@@ -1,5 +1,7 @@
 <script>
     import { onMount } from "svelte";
+    import {HotelArtystowApi} from "../lib/HotelArtystowApi.js";
+    const api = new HotelArtystowApi();
 
     let canvas;
     let ctx;
@@ -71,9 +73,9 @@
         });
     }
 
-    function updateBird() {
+    function updateBird(delta) {
         bird.velocity += bird.gravity;
-        bird.y += bird.velocity;
+        bird.y += bird.velocity*delta;
 
         if (bird.y + bird.height > canvas.height || bird.y < 0) {
             isGameOver = true;
@@ -107,7 +109,9 @@
             ) {
                 isGameOver = true;
                 isGameRunning = false;
-                sendScore();
+                if(score >= 10){
+                    sendScore();
+                }
             }
         }
     }
@@ -115,14 +119,14 @@
     function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.fillText(`Wynik: ${score}`, canvas.width / 2 , 50);
             drawPipes();
             drawBird();
-            ctx.fillStyle = "black";
-            ctx.fillText(`Score: ${score}`, 10, 20);
 
             if (isGameOver) {
             ctx.fillStyle = 'red';
-            ctx.fillRect(canvas.width / 2 - 230, canvas.height /2, canvas.width / 2, canvas.height / 2);
+            // ctx.fillRect(canvas.width / 2 - 230, canvas.height /2, canvas.width / 2, canvas.height / 2);
             ctx.fillStyle = "white";
             ctx.font = '40px "Baloo 2", sans-serif';
             ctx.textAlign = 'center';
@@ -131,10 +135,18 @@
             }
     }
 
-    function gameLoop() {
+    let lastFrameTime;
+    function gameLoop(timestamp) {
+
+            if(!lastFrameTime) {
+                lastFrameTime = timestamp;
+            }
+
+        let deltaTime = (timestamp - lastFrameTime) / 1000;
+
         if (!isGameRunning) return;
 
-        updateBird();
+        updateBird(deltaTime);
         updatePipes();
         checkCollision();
         draw();
@@ -154,16 +166,9 @@
             }
         }
     }
-
-    function sendScore() {
-            if (score > 3){
-                fetch('/submit-score', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({score})
-                })
+    async function sendScore() {
+            if(score >= 10){
+                    await api.sendBeePoints(score);
             }
     }
 
