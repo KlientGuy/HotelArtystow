@@ -4,8 +4,11 @@
 
     const api = new HotelArtystowApi();
     let navbarData = {
-        bees: 0,
-        loginStreak: 0
+        profilePic: 'Hotpot.png',
+        userStatistics: {
+            bees: 0,
+            loginStreak: 0
+        }
     };
 
     api.getNavbarData().then((res) => {
@@ -21,7 +24,7 @@
 
 <style>
     ul {
-        position: absolute;
+        position: fixed;
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -32,6 +35,7 @@
         /*justify-content: space-between;*/
         margin: 0;
         padding: 0;
+        z-index: 1;
         overflow: hidden;
         background-color: #3B1B59;
     }
@@ -61,9 +65,10 @@
         transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
     }
 
-    ul > li:not(:first-child):not(:nth-child(5)):not(:nth-child(4)):not(:nth-child(3)):hover {
+    /* ul > li:not(:first-child):not(:nth-child(5)):not(:nth-child(4)):not(:nth-child(3)):hover {
         box-shadow: inset 100px 0 0 0 #716085;
-    }
+    } */
+
     .nav-emoji {
         font-size: 1.2rem;
         width: 2vw;
@@ -110,19 +115,62 @@
         border-color: transparent;
     }
 
+    .spacer {
+        position: absolute;
+        top: 0;
+        height: 10vh;
+        margin-bottom: 50px;
+    }
+
+    @media only screen and (max-width: 500px) {
+
+        .spacer {
+            position: relative;
+        }
+        .nav-logo {
+            width: 50px;
+            height: 50px;
+        }
+        .profile {
+            margin-left: 0;
+            width: 100%;
+            padding: 0;
+            padding-left: 30px;
+        }
+
+        .profile > .stats-wrapper {
+            justify-content: space-around;
+        }
+
+        .nav-emoji {
+            width: 20px;
+            height: 20px;
+        }
+
+        .nav-emoji-fa {
+            font-size: 1.2rem;
+        }
+
+        .profile-navbar-image {
+            width: 40px;
+            height: 40px;
+        }
+    }
+
 </style>
 
+<div class="spacer"></div>
 <ul>
     <li><a class="nav-logo img-link" href="/"><img src="/svg/logo_test.svg" alt="logo"></a></li>
-    <li><a href="/zjeble">Zjeble</a></li>
+    <!-- <li><a href="/zjeble">Zjeble</a></li> -->
     <li class="profile">
         <div class="row align-items-center stats-wrapper">
-            <div class="nav-emoji">{navbarData.bees}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
-            <div class="nav-emoji">{navbarData.loginStreak}<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
+            <div class="nav-emoji">{navbarData.userStatistics.bees}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+            <div class="nav-emoji">{navbarData.userStatistics.loginStreak}<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
             <div class="row align-items-center">
                 <a href="/settings" class="img-link nav-emoji-fa"><i class="fa fa-cog rotate-hover"></i></a>
                 <button on:click={logoutClick} class="img-link nav-emoji-fa nav-button logout-hover"><i class="fa fa-right-from-bracket"></i></button>
-                <a href="/profile" class="img-link"><img class="profile-navbar-image" src="/img/profile_pics/Hotpot.png" alt="profile_pic"></a>
+                <a href="/profile" class="img-link"><img class="profile-navbar-image" src="/img/profile_pics/{navbarData.profilePic}" alt="profile_pic"></a>
             </div>
         </div>
     </li>

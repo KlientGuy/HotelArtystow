@@ -117,10 +117,17 @@
         justify-content: space-evenly;
         width: 70%;
     }
+
+    @media only screen and (max-width: 500px) {
+        .main-game {
+            height: auto;
+            margin-top: 0;
+        }
+    }
 </style>
 {#await getSession()}
     <div class="main-game bg-primary card-rounded">
-        <div class="row justify-center">
+        <div class="row row-500 justify-center">
             <div class="col justify-center">
                 <Loading/>
             </div>
@@ -128,13 +135,18 @@
     </div>
 {:then}
     <div class="main-game bg-primary card-rounded">
-        <div class="row justify-center">
+        <div class="row row-500 justify-center">
             <div class="col justify-center" style="">
                 <span class="game-title">
                     {responseMessage} 
                 </span>
                 <div class="game-photo">
-                    <img class="card-rounded" src="{imageUrl}" width="512" height="512" alt="">
+                    <picture>
+                        <source media="(max-width: 350px)" width="128" height="128" srcset="{imageUrl}">
+                        <source media="(max-width: 850px)" width="256" height="256" srcset="{imageUrl}">
+                        <source media="(min-width: 850px)" width="512" height="512" srcset="{imageUrl}">
+                        <img class="card-rounded" src="{imageUrl}" alt="">
+                    </picture>
                 </div>
                 <form action="#" on:submit|preventDefault={(e) => handleAnswerSubmit(e)}>
                     <div class="game-input row justify-center">

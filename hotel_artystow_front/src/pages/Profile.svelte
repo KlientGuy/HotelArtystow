@@ -154,78 +154,95 @@
         visibility: hidden;
     }
 
-   .profile-container {
-       width: 70vw;
-       height: 70vh;
-       display: flex;
-       flex-direction: column;
-       border-radius: 35px;
-       padding: 1rem;
-   } 
+    .profile-container {
+        width: 70vw;
+        height: 70vh;
+        display: flex;
+        flex-direction: column;
+        border-radius: 35px;
+        padding: 1rem;
+    } 
 
-   .profile-name {
-       flex-basis: 10%;
-   }
+    .profile-name {
+        flex-basis: 10%;
+    }
 
-   .profile-info {
-       flex-basis: 90%;
-   }
+    .profile-info {
+        flex-basis: 90%;
+    }
 
-   .profile-stats {
-       font-size: 2rem;
-       font-weight: bold;
-   }
-   .profile-stats .count {
-       font-size: 2.5em;
-       /* overflow: hidden; */
-       transition: --beeCount 5s;
-       counter-reset: beeCount var(--beeCount);
-   }
+    .profile-stats {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+    .profile-stats .count {
+        font-size: 2.5em;
+        /* overflow: hidden; */
+        transition: --beeCount 5s;
+        counter-reset: beeCount var(--beeCount);
+    }
 
-   .profile-stats .count::before {
-       content: attr(data-count);
-       position: absolute;
-   }
+    .profile-stats .count::before {
+        content: attr(data-count);
+        position: absolute;
+    }
 
-   .profile-stats .count:hover {
-       --beeCount: 10;
-   }
+    .profile-stats .count:hover {
+        --beeCount: 10;
+    }
 
-   .profile-desc {
-       font-size: 1.3rem;
-   }
+    .profile-desc {
+        font-size: 1.3rem;
+    }
 
-   .profile-pic-wrap {
-       flex-basis: 50%;
-   }
+    .profile-pic-wrap {
+        flex-basis: 50%;
+    }
 
-   .profile-pic img {
-       border-radius: 15px;
-   }
+    .profile-pic img {
+        border-radius: 15px;
+    }
 
-   .profile-name {
-       font-size: 2rem;
-       font-weight: bold;
-   }
+    .profile-name {
+        font-size: 2rem;
+        font-weight: bold;
+    }
 
-   .profile-emoji{
-       height: 5rem;
-       width: 5rem;
-   }
+    .profile-emoji{
+        height: 5rem;
+        width: 5rem;
+    }
 
-   .text-area{
+    .text-area{
         background-color: #716085;
         border: none;
         border-radius: 15px;
         padding: 0.5rem;
         /*font-size: 1.5rem;*/
-   }
+    }
 
-   #edit-desc-field {
-       width: 100%;
-       resize: none;
-       height: 10em;
-   }
+    #edit-desc-field {
+        width: 100%;
+        resize: none;
+        height: 10em;
+    }
+
+    @media only screen and (max-width: 800px) {
+        .profile-container {
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .profile-stats {
+            margin-top: 20px;
+            font-size: 1.5rem;
+        }
+
+        .profile-emoji {
+            width: 3rem;
+            height: 3rem;
+        }
+    }
 </style>
 
 {#await getUserData()}
@@ -242,7 +259,7 @@
             <span class="profile-name">{userData.firstname}</span>
         </div>
         <div class="col space-around profile-info">
-            <div class="row space-around">
+            <div class="row row-800 space-around">
                 <div class="col space-around profile-pic-wrap">
                     <div class="profile-pic">
                         <img src="/img/profile_pics/{userData.profilePic}" width="256" height="256" alt="ja">
@@ -277,7 +294,7 @@
                     />
                 </div>
             </div>
-            <div class="row space-around profile-stats">
+            <div class="row row-500 space-around profile-stats">
                 <div class="login-streak">
                     <div class="count" data-count="{counters.loginStreak}"><span class:invisible={!countersVisible}>{userData.userStatistics.loginStreak}</span> <img class="profile-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
                     <div class="stat-text">Login streak</div>

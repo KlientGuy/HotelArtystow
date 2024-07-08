@@ -18,8 +18,10 @@
     }
 </script>
 <style>
-    .form-group {
-        min-width: 300px;
+    @media only screen and (min-width: 800px) {
+        .form-group {
+            min-width: 300px;
+        }
     }
 </style>
 <div class="small-container bg-primary col align-center">

@@ -25,6 +25,7 @@
     let nextTexture;
     let canAdvanceMore = false;
     let waitTime = 1;
+    let showButton = canAdvance;
 
     /** @type {EngineBase} */
     let engineBase;
@@ -119,6 +120,7 @@
         audio.play();
 
         divisionName = nextDivisionName;
+        showButton = canAdvanceMore;
 
         animateAdvanceScale(null, false);
         await animateAdvanceRotation(false);
@@ -231,8 +233,8 @@
     <canvas id="division-canvas" class="bg-primary" width="{width}" height="{height}"></canvas>
 </div>
 <div class="division-name">{divisionName}</div>
-<!-- {#if canAdvance} -->
+{#if showButton}
     {#key divisionName}
         <FancyButton onclick={rankup} disabled={!canAdvance} divisionName={divisionName.toLowerCase()}/>
     {/key}
-<!-- {/if} -->
+{/if}

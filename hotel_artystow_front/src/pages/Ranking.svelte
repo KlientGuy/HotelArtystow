@@ -39,10 +39,30 @@
     tbody {
         font-size: 20px;
     }
+
+    @media only screen and (max-width: 500px) {
+        th {
+            font-size: 1.1rem;
+        }
+
+        th, td {
+            padding: 0.5rem;
+        }
+
+        thead {
+            font-size: 30px;
+        }
+
+        tbody {
+            font-size: 1.1rem;
+        }
+    }
 </style>
 
 {#await getRanking()}
-    <Loading/>
+    <div class="bg-primary ranking-container">
+        <Loading/>
+    </div>
 {:then ranking}
     <div class="bg-primary ranking-container">
         <table>

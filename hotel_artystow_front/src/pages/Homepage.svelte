@@ -1,34 +1,8 @@
 <script>
 
-import Navbar from "../lib/Navbar.svelte";
-import Loading from "../lib/Loading.svelte";
 import {navigateTo} from '../lib/navigation';
 
-
 </script>
-
-<!--<Loading/>-->
-<div class="container">
-    <div class="app-block">
-        <button class="hex">
-            <i class="fa-solid fa-7x fa-cloud-arrow-up"></i>
-        </button>
-        <button on:click={() => navigateTo('/zjeble')} class="hex zjeble">
-            <i class="fa-solid fa-7x fa-camera-retro"></i>
-        </button>
-        <button on:click={() => navigateTo('/flappybee')} class="hex zjeble">
-            <img src="/svg/bee.svg" alt="">
-        </button>
-    </div>
-    <div class="app-block">
-        <button on:click={() => navigateTo('/ranking')} class="hex">
-            <i class="fa-solid fa-7x fa-ranking-star"></i>
-        </button>
-        <button on:click={() => navigateTo('/zjeble')} class="hex">
-            ZAPCHAJ DZIURA BO CHUJOWO WYGLADA JAK JEST NIESYMETRYCZNIE
-        </button>
-    </div>
-</div>
 
 <style>
 
@@ -79,4 +53,54 @@ import {navigateTo} from '../lib/navigation';
         outline: none;
     }
 
+    @media only screen and (max-width: 800px) {
+        :root {
+            --translateX: 70px;
+        }
+        .container > .app-block {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .container > .app-block > .hex:nth-child(even) {
+            width: 200px;
+            translate: var(--translateX);
+        }
+
+        .container > .app-block > .hex:nth-child(odd) {
+            width: 200px;
+            translate: calc(var(--translateX) * -1);
+        }
+
+        .container > .app-block-2 > .hex:nth-child(odd) {
+            translate: var(--translateX) 80px!important;
+        }
+
+        .container > .app-block-2 > .hex:nth-child(even) {
+            translate: calc(var(--translateX) * -1)!important;
+        }
+    }
+
 </style>
+
+<div class="container">
+    <div class="app-block">
+        <button class="hex">
+            <i class="fa-solid fa-7x fa-cloud-arrow-up"></i>
+        </button>
+        <button on:click={() => navigateTo('/zjeble')} class="hex zjeble">
+            <i class="fa-solid fa-7x fa-camera-retro"></i>
+        </button>
+        <button on:click={() => navigateTo('/flappybee')} class="hex zjeble">
+            <img src="/svg/bee.svg" alt="">
+        </button>
+    </div>
+    <div class="app-block app-block-2">
+        <button on:click={() => navigateTo('/ranking')} class="hex">
+            <i class="fa-solid fa-7x fa-ranking-star"></i>
+        </button>
+        <button on:click={() => navigateTo('/zjeble')} class="hex">
+            ZAPCHAJ DZIURA BO CHUJOWO WYGLADA JAK JEST NIESYMETRYCZNIE
+        </button>
+    </div>
+</div>

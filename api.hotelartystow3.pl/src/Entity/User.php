@@ -43,14 +43,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $description = null;
 
     #[ORM\Column(length: 20)]
-    #[Groups(['usersList', 'userProfile', 'ranking'])]
+    #[Groups(['usersList', 'userProfile', 'ranking', 'navbarStats'])]
     private ?string $profilePic = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $lastLogin = null;
 
     #[ORM\OneToOne(mappedBy: 'user', cascade: ['persist', 'remove'])]
-    #[Groups(['userProfile', 'ranking'])]
+    #[Groups(['userProfile', 'ranking', 'navbarStats'])]
     private ?UserStatistics $userStatistics = null;
 
     public function getId(): ?int

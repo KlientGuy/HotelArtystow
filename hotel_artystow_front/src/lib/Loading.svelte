@@ -2,16 +2,6 @@
 
 </script>
 
-<div class="loading-conatiner justify-center align-items-center col">
-    <img src="/svg/logo_test.svg" alt="logo" class="nav-logo">
-    <div class="spinner">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-    </div>
-</div>
-
 <style>
     .loading-conatiner{
         background-color: #3B1B59;
@@ -66,4 +56,21 @@
             transform: rotate(360deg);
         }
     }
+
+    @media only screen and (max-width: 500px) {
+        .loading-conatiner {
+            height: 75vh;
+            width: auto;
+        }
+    }
 </style>
+
+<div class="loading-conatiner justify-center align-items-center col">
+    <img src="/svg/logo_test.svg" alt="logo" class="nav-logo">
+    <div class="spinner">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+</div>

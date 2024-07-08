@@ -187,7 +187,7 @@ class UsersController extends AbstractController
     {
         $stats = $user->getUserStatistics();
 
-        return $this->serializer->res($stats, ['navbarStats']);
+        return $this->serializer->res($user, ['navbarStats']);
     }
 
     #[Route('/ranking', name: 'api_users_get_by_rank', methods: ['GET'])]
