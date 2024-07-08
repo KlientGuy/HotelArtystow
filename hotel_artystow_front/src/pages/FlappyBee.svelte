@@ -1,8 +1,9 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import {HotelArtystowApi} from "../lib/HotelArtystowApi.js";
     const api = new HotelArtystowApi();
 
+    /** @type {HTMLCanvasElement} */
     let canvas;
     let ctx;
 
@@ -28,8 +29,7 @@
     let pipes = [];
     let frame = 0;
     let score = 0;
-    let isGameOver = false;
-    let isGameRunning = false;
+    let isGameOver = true;
 
     const pipeWidth = 40;
     const pipeGap = 150;
@@ -42,8 +42,6 @@
         score = 0;
         frame = 0;
         isGameOver = false;
-        isGameRunning = true;
-        gameLoop();
     }
 
     function createPipe() {
@@ -68,18 +66,18 @@
 
     function drawPipes() {
         // ctx.fillStyle = "green";
-        pipes.forEach((pipe) => {
-                ctx.drawImage(pipeImage, pipe.x, pipe.y, pipe.width, pipe.height);
-        });
+        pipes.forEach((pipe) => ctx.drawImage(pipeImage, pipe.x, pipe.y, pipe.width, pipe.height));
     }
 
+    /**
+    * @param {number} delta 
+    */
     function updateBird(delta) {
-        bird.velocity += bird.gravity;
-        bird.y += bird.velocity*delta;
+        bird.velocity += bird.gravity * delta;
+        bird.y += bird.velocity;
 
         if (bird.y + bird.height > canvas.height || bird.y < 0) {
             isGameOver = true;
-            isGameRunning = false;
             sendScore();
         }
     }
@@ -108,7 +106,6 @@
                 bird.y + bird.height > pipes[i].y
             ) {
                 isGameOver = true;
-                isGameRunning = false;
                 if(score >= 10){
                     sendScore();
                 }
@@ -117,14 +114,14 @@
     }
 
     function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "white";
-            ctx.fillText(`Wynik: ${score}`, canvas.width / 2 , 50);
-            drawPipes();
-            drawBird();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "white";
+        ctx.fillText(`Wynik: ${score}`, canvas.width / 2 , 50);
+        drawPipes();
+        drawBird();
 
-            if (isGameOver) {
+        if (isGameOver) {
             ctx.fillStyle = 'red';
             // ctx.fillRect(canvas.width / 2 - 230, canvas.height /2, canvas.width / 2, canvas.height / 2);
             ctx.fillStyle = "white";
@@ -132,56 +129,91 @@
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText("Kliknij spacje", canvas.width / 2, canvas.height / 2);
-            }
+        }
     }
 
     let lastFrameTime;
+    /**
+    * @param {number} timestamp 
+    */
     function gameLoop(timestamp) {
+        timestamp |= 0;
 
-            if(!lastFrameTime) {
-                lastFrameTime = timestamp;
-            }
+        if(!lastFrameTime) {
+            lastFrameTime = timestamp;
+        }
 
-        let deltaTime = (timestamp - lastFrameTime) / 1000;
+        const deltaTime = (timestamp - lastFrameTime) / 10;
+        lastFrameTime = timestamp;
 
-        if (!isGameRunning) return;
+        draw();
+
+        if (isGameOver) {
+            handle = requestAnimationFrame(gameLoop);
+            return; 
+        }
+
+        if(jumpQueued)
+            jump(deltaTime);
 
         updateBird(deltaTime);
         updatePipes();
         checkCollision();
-        draw();
         frame++;
-        requestAnimationFrame(gameLoop);
+        handle = requestAnimationFrame(gameLoop);
     }
 
+    let jumpQueued = false;
+    function queueJump() {
+        jumpQueued = true;
+    }
+
+    /**
+    * @param {number} delta 
+    */
+    function jump(delta) {
+        bird.velocity = bird.lift * delta;
+        jumpQueued = false;
+    }
+
+    /**
+    * @param {KeyboardEvent} event 
+    */
     function handleKeyPress(event) {
         if (event.code === "Space") {
-            if (isGameOver) {
-                resetGame();
-            } else if (!isGameRunning) {
-                isGameRunning = true;
-                gameLoop();
-            } else {
-                bird.velocity = bird.lift;
-            }
+            isGameOver ? resetGame() : queueJump();
         }
     }
+
+    function handleTap() {
+        isGameOver ? resetGame() : queueJump()
+    }
+
+    let handle = requestAnimationFrame(gameLoop);
+
     async function sendScore() {
-            if(score >= 10){
-                    await api.sendBeePoints(score);
-            }
+        if(score >= 10) {
+            await api.sendBeePoints(score);
+        }
     }
 
     onMount(() => {
-        canvas = document.getElementById("gameCanvas");
+        canvas = document.querySelector("#gameCanvas");
         ctx = canvas.getContext("2d");
         document.addEventListener("keydown", handleKeyPress);
+        canvas.addEventListener('click', handleTap);
     });
+
+    onDestroy(() => {
+        cancelAnimationFrame(handle);
+        document.removeEventListener('keydown', handleKeyPress);
+        canvas.removeEventListener('click', handleTap);
+    })
 </script>
 
 <div class="bg-primary game-container">
-        <h1>Graj i zdobywaj pszczoły!</h1>
-        <canvas id="gameCanvas" width="900px" height="500"></canvas>
+        <h1 class="game-title">Graj i zdobywaj pszczoły!</h1>
+        <canvas id="gameCanvas" width="800" height="500"></canvas>
 </div>
 
 <style>
@@ -222,5 +254,20 @@
 
     button:disabled {
         cursor: not-allowed;
+    }
+
+    @media only screen and (max-width: 500px) {
+        .game-container {
+            width: 90vw;
+        }
+
+        .game-title {
+            font-size: 1.2rem;
+        }
+
+        #gameCanvas {
+            width: 420px;
+            height: 500px;
+        }
     }
 </style>
