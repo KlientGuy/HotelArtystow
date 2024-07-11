@@ -164,7 +164,6 @@
 <div class="spacer"></div>
 <ul>
     <li><a class="nav-logo img-link" href="/"><img src="/svg/logo_test.svg" alt="logo"></a></li>
-    <!-- <li><a href="/zjeble">Zjeble</a></li> -->
     <li class="profile">
         <div class="row align-items-center stats-wrapper">
             <div class="nav-emoji">{$beesStore}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>

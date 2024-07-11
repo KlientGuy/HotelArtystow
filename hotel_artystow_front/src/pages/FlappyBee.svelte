@@ -134,7 +134,7 @@
             ctx.font = '40px "Baloo 2", sans-serif';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText("Kliknij spacje", canvas.width / 2, canvas.height / 2);
+            ctx.fillText("Naciśnij spacje lub zacznij klikać", canvas.width / 2, canvas.height / 2);
         }
     }
 
@@ -214,13 +214,15 @@
         canvas = document.querySelector("#gameCanvas");
         ctx = canvas.getContext("2d");
         document.addEventListener("keydown", handleKeyPress);
-        canvas.addEventListener('click', handleTap);
+        canvas.addEventListener('mousedown', handleTap);
+        canvas.addEventListener('touchstart', handleTap);
     });
 
     onDestroy(() => {
         cancelAnimationFrame(handle);
         document.removeEventListener('keydown', handleKeyPress);
-        canvas.removeEventListener('click', handleTap);
+        canvas.removeEventListener('mousedown', handleTap);
+        canvas.removeEventListener('touchstart', handleTap);
     })
 </script>
 
@@ -241,32 +243,12 @@
         padding: 1rem;
     }
 
-    main {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        background-color: #f0f0f0;
-    }
-
     canvas {
         border: 1px solid #ffffff;
     }
 
     h1 {
         margin-bottom: 20px;
-    }
-
-    button {
-        margin-top: 20px;
-        padding: 10px 20px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-
-    button:disabled {
-        cursor: not-allowed;
     }
 
     @media only screen and (max-width: 500px) {
