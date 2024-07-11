@@ -71,11 +71,15 @@ class UsersController extends AbstractController
     public function changePassword(#[CurrentUser] User $user, Request $request, UserPasswordHasherInterface $hasher)
     {
         [
-            'password' => $password
+            'password' => $password,
+            'passwordConfirm' => $passwordConfirm
         ] = $request->toArray();
 
         if(empty($password))
-            return new JsonResponse(['status' => false, 'message' => 'Hasło nie może być puste']);
+            return new JsonResponse(['status' => false, 'message' => 'Hasło nie może być puste'], 400);
+
+        if($password !== $passwordConfirm)
+            return new JsonResponse(['status' => false, 'message' => 'Hasła nie są takie same'], 400);
 
         $hashedPassword = $hasher->hashPassword($user, $password);
 
@@ -185,8 +189,6 @@ class UsersController extends AbstractController
     )]
     public function getNavbarStats(#[CurrentUser] User $user)
     {
-        $stats = $user->getUserStatistics();
-
         return $this->serializer->res($user, ['navbarStats']);
     }
 

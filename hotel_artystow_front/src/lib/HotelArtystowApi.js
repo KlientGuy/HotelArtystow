@@ -232,7 +232,6 @@ export class HotelArtystowApi
             }
         }
         else if(response.status == 401) {
-            console.log('adam');
             navigateTo('/login');
         }
 

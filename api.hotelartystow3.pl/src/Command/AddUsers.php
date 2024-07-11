@@ -40,7 +40,7 @@ class AddUsers extends Command
                 'profilePic' => 'patryk-256.webp',
             ],
             [
-                'username' => 'gabriel',
+                'username' => 'gabrys',
                 'roles' => ['ROLE_USER', 'ROLE_ADMIN'],
                 'firstname' => 'Gabryś',
                 'profilePic' => 'gabrys-256.webp',
@@ -51,7 +51,60 @@ class AddUsers extends Command
                 'firstname' => 'Damian',
                 'profilePic' => 'damian-256.webp',
             ],
-
+            [
+                'username' => 'gabrysia',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Gabrysia',
+                'profilePic' => 'gabsuia-256.webp',
+            ],
+            [
+                'username' => 'kacper',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Kacper',
+                'profilePic' => 'kacper-256.webp',
+            ],
+            [
+                'username' => 'bartek',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Bartek',
+                'profilePic' => 'bartek-256.webp',
+            ],
+            [
+                'username' => 'oliwier',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Olik',
+                'profilePic' => 'olik-256.webp',
+            ],
+            [
+                'username' => 'pawel',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Paweł',
+                'profilePic' => 'pawel-256.webp',
+            ],
+            [
+                'username' => 'kinga',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Kinga',
+                'profilePic' => 'kinga-256.webp',
+            ],
+            [
+                'username' => 'weronika',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Weronika',
+                'profilePic' => 'weronika-256.webp',
+            ],
+            [
+                'username' => 'zosia',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Zosia',
+                'profilePic' => 'zosia-256.webp',
+            ],
+            [
+                'username' => 'julka',
+                'roles' => ['ROLE_USER'],
+                'firstname' => 'Julka',
+                'profilePic' => 'julka-256.webp',
+            ]
         ];
 
         $added = 0;

@@ -30,7 +30,7 @@ class UserStatisticsRepository extends ServiceEntityRepository
                 RANK() OVER (ORDER BY us.bees DESC) as place
             FROM user u
             INNER JOIN user_statistics us on u.id = us.user_id
-            ORDER BY bees DESC
+            ORDER BY bees DESC, u.firstname ASC
         ";
 
         $em = $this->getEntityManager();

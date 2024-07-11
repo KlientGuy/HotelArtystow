@@ -1,7 +1,10 @@
 <script>
     import { HotelArtystowApi } from "../lib/HotelArtystowApi";
+    import { navigateTo } from "../lib/navigation";
 
     export const params = {};
+
+    let error = '';
 
     /**
     * @param {SubmitEvent & {currentTarget: HTMLFormElement}} e 
@@ -14,7 +17,15 @@
         }
 
         const api = new HotelArtystowApi();
-        api.changePassword(json.password, json.passwordConfirm);
+        const res = await api.changePassword(json.password, json.passwordConfirm);
+
+        if(!res.status) {
+            const message = JSON.parse(res.message);
+            error = message.message;
+        }
+
+        await api.logout();
+        navigateTo('/login');
     }
 </script>
 <style>
@@ -32,12 +43,15 @@
         <form on:submit|preventDefault={(e) => submitSettingsForm(e)}>
             <div class="col w-100 align-items-center">
                 <div class="form-group field">
-                    <input name="password" type="text" class="form-field" placeholder="Hasło" id="password">
+                    <input name="password" type="password" class="form-field" placeholder="Hasło" id="password">
                     <label for="password" class="form-label">Hasło</label>
                 </div>
                 <div class="form-group field">
-                    <input name="passwordConfirm" type="text" class="form-field" placeholder="Powtórz hasło" id="password-confirm">
+                    <input name="passwordConfirm" type="password" class="form-field" placeholder="Powtórz hasło" id="password-confirm">
                     <label for="password" class="form-label">Powtórz hasło</label>
+                </div>
+                <div class="w-100">
+                    {error}
                 </div>
                 <div class="w-100">
                     <button class="w-100" type="submit">Zapisz</button>

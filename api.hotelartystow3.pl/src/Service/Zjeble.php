@@ -33,9 +33,8 @@ class Zjeble
         return $imagick->getImageBlob();
     }
 
-    public function createNextRound()
+    public function createNextRound(ZjebleRound $round)
     {
-        $round = $this->roundRepository->getCurrent();
         $nextIndex = $round->getPhotoIndex() + 1;
         $globPath = $this->kernel->getProjectDir().'/'.$this->imagePath. "*_$nextIndex.jpeg";
 

@@ -69,13 +69,12 @@ class FlappyBeeController extends AbstractController
                 $this->em->flush();
                 $this->em->commit();
 
-                return new JsonResponse(['message' => 'Punkty zostały zapisane'], 200);
+                return new JsonResponse(['beesAdded' => $points], 200);
             } catch (\Exception $e) {
                 $this->em->rollback();
                 return new JsonResponse(['message' => 'Coś się wyjebało'], 500);
             }
         }
-
-        die;
+        return new JsonResponse(['message' => 'Nie możesz zdobyć dzisiaj więcej pszczół'], 400);
     }
 }

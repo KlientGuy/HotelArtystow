@@ -1,6 +1,7 @@
 <script>
     import { HotelArtystowApi } from "./HotelArtystowApi";
     import { navigateTo } from "./navigation";
+    import { beesStore } from "./bees-store"
 
     const api = new HotelArtystowApi();
     let navbarData = {
@@ -13,6 +14,7 @@
 
     api.getNavbarData().then((res) => {
         navbarData = res.data;
+        $beesStore = navbarData.userStatistics.bees;
     })
 
     async function logoutClick() {
@@ -165,7 +167,7 @@
     <!-- <li><a href="/zjeble">Zjeble</a></li> -->
     <li class="profile">
         <div class="row align-items-center stats-wrapper">
-            <div class="nav-emoji">{navbarData.userStatistics.bees}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
+            <div class="nav-emoji">{$beesStore}<img class="nav-emoji" src="/img/emojis/bee_emoji.png" alt="bee emoji"></div>
             <div class="nav-emoji">{navbarData.userStatistics.loginStreak}<img class="nav-emoji" src="/img/emojis/fire_emoji.png" alt="fire emoji"></div>
             <div class="row align-items-center">
                 <a href="/settings" class="img-link nav-emoji-fa"><i class="fa fa-cog rotate-hover"></i></a>

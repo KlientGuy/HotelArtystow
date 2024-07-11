@@ -1,7 +1,10 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import {HotelArtystowApi} from "../lib/HotelArtystowApi.js";
+    import { beesStore } from "../lib/bees-store.js";
     const api = new HotelArtystowApi();
+
+    let title = 'Graj i zdobywaj pszczoły!';
 
     /** @type {HTMLCanvasElement} */
     let canvas;
@@ -82,9 +85,12 @@
         }
     }
 
-    function updatePipes() {
+    /**
+    * @param {number} deltaTime 
+    */
+    function updatePipes(deltaTime) {
         pipes.forEach((pipe) => {
-            pipe.x -= 2;
+            pipe.x -= 2 *deltaTime;
         });
 
         if (pipes.length > 0 && pipes[0].x + pipeWidth < 0) {
@@ -157,7 +163,7 @@
             jump(deltaTime);
 
         updateBird(deltaTime);
-        updatePipes();
+        updatePipes(deltaTime);
         checkCollision();
         frame++;
         handle = requestAnimationFrame(gameLoop);
@@ -193,7 +199,14 @@
 
     async function sendScore() {
         if(score >= 10) {
-            await api.sendBeePoints(score);
+            const res = await api.sendBeePoints(score);
+            if(!res.status) {
+                const mess = JSON.parse(res.message);
+                title = mess.message;
+                return;
+            }
+
+            $beesStore += res.data.beesAdded;
         }
     }
 
@@ -212,7 +225,7 @@
 </script>
 
 <div class="bg-primary game-container">
-        <h1 class="game-title">Graj i zdobywaj pszczoły!</h1>
+        <h1 class="game-title">{title}</h1>
         <canvas id="gameCanvas" width="800" height="500"></canvas>
 </div>
 

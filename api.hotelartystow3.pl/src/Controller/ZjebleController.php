@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\ZjebleRound;
 use App\Entity\ZjebleUserSession;
 use App\Repository\ZjebleRoundRepository;
 use App\Repository\ZjebleUserSessionRepository;
@@ -176,7 +177,15 @@ class ZjebleController extends AbstractController
     #[Route('/createTodaysRound', name: 'api_zjeble_create_todays_round', methods: ['POST'])]
     public function createTodaysRound(Zjeble $zjeble)
     {
-        $round = $this->roundRepository->getCurrent();
+        $round = null;
+        try
+        {
+            $round = $this->roundRepository->getCurrent();
+        }
+        catch(\Exception $e) {
+            $round = new ZjebleRound();
+            $round->setPhotoIndex(0)->setCreatedAt(new \DateTimeImmutable('-1 day'));
+        }
 
         if($round->getCreatedAt()->format('z') === (new \DateTime())->format('z'))
             return new JsonResponse(['status' => false, 'message' => 'Todays round already exists'], 418);
