@@ -53,28 +53,59 @@ class FlappyBeeController extends AbstractController
 
         $canGetPoints = $flappyBeeScoreRepository->canGetPoints($user);
 
-        if($points >= 10 && $canGetPoints) {
+        if($points >= 10) {
             $flappyBeeScore
                 ->setUser($user)
                 ->setScore($points)
                 ->setCreatedAt(new DateTimeImmutable());
 
-            $newBees = $statistics->getBees() + $points;
-            $statistics->setBees($newBees);
-
             try {
                 $this->em->beginTransaction();
                 $this->em->persist($flappyBeeScore);
-                $this->em->persist($statistics);
+
+                if($canGetPoints) {
+                    $newBees = $statistics->getBees() + $points;
+                    $statistics->setBees($newBees);
+                    $this->em->persist($statistics);
+                }
                 $this->em->flush();
                 $this->em->commit();
 
-                return new JsonResponse(['beesAdded' => $points], 200);
+                if($canGetPoints)
+                    return new JsonResponse(['beesAdded' => $points], 200);
+                else
+                    return new JsonResponse(['message' => 'Nie możesz zdobyć dzisiaj więcej pszczół'], 400);
+
             } catch (\Exception $e) {
                 $this->em->rollback();
                 return new JsonResponse(['message' => 'Coś się wyjebało'], 500);
             }
         }
-        return new JsonResponse(['message' => 'Nie możesz zdobyć dzisiaj więcej pszczół'], 400);
+        return new JsonResponse(['message' => 'Musisz się bardziej postarać'], 400);
+    }
+
+    #[Route('/getHighScores', name: 'api_flappy_bee_get_high_scores', methods: ['GET'])]
+    #[OA\Response(
+        response: 200,
+        description: 'High scores',
+        content: new OA\JsonContent(
+            example: [
+                'overall' => 'integer',
+                'mine' => 'integer',
+                'todays' => 'integer'
+            ]
+        )
+    )]
+    public function getHighScores(#[CurrentUser] $user, FlappyBeeScoreRepository $scoreRepository)
+    {
+        $overall = $scoreRepository->getOverallHighScore();
+        $my = $scoreRepository->getUserHighScore($user);
+        $todays = $scoreRepository->getTodaysHighScore();
+
+        return new JsonResponse([
+                'overall' => $overall,
+                'mine' => $my,
+                'todays' => $todays
+        ]);
     }
 }

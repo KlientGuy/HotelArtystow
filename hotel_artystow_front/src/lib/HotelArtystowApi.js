@@ -159,6 +159,11 @@ export class HotelArtystowApi
         return await this._parseResponse(res);
     }
 
+    async getFlappyBeeHighScores() {
+        const res = await this._sendGetRequest('/flappyBee/getHighScores');
+        return await this._parseResponse(res);
+    }
+
     /**
     * @private
     * @param {string} endpoint 

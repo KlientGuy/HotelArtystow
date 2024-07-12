@@ -33,6 +33,40 @@ class FlappyBeeScoreRepository extends ServiceEntityRepository
 
     }
 
+    public function getOverallHighScore()
+    {
+        $dql = "
+            SELECT MAX(p.score) FROM App\Entity\FlappyBeeScore p
+        ";
+
+        return $this->getEntityManager()->createQuery($dql)->getSingleScalarResult();
+    }
+
+    public function getUserHighScore(User $user)
+    {
+        $dql = "
+            SELECT MAX(p.score) FROM App\Entity\FlappyBeeScore p
+            WHERE p.user = :user
+        ";
+
+        return $this->getEntityManager()->createQuery($dql)->setParameter('user', $user)->getSingleScalarResult();
+    }
+
+    public function getTodaysHighScore()
+    {
+        $dql = "
+            SELECT MAX(p.score) FROM App\Entity\FlappyBeeScore p
+            WHERE p.createdAt BETWEEN :start AND :end
+        ";
+
+        return $this->getEntityManager()->createQuery($dql)
+            ->setParameters([
+                'start' => (new \DateTime())->format('Y-m-d 00:00:01'),
+                'end' => (new \DateTime())->format('Y-m-d 23:59:59'),
+            ])
+            ->getSingleScalarResult();
+    }
+
     //    /**
     //     * @return FlappyBeeScore[] Returns an array of FlappyBeeScore objects
     //     */

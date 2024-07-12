@@ -4,6 +4,11 @@
     import { beesStore } from "../lib/bees-store.js";
     const api = new HotelArtystowApi();
 
+    let highScores = {
+        overall: 0,
+        mine: 0,
+        todays: 0
+    }
     let title = 'Graj i zdobywaj pszczoły!';
 
     /** @type {HTMLCanvasElement} */
@@ -15,8 +20,8 @@
         y: 150,
         width: 40,
         height: 40,
-        gravity: 0.1 ,
-        lift: -4,
+        gravity: 5,
+        lift: -300,
         velocity: 0,
     };
 
@@ -36,7 +41,8 @@
 
     const pipeWidth = 40;
     const pipeGap = 150;
-    const pipeFrequency = 150; // Co ile klatek powstaje nowa rura
+    const pipeFrequency = 175; // Co ile klatek powstaje nowa rura
+    const pipeSpeed = 200;
 
     function resetGame() {
         bird.y = 150;
@@ -76,8 +82,8 @@
     * @param {number} delta 
     */
     function updateBird(delta) {
-        bird.velocity += bird.gravity * delta;
-        bird.y += bird.velocity;
+        bird.velocity += bird.gravity;
+        bird.y += bird.velocity * delta;
 
         if (bird.y + bird.height > canvas.height || bird.y < 0) {
             isGameOver = true;
@@ -90,7 +96,7 @@
     */
     function updatePipes(deltaTime) {
         pipes.forEach((pipe) => {
-            pipe.x -= 2 *deltaTime;
+            pipe.x -= pipeSpeed * deltaTime;
         });
 
         if (pipes.length > 0 && pipes[0].x + pipeWidth < 0) {
@@ -149,9 +155,6 @@
             lastFrameTime = timestamp;
         }
 
-        const deltaTime = (timestamp - lastFrameTime) / 10;
-        lastFrameTime = timestamp;
-
         draw();
 
         if (isGameOver) {
@@ -159,13 +162,19 @@
             return; 
         }
 
+        const deltaTime = (timestamp - lastFrameTime) / 1000;
+        lastFrameTime = timestamp;
+
         if(jumpQueued)
             jump(deltaTime);
 
-        updateBird(deltaTime);
-        updatePipes(deltaTime);
+        if((timestamp - lastFrameTime) < 1000 / 30) {
+            updateBird(0.008);
+            updatePipes(0.007);
+            frame++;
+        }
+
         checkCollision();
-        frame++;
         handle = requestAnimationFrame(gameLoop);
     }
 
@@ -178,7 +187,7 @@
     * @param {number} delta 
     */
     function jump(delta) {
-        bird.velocity = bird.lift * delta;
+        bird.velocity = bird.lift;
         jumpQueued = false;
     }
 
@@ -199,6 +208,19 @@
 
     async function sendScore() {
         if(score >= 10) {
+
+            if(score > highScores.mine) {
+                highScores.mine = score;
+            }
+
+            if(score > highScores.overall) {
+                highScores.overall = score;
+            }
+
+            if(score > highScores.todays) {
+                highScores.todays = score;
+            }
+
             const res = await api.sendBeePoints(score);
             if(!res.status) {
                 const mess = JSON.parse(res.message);
@@ -210,12 +232,16 @@
         }
     }
 
-    onMount(() => {
+    onMount(async () => {
         canvas = document.querySelector("#gameCanvas");
         ctx = canvas.getContext("2d");
         document.addEventListener("keydown", handleKeyPress);
         canvas.addEventListener('mousedown', handleTap);
         canvas.addEventListener('touchstart', handleTap);
+        const res = await api.getFlappyBeeHighScores();
+        if(res.status) {
+            highScores = res.data;
+        }
     });
 
     onDestroy(() => {
@@ -227,17 +253,38 @@
 </script>
 
 <div class="bg-primary game-container">
-        <h1 class="game-title">{title}</h1>
-        <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <h1 class="game-title">{title}</h1>
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+    <div class="row justify-center score-title" style="">
+        Highscore
+    </div>
+    <div class="row high-scores space-around w-100">
+        <span class="overall">Ogólnie: {highScores.overall ?? 0}</span>
+        <span class="mine">Mój: {highScores.mine ?? 0}</span>
+        <span class="todays">Dzisiejszy: {highScores.todays ?? 0}</span>
+    </div>
 </div>
 
 <style>
+
+    .high-scores {
+        font-size: 1.8rem;
+    }
+
+    .score-title {
+        font-weight: bold;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-size: 2rem;
+    }
+
     .game-container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 70vh;
+        /* height: 70vh; */
+        margin-top: 100px;
         width: 60vw;
         border-radius: 35px;
         padding: 1rem;

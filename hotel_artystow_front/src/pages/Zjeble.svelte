@@ -1,6 +1,7 @@
 <script>
     import { HotelArtystowApi } from '../lib/HotelArtystowApi';
     import Loading from '../lib/Loading.svelte';
+    import { beesStore } from '../lib/bees-store';
     import * as Types from '../lib/types';
     
     let lives = ['', '', ''];
@@ -94,6 +95,7 @@
         else {
             winningAudio.play();
             lives = [winLife, winLife, winLife];
+            $beesStore += (leftLives + 1) * 10;
             await fetchImage();
         }
 
