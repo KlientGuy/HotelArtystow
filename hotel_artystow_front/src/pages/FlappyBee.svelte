@@ -203,6 +203,8 @@
     }
 
     function handleTap() {
+        if(jumpQueued) return;
+
         isGameOver ? resetGame() : queueJump()
     }
 
