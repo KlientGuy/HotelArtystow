@@ -241,7 +241,7 @@
         ctx = canvas.getContext("2d");
 
         document.addEventListener("keydown", handleKeyPress);
-        canvas.addEventListener('mousedown', handleTap);
+        // canvas.addEventListener('mousedown', handleTap);
         canvas.addEventListener('touchstart', handleTap);
 
         const res = await api.getFlappyBeeHighScores();
@@ -253,7 +253,7 @@
     onDestroy(() => {
         cancelAnimationFrame(handle);
         document.removeEventListener('keydown', handleKeyPress);
-        canvas.removeEventListener('mousedown', handleTap);
+        // canvas.removeEventListener('mousedown', handleTap);
         canvas.removeEventListener('touchstart', handleTap);
     })
 </script>
