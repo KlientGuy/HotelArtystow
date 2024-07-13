@@ -187,7 +187,7 @@ class ZjebleController extends AbstractController
             $round->setPhotoIndex(0)->setCreatedAt(new \DateTimeImmutable('-1 day'));
         }
 
-        if($round->getCreatedAt()->format('z') === (new \DateTime())->format('z'))
+        if($round->getCreatedAt()->format('z') === (new \DateTime('+1 hour'))->format('z'))
             return new JsonResponse(['status' => false, 'message' => 'Todays round already exists'], 418);
 
         try

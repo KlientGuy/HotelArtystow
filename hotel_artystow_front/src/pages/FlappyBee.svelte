@@ -20,8 +20,8 @@
         y: 150,
         width: 40,
         height: 40,
-        gravity: 5,
-        lift: -300,
+        gravity: 13,
+        lift: -4.5,
         velocity: 0,
     };
 
@@ -51,6 +51,7 @@
         score = 0;
         frame = 0;
         isGameOver = false;
+        createPipe();
     }
 
     function createPipe() {
@@ -82,7 +83,7 @@
     * @param {number} delta 
     */
     function updateBird(delta) {
-        bird.velocity += bird.gravity;
+        bird.velocity += bird.gravity * 100 * delta;
         bird.y += bird.velocity * delta;
 
         if (bird.y + bird.height > canvas.height || bird.y < 0) {
@@ -104,9 +105,13 @@
             score++;
         }
 
-        if (frame % pipeFrequency === 0) {
+        if(pipes[pipes.length - 1].x < (canvas.width / 3) * 2) {
             createPipe();
         }
+
+        // if (frame % pipeFrequency === 0) {
+            // createPipe();
+        // }
     }
 
     function checkCollision() {
@@ -157,22 +162,19 @@
 
         draw();
 
+        const deltaTime = (timestamp - lastFrameTime) / 1000;
+        lastFrameTime = timestamp;
+
         if (isGameOver) {
             handle = requestAnimationFrame(gameLoop);
             return; 
         }
 
-        const deltaTime = (timestamp - lastFrameTime) / 1000;
-        lastFrameTime = timestamp;
-
         if(jumpQueued)
             jump(deltaTime);
 
-        if((timestamp - lastFrameTime) < 1000 / 30) {
-            updateBird(0.008);
-            updatePipes(0.007);
-            frame++;
-        }
+        updateBird(deltaTime);
+        updatePipes(deltaTime);
 
         checkCollision();
         handle = requestAnimationFrame(gameLoop);
@@ -187,7 +189,7 @@
     * @param {number} delta 
     */
     function jump(delta) {
-        bird.velocity = bird.lift;
+        bird.velocity = bird.lift * 100;
         jumpQueued = false;
     }
 
@@ -235,9 +237,11 @@
     onMount(async () => {
         canvas = document.querySelector("#gameCanvas");
         ctx = canvas.getContext("2d");
+
         document.addEventListener("keydown", handleKeyPress);
         canvas.addEventListener('mousedown', handleTap);
         canvas.addEventListener('touchstart', handleTap);
+
         const res = await api.getFlappyBeeHighScores();
         if(res.status) {
             highScores = res.data;
