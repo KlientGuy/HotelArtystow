@@ -33,6 +33,8 @@
     let cube;
 
     let cubeRotationSpeed = MIN_CUBE_SPEED;
+    /** @type {WebGL2RenderingContext} */
+    let glContext;
 
     onDestroy(() => {
         cube?.destroy();
@@ -54,6 +56,9 @@
         engineBase.run();
 
         cube.queueDraw(cubePreDraw);
+        glContext = EngineBase.getGlContext();
+        shader.use();
+        glContext.uniform4f(shader.getUniformLocation('uRgba'), 1, 1, 1, 1);
     })
 
     let rotation = 0;
@@ -62,6 +67,7 @@
 
     let freeze = false;
     let startAnimation = false;
+    let test2 = 1;
     /**
     * @param {number} deltaTime 
     * @param {number} elapsedTime 
@@ -70,6 +76,10 @@
     function cubePreDraw(deltaTime, elapsedTime) {
 
         rotation += cubeRotationSpeed * deltaTime;
+
+        if(divisionName === 'Legendary Bedrock') {
+            drawLegendaryBedrock(deltaTime, elapsedTime);
+        }
 
         if(!freeze) {
             translation += deltaTime;
@@ -82,7 +92,35 @@
                 startAnimation = false;
         }
 
+
         this.rotateGlobal(new Vector3(-25, rotation, 0))
+    }
+
+    /**
+    * @param {number} deltaTime 
+    * @param {number} elapsedTime 
+    */
+    function drawLegendaryBedrock(deltaTime, elapsedTime) {
+        const shader = cube.getShader();
+        const red = Math.sin(elapsedTime)  + 0.3;
+        const green = -1 * Math.sin(elapsedTime) + 0.3;
+        const blue = Math.cos(elapsedTime) + 0.3;
+
+        glContext.uniform4f(shader.getUniformLocation('uRgba'), red, green, blue, 1);
+        test2 += 0.2 * deltaTime;
+
+        const scale = cube.getScale();
+        cube.scaleTimes(new Vector3(1.2, 1.2, 1.2));
+
+        glContext.uniform2f(shader.getUniformLocation('uTexPos'), 1, 1);
+
+        glContext.disable(glContext.DEPTH_TEST);
+        cube.draw();
+        glContext.enable(glContext.DEPTH_TEST);
+
+        cube.scale(scale);
+        glContext.uniform4f(shader.getUniformLocation('uRgba'), 1,1,1, 1);
+        glContext.uniform2f(shader.getUniformLocation('uTexPos'), 1, test2);
     }
 
     /**

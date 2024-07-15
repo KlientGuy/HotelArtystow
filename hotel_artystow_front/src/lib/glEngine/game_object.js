@@ -191,6 +191,11 @@ export class GameObject {
         return this;
     }
 
+    getScale() {
+        const arr = this.scaleMatrix.toArray();
+        return new Vector3(arr[0], arr[5], arr[10]);
+    }
+
     /**
      * @param {Vector3} vec3 
      */
