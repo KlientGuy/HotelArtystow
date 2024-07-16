@@ -174,7 +174,7 @@ class ZjebleController extends AbstractController
         ]);
     }
 
-    #[Route('/createTodaysRound', name: 'api_zjeble_create_todays_round', methods: ['POST'])]
+    #[Route('/createTodaysRound', name: 'api_zjeble_create_todays_round', methods: ['GET'])]
     public function createTodaysRound(Zjeble $zjeble)
     {
         $round = null;
@@ -187,7 +187,7 @@ class ZjebleController extends AbstractController
             $round->setPhotoIndex(0)->setCreatedAt(new \DateTimeImmutable('-1 day'));
         }
 
-        if($round->getCreatedAt()->format('z') === (new \DateTime('+1 hour'))->format('z'))
+        if($round->getCreatedAt()->format('z') === (new \DateTime('+10 minutes'))->format('z'))
             return new JsonResponse(['status' => false, 'message' => 'Todays round already exists'], 418);
 
         try
