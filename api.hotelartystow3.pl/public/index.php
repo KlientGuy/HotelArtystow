@@ -1,8 +1,5 @@
 <?php
 
-echo ':o';
-exit;
-
 use App\Kernel;
 
 $allowed = [
