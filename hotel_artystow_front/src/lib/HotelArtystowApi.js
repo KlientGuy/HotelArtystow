@@ -165,6 +165,24 @@ export class HotelArtystowApi
     }
 
     /**
+     * @param {FileList} files 
+     */
+    async uploadPhoto(files) {
+
+        const data = new FormData();
+        for(let i = 0; i < files.length; i++) {
+            data.append(`files[${i}]`, files[i]);
+        }
+
+        const res = await fetch(`${this._apiUrl}/photos/upload`, {
+            credentials: 'include',
+            method: 'POST',
+            body: data
+        })
+        return await this._parseResponse(res);
+    }
+
+    /**
     * @private
     * @param {string} endpoint 
     * @param {object} [queryParams=null] 

@@ -9,4 +9,5 @@
 /var/
 /vendor/
 /migrations/
+/public/files/photos/*
 ###< symfony/framework-bundle ###

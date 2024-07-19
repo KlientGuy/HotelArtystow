@@ -118,7 +118,7 @@
     }
 
     .spacer {
-        position: absolute;
+        position: relative;
         top: 0;
         height: 10vh;
         margin-bottom: 50px;

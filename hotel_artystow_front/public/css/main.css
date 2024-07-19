@@ -25,6 +25,7 @@ button {
     align-items: center;
     height: 60vh;
     width: 25vw;
+    margin-top: 20vh;
     border-radius: 35px;
     -webkit-box-shadow: 7px 7px 9px 1px rgba(66, 68, 90, 1);
     -moz-box-shadow: 7px 7px 9px 1px rgba(66, 68, 90, 1);

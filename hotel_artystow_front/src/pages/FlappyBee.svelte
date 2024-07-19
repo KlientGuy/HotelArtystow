@@ -290,7 +290,7 @@
         align-items: center;
         justify-content: center;
         /* height: 70vh; */
-        margin-top: 100px;
+        /* margin-top: 100px; */
         width: 60vw;
         border-radius: 35px;
         padding: 1rem;

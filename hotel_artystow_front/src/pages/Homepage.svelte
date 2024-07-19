@@ -85,7 +85,7 @@ import {navigateTo} from '../lib/navigation';
 
 <div class="container">
     <div class="app-block">
-        <button class="hex">
+        <button class="hex" on:click={() => navigateTo('/photos')}>
             <i class="fa-solid fa-7x fa-cloud-arrow-up"></i>
         </button>
         <button on:click={() => navigateTo('/zjeble')} class="hex zjeble">

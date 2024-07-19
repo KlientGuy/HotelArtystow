@@ -105,7 +105,6 @@
     .main-game {
         width: 60vw;
         height: 80vh;
-        margin-top: 10vh;
         padding: 1.2rem;
     }
 
