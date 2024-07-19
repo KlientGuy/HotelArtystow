@@ -31,6 +31,12 @@ class PhotoController extends AbstractController
     {
         $files = $request->files->get('files');
 
+        $path = $this->kernel->getProjectDir().'/public'.$this->imagePath;
+
+        if(!file_exists($path)) {
+            mkdir($path, 7770, true);
+        }
+
         try {
             $this->em->beginTransaction();
 
@@ -47,7 +53,6 @@ class PhotoController extends AbstractController
 
                 $this->em->persist($photo);
 
-                $path = $this->kernel->getProjectDir().'/public'.$this->imagePath;
                 $file->move($path, $newFilename);
             }
             $this->em->flush();
